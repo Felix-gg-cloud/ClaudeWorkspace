@@ -1,0 +1,10 @@
+{
+  "defaultLanguage": "zh-CN",
+  "preferFree": true,
+  "codeStyle": {
+    "python": "pep8",
+    "sql": "uppercase-keywords",
+    "indentSize": 4
+  },
+  "_说明": "个人偏好设定，供提示词或脚本引用"
+}
