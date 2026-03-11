@@ -1,66 +1,78 @@
 <template>
   <div class="page-container">
     <div class="cal-header">
-      <h1 class="cal-title">📅 打卡日历</h1>
+      <h1 class="cal-title">
+        <span class="title-icon">📅</span>
+        <span class="text-gradient">打卡日历</span>
+      </h1>
     </div>
 
     <!-- Streak Banner -->
-    <div class="card streak-card">
+    <div class="glass-card streak-card">
       <div class="streak-row">
-        <div>
-          <div class="streak-value">🔥 {{ currentStreak }}</div>
+        <div class="streak-info">
+          <div class="streak-num">
+            <span class="fire-icon">🔥</span>
+            <span class="text-gradient-warm streak-val">{{ currentStreak }}</span>
+          </div>
           <div class="streak-label">连续打卡天数</div>
         </div>
         <button
-          class="btn-primary checkin-action-btn"
+          class="btn-primary checkin-btn"
+          :class="{ checked: todayChecked }"
           :disabled="todayChecked || checkinLoading"
           @click="doCheckin"
         >
-          {{ todayChecked ? '✅ 已打卡' : '🎯 立即打卡' }}
+          <span v-if="checkinLoading" class="loading-dots"><i></i><i></i><i></i></span>
+          <span v-else>{{ todayChecked ? '✅ 已打卡' : '🎯 立即打卡' }}</span>
         </button>
       </div>
     </div>
 
-    <!-- Checkin result popup -->
-    <div v-if="checkinResult" class="card checkin-result animate__animated animate__bounceIn">
-      <span class="result-emoji">🎉</span>
-      打卡成功！获得 {{ checkinResult.xpEarned }} XP + {{ checkinResult.coinsEarned }} 🪙
-    </div>
+    <!-- Checkin result -->
+    <Transition name="page-slide">
+      <div v-if="checkinResult" class="glass-card result-popup">
+        <span>🎉</span> 打卡成功！+{{ checkinResult.xpEarned }} XP · +{{ checkinResult.coinsEarned }} 💎
+      </div>
+    </Transition>
 
-    <!-- Month Navigation -->
+    <!-- Month Nav -->
     <div class="month-nav">
-      <button class="month-btn" @click="prevMonth">‹</button>
+      <button class="nav-btn" @click="prevMonth">‹</button>
       <span class="month-label">{{ year }}年{{ month }}月</span>
-      <button class="month-btn" @click="nextMonth">›</button>
+      <button class="nav-btn" @click="nextMonth">›</button>
     </div>
 
     <!-- Calendar Grid -->
     <div class="cal-grid">
-      <div class="cal-weekday" v-for="w in weekdays" :key="w">{{ w }}</div>
+      <div class="weekday" v-for="w in weekdays" :key="w">{{ w }}</div>
       <div
-        v-for="(day, i) in calenderDays"
+        v-for="(day, i) in calendarDays"
         :key="i"
-        class="checkin-cell"
+        class="day-cell"
         :class="{
           checked: day.checked,
           today: day.isToday,
           empty: !day.date,
-          'other-month': day.otherMonth
+          other: day.otherMonth
         }"
       >
-        <template v-if="day.date">{{ day.dayNum }}</template>
+        <template v-if="day.date">
+          <span class="day-num">{{ day.dayNum }}</span>
+          <span v-if="day.checked" class="day-dot"></span>
+        </template>
       </div>
     </div>
 
     <!-- Stats -->
-    <div class="card cal-stats">
-      <div class="cal-stat-item">
-        <span class="cal-stat-val">{{ monthCheckins }}</span>
-        <span class="cal-stat-label">本月打卡</span>
+    <div class="stats-row">
+      <div class="glass-card stat-box">
+        <div class="stat-val text-gradient">{{ monthCheckins }}</div>
+        <div class="stat-label">本月打卡</div>
       </div>
-      <div class="cal-stat-item">
-        <span class="cal-stat-val">{{ totalCheckins }}</span>
-        <span class="cal-stat-label">累计打卡</span>
+      <div class="glass-card stat-box">
+        <div class="stat-val text-gradient-warm">{{ totalCheckins }}</div>
+        <div class="stat-label">累计打卡</div>
       </div>
     </div>
   </div>
@@ -70,7 +82,9 @@
 import { ref, computed, onMounted, watch } from 'vue'
 import api from '@/api'
 import { useUserStore } from '@/stores/user'
-import type { CheckinDto, CheckinResult } from '@/types'
+import type { CheckinDto } from '@/types'
+
+interface CheckinResult { date: string; xpEarned: number; coinsEarned: number; streak: number }
 
 const userStore = useUserStore()
 const weekdays = ['日', '一', '二', '三', '四', '五', '六']
@@ -93,14 +107,13 @@ const monthCheckins = computed(() => {
   return count
 })
 
-const calenderDays = computed(() => {
+const calendarDays = computed(() => {
   const firstDay = new Date(year.value, month.value - 1, 1)
   const lastDay = new Date(year.value, month.value, 0)
   const startOffset = firstDay.getDay()
 
   const days: Array<{ date: string; dayNum: number; checked: boolean; isToday: boolean; otherMonth: boolean }> = []
 
-  // Previous month padding
   for (let i = 0; i < startOffset; i++) {
     days.push({ date: '', dayNum: 0, checked: false, isToday: false, otherMonth: true })
   }
@@ -108,7 +121,6 @@ const calenderDays = computed(() => {
   const today = new Date()
   const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 
-  // Current month days
   for (let d = 1; d <= lastDay.getDate(); d++) {
     const dateStr = `${year.value}-${String(month.value).padStart(2, '0')}-${String(d).padStart(2, '0')}`
     days.push({
@@ -182,17 +194,21 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .cal-header {
-  padding: 24px 0 8px;
+  padding: 28px 0 12px;
 }
 
 .cal-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 24px;
   font-weight: 800;
 }
 
-.streak-card {
-  margin-bottom: 16px;
-}
+.title-icon { font-size: 26px; }
+
+// Streak
+.streak-card { margin-bottom: 12px; }
 
 .streak-row {
   display: flex;
@@ -200,133 +216,183 @@ onMounted(async () => {
   justify-content: space-between;
 }
 
-.streak-value {
+.streak-num {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.fire-icon {
   font-size: 28px;
+  animation: pulse-glow 2s infinite;
+}
+
+.streak-val {
+  font-size: 36px;
   font-weight: 800;
 }
 
 .streak-label {
   font-size: 13px;
-  color: #718096;
+  color: #5a6480;
   margin-top: 2px;
 }
 
-.checkin-action-btn {
-  padding: 10px 20px;
+.checkin-btn {
+  padding: 12px 22px;
   font-size: 14px;
+  border-radius: 14px;
 
-  &:disabled {
-    background: #e2e8f0;
-    color: #a0aec0;
+  &.checked {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.2);
     box-shadow: none;
+    cursor: default;
+
+    &:hover { transform: none; box-shadow: none; }
   }
 }
 
-.checkin-result {
+.loading-dots {
+  display: flex;
+  gap: 4px;
+  i {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: white;
+    animation: typing-dots 1.2s infinite;
+    &:nth-child(2) { animation-delay: 0.2s; }
+    &:nth-child(3) { animation-delay: 0.4s; }
+  }
+}
+
+// Result popup
+.result-popup {
   text-align: center;
-  padding: 14px;
-  margin-bottom: 16px;
+  padding: 14px 20px;
+  margin-bottom: 12px;
   font-weight: 600;
-  background: linear-gradient(135deg, #f0fff4, #e6ffed);
-  border: 1px solid #9ae6b4;
-  color: #276749;
+  font-size: 14px;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #10b981;
 }
 
-.result-emoji {
-  font-size: 18px;
-  margin-right: 4px;
-}
-
+// Month nav
 .month-nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
+  gap: 28px;
   margin-bottom: 16px;
 }
 
-.month-btn {
+.nav-btn {
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 1px solid #e2e8f0;
-  background: white;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.04);
+  color: #8b95b0;
   font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: all 0.2s;
 
-  &:hover { background: #f7fafc; }
+  &:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #e8ecf4;
+  }
 }
 
 .month-label {
   font-size: 16px;
   font-weight: 700;
+  color: #e8ecf4;
 }
 
+// Calendar grid
 .cal-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 6px;
+  gap: 4px;
   margin-bottom: 20px;
 }
 
-.cal-weekday {
+.weekday {
   text-align: center;
-  font-size: 12px;
-  color: #a0aec0;
+  font-size: 11px;
+  color: #5a6480;
   font-weight: 600;
-  padding: 4px 0;
+  padding: 6px 0;
 }
 
-.checkin-cell {
+.day-cell {
   aspect-ratio: 1;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
   font-size: 14px;
   font-weight: 500;
-  color: #4a5568;
+  color: #8b95b0;
+  position: relative;
+  transition: all 0.2s;
+  gap: 2px;
 
   &.empty { visibility: hidden; }
-  &.other-month { color: #cbd5e0; }
+  &.other { color: #2a3050; }
 
   &.checked {
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    color: white;
+    background: linear-gradient(135deg, rgba(0, 212, 255, 0.15), rgba(168, 85, 247, 0.15));
+    color: #e8ecf4;
     font-weight: 700;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    border: 1px solid rgba(0, 212, 255, 0.2);
   }
 
   &.today:not(.checked) {
-    border: 2px solid #667eea;
-    color: #667eea;
+    border: 1px solid rgba(0, 212, 255, 0.4);
+    color: #00d4ff;
     font-weight: 700;
+    box-shadow: 0 0 12px rgba(0, 212, 255, 0.15);
   }
 }
 
-.cal-stats {
-  display: flex;
-  justify-content: space-around;
+.day-num { font-size: 13px; }
+
+.day-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #00d4ff;
+  box-shadow: 0 0 6px rgba(0, 212, 255, 0.5);
+}
+
+// Stats
+.stats-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.stat-box {
   text-align: center;
+  padding: 20px 16px;
 }
 
-.cal-stat-item {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.cal-stat-val {
-  font-size: 24px;
+.stat-val {
+  font-size: 28px;
   font-weight: 800;
-  color: #667eea;
 }
 
-.cal-stat-label {
-  font-size: 13px;
-  color: #a0aec0;
+.stat-label {
+  font-size: 12px;
+  color: #5a6480;
+  margin-top: 4px;
 }
 </style>

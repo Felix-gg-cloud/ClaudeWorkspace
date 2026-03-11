@@ -74,3 +74,23 @@ export interface CheckinResult {
   coinsEarned: number
   streak: number
 }
+
+export interface StageInfo {
+  id: number
+  name: string
+  levelId: number
+  sortOrder: number
+  lessonCount: number
+  completedLessonCount: number
+  totalTasks: number
+  completedTasks: number
+  locked: boolean
+  current: boolean
+}
+
+export interface LevelInfo {
+  level: number
+  title: string
+  description: string
+  requiredXp: number
+}

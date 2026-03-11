@@ -1,68 +1,113 @@
 <template>
   <div class="page-container">
     <div class="today-header">
-      <h1 class="today-title">📝 今日学习</h1>
-      <p class="today-sub" v-if="lesson">第 {{ lesson.dayIndex }} 天</p>
+      <h1 class="today-title">
+        <span class="title-icon">📝</span>
+        <span class="text-gradient">今日学习</span>
+      </h1>
+      <div class="day-badge" v-if="lesson">Day {{ lesson.dayIndex }}</div>
     </div>
 
     <!-- Loading -->
     <div v-if="loading" class="loading-state">
-      <div class="loading-spinner"></div>
+      <div class="loader">
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+        <div class="loader-ring"></div>
+      </div>
       <p>加载课程中...</p>
     </div>
 
     <!-- No lesson -->
-    <div v-else-if="!lesson" class="empty-state">
+    <div v-else-if="!lesson" class="empty-state glass-card">
       <div class="empty-icon">🎊</div>
-      <p>暂无课程，休息一下吧！</p>
+      <h3>暂无课程</h3>
+      <p>休息一下，明天继续加油！</p>
+      <button class="btn-primary" @click="$router.push('/stages')" style="margin-top: 16px">
+        🗺️ 查看学习旅程
+      </button>
     </div>
 
     <!-- Lesson Content -->
     <template v-else>
-      <div class="lesson-info card">
+      <!-- Lesson Info Card -->
+      <div class="glass-card lesson-info">
         <h2 class="lesson-title">{{ lesson.title }}</h2>
         <p class="lesson-desc">{{ lesson.description }}</p>
-        <div class="lesson-progress-row">
-          <div class="level-progress" style="flex:1">
-            <div class="level-progress-bar" :style="{ width: progressPercent + '%' }"></div>
+
+        <!-- Progress dots -->
+        <div class="progress-dots">
+          <div
+            v-for="(task, i) in lesson.tasks"
+            :key="task.id"
+            class="dot"
+            :class="{
+              completed: task.completed,
+              current: !task.completed && i === currentTaskAbsIndex,
+              upcoming: !task.completed && i !== currentTaskAbsIndex
+            }"
+          >
+            <span v-if="task.completed">✓</span>
+            <span v-else>{{ i + 1 }}</span>
           </div>
-          <span class="progress-text">{{ lesson.completedCount }}/{{ lesson.totalCount }}</span>
+        </div>
+
+        <div class="progress-row">
+          <div class="progress-bar" style="flex:1">
+            <div class="progress-fill" :style="{ width: progressPercent + '%' }"></div>
+          </div>
+          <span class="progress-label">{{ lesson.completedCount }}/{{ lesson.totalCount }}</span>
         </div>
       </div>
 
-      <!-- All complete -->
-      <div v-if="lesson.allCompleted && !currentTask" class="complete-banner animate__animated animate__bounceIn">
+      <!-- All Complete -->
+      <div v-if="lesson.allCompleted && !currentTask" class="glass-card complete-banner">
+        <div class="complete-particles">
+          <span v-for="i in 12" :key="i" class="particle" :style="particleStyle(i)">✨</span>
+        </div>
         <div class="complete-icon">🎉</div>
-        <h3>今日课程已完成！</h3>
-        <p>太棒了，明天继续加油！</p>
+        <h3 class="text-gradient">今日课程已完成！</h3>
+        <p>太棒了，已自动打卡成功</p>
+        <div class="complete-stats">
+          <div class="cs-item">
+            <span class="cs-val text-gradient">{{ lesson.totalCount }}</span>
+            <span class="cs-label">任务完成</span>
+          </div>
+          <div class="cs-divider"></div>
+          <div class="cs-item">
+            <span class="cs-val text-gradient-warm">{{ totalXpEarned }}</span>
+            <span class="cs-label">获得 XP</span>
+          </div>
+        </div>
       </div>
 
       <!-- Task Card -->
       <div v-if="currentTask" class="task-area">
-        <div class="task-counter">
-          任务 {{ currentTaskIndex + 1 }} / {{ lesson.tasks.length }}
-        </div>
 
         <!-- VOCAB_CARD -->
-        <div v-if="currentTask.type === 'VOCAB_CARD'" class="card task-card vocab-card" :class="{ flipped: vocabFlipped }">
-          <div class="vocab-front" v-if="!vocabFlipped" @click="vocabFlipped = true">
-            <div class="vocab-type-badge">📖 词汇卡片</div>
-            <div class="vocab-word">{{ currentTask.question }}</div>
-            <p class="vocab-hint">👆 点击翻转查看释义</p>
-          </div>
-          <div class="vocab-back" v-else>
-            <div class="vocab-type-badge">📖 词汇卡片</div>
-            <div class="vocab-answer">{{ currentTask.correctAnswer }}</div>
-            <div class="vocab-explain">{{ currentTask.explanation }}</div>
-            <button class="btn-primary" @click="submitTask" :disabled="submitting">
-              ✅ 已掌握 (+{{ currentTask.xpReward }} XP)
-            </button>
-          </div>
+        <div v-if="currentTask.type === 'VOCAB_CARD'" class="glass-card task-card vocab-card" @click="!vocabFlipped && (vocabFlipped = true)">
+          <div class="task-type-chip vocab">📖 词汇卡片</div>
+
+          <Transition name="card-flip" mode="out-in">
+            <div v-if="!vocabFlipped" key="front" class="vocab-content">
+              <div class="vocab-word">{{ currentTask.question }}</div>
+              <div class="tap-hint">
+                <span class="tap-icon">👆</span> 点击翻转查看释义
+              </div>
+            </div>
+            <div v-else key="back" class="vocab-content">
+              <div class="vocab-answer text-gradient">{{ currentTask.correctAnswer }}</div>
+              <div class="vocab-explain">{{ currentTask.explanation }}</div>
+              <button class="btn-primary" @click.stop="submitTask" :disabled="submitting">
+                ✅ 已掌握 <span class="xp-tag">+{{ currentTask.xpReward }} XP</span>
+              </button>
+            </div>
+          </Transition>
         </div>
 
         <!-- QUIZ_SINGLE -->
-        <div v-else-if="currentTask.type === 'QUIZ_SINGLE'" class="card task-card quiz-card">
-          <div class="quiz-type-badge">🧠 选择题</div>
+        <div v-else-if="currentTask.type === 'QUIZ_SINGLE'" class="glass-card task-card quiz-card">
+          <div class="task-type-chip quiz">🧠 选择题</div>
           <h3 class="quiz-question">{{ currentTask.question }}</h3>
           <div class="quiz-options">
             <button
@@ -70,85 +115,104 @@
               :key="i"
               class="quiz-option"
               :class="{
-                selected: selectedOption === opt,
+                selected: selectedOption === opt && !showResult,
                 correct: showResult && opt === currentTask.correctAnswer,
                 wrong: showResult && selectedOption === opt && opt !== currentTask.correctAnswer
               }"
               :disabled="showResult"
               @click="selectOption(opt)"
             >
-              <span class="option-letter">{{ ['A', 'B', 'C', 'D'][i] }}</span>
-              <span class="option-text">{{ opt }}</span>
-              <span v-if="showResult && opt === currentTask.correctAnswer" class="option-mark">✅</span>
-              <span v-if="showResult && selectedOption === opt && opt !== currentTask.correctAnswer" class="option-mark">❌</span>
+              <span class="opt-letter">{{ ['A', 'B', 'C', 'D'][i] }}</span>
+              <span class="opt-text">{{ opt }}</span>
+              <span v-if="showResult && opt === currentTask.correctAnswer" class="opt-icon">✅</span>
+              <span v-if="showResult && selectedOption === opt && opt !== currentTask.correctAnswer" class="opt-icon">❌</span>
             </button>
           </div>
-          <div v-if="showResult" class="quiz-explain animate__animated animate__fadeInUp">
-            <p class="explain-text">💡 {{ currentTask.explanation }}</p>
-            <button class="btn-primary" @click="submitTask" :disabled="submitting">
-              继续 (+{{ currentTask.xpReward }} XP)
-            </button>
-          </div>
+          <Transition name="page-slide">
+            <div v-if="showResult" class="explain-box">
+              <p>💡 {{ currentTask.explanation }}</p>
+              <button class="btn-primary" @click="submitTask" :disabled="submitting">
+                继续 <span class="xp-tag">+{{ currentTask.xpReward }} XP</span>
+              </button>
+            </div>
+          </Transition>
         </div>
 
         <!-- SPELLING -->
-        <div v-else-if="currentTask.type === 'SPELLING'" class="card task-card spelling-card">
-          <div class="spelling-type-badge">✍️ 拼写题</div>
+        <div v-else-if="currentTask.type === 'SPELLING'" class="glass-card task-card spelling-card">
+          <div class="task-type-chip spelling">✍️ 拼写题</div>
           <h3 class="spelling-question">{{ currentTask.question }}</h3>
-          <div class="spelling-input-row">
+
+          <div class="spelling-input-area">
             <input
               v-model="spellingAnswer"
               type="text"
-              class="spelling-input"
+              class="input-dark spelling-input"
               placeholder="输入英文拼写..."
               @keyup.enter="checkSpelling"
               :disabled="spellingChecked"
+              autocomplete="off"
+              autocapitalize="off"
             />
             <button
               v-if="!spellingChecked"
-              class="btn-primary"
+              class="btn-primary check-btn"
               @click="checkSpelling"
+              :disabled="!spellingAnswer.trim()"
             >
               检查
             </button>
           </div>
-          <div v-if="spellingChecked" class="spelling-result animate__animated animate__fadeInUp">
-            <div v-if="spellingCorrect" class="spelling-correct">
-              <span>🎉 正确！</span>
+
+          <Transition name="page-slide">
+            <div v-if="spellingChecked" class="spelling-result">
+              <div v-if="spellingCorrect" class="result-correct">
+                <span class="result-icon">🎉</span> 正确！
+              </div>
+              <div v-else class="result-wrong">
+                <span class="result-icon">❌</span>
+                正确答案: <strong class="text-gradient">{{ currentTask.correctAnswer }}</strong>
+              </div>
+              <div class="explain-box">
+                <p>💡 {{ currentTask.explanation }}</p>
+                <button class="btn-primary" @click="submitTask" :disabled="submitting">
+                  继续 <span class="xp-tag">+{{ currentTask.xpReward }} XP</span>
+                </button>
+              </div>
             </div>
-            <div v-else class="spelling-wrong">
-              <span>❌ 正确答案: <strong>{{ currentTask.correctAnswer }}</strong></span>
-            </div>
-            <p class="explain-text">💡 {{ currentTask.explanation }}</p>
-            <button class="btn-primary" @click="submitTask" :disabled="submitting">
-              继续 (+{{ currentTask.xpReward }} XP)
-            </button>
-          </div>
+          </Transition>
         </div>
+
+        <!-- Skip Button -->
+        <button class="btn-ghost skip-btn" @click="skipTask" v-if="currentTask && !submitting">
+          跳过此题 ›
+        </button>
       </div>
     </template>
 
     <!-- Celebration Modal -->
     <Teleport to="body">
-      <div v-if="showCelebration" class="celebration-overlay" @click="closeCelebration">
-        <div class="celebration-modal animate__animated animate__zoomIn">
-          <div class="celebration-confetti">🎊</div>
-          <h2>{{ celebrationTitle }}</h2>
-          <p>{{ celebrationMsg }}</p>
-          <div v-if="resultData" class="celebration-stats">
-            <div v-if="resultData.xpGained" class="celebrate-stat">+{{ resultData.xpGained }} XP</div>
-            <div v-if="resultData.coinsGained" class="celebrate-stat coins">+{{ resultData.coinsGained }} 🪙</div>
-            <div v-if="resultData.streak" class="celebrate-stat streak">🔥 {{ resultData.streak }} 天连续</div>
-          </div>
-          <div v-if="resultData?.newAchievements?.length" class="new-achievements">
-            <h4>🏆 新成就解锁！</h4>
-            <div v-for="a in resultData.newAchievements" :key="a.id" class="achievement-item">
-              {{ a.icon }} {{ a.name }}
+      <Transition name="scale-in">
+        <div v-if="showCelebration" class="celebration-overlay" @click="closeCelebration">
+          <div class="celebration-modal" @click.stop>
+            <div class="confetti-icon">{{ celebrationTitle.includes('升级') ? '🎊' : '🎉' }}</div>
+            <h2>{{ celebrationTitle }}</h2>
+            <p>{{ celebrationMsg }}</p>
+            <div v-if="resultData" class="celebrate-chips">
+              <span v-if="resultData.xpGained" class="c-chip xp">+{{ resultData.xpGained }} XP</span>
+              <span v-if="resultData.coinsGained" class="c-chip coins">+{{ resultData.coinsGained }} 💎</span>
+              <span v-if="resultData.streak" class="c-chip streak">🔥 {{ resultData.streak }} 天</span>
             </div>
+            <div v-if="resultData?.newAchievements?.length" class="new-achievements">
+              <h4>🏆 新成就解锁！</h4>
+              <div v-for="a in resultData.newAchievements" :key="a.id" class="ach-item">
+                {{ a.icon }} {{ a.name }}
+              </div>
+            </div>
+            <button class="btn-primary" @click="closeCelebration">太棒了！</button>
           </div>
-          <button class="btn-primary" @click="closeCelebration">太棒了！</button>
         </div>
-      </div>
+      </Transition>
     </Teleport>
   </div>
 </template>
@@ -164,6 +228,7 @@ const lesson = ref<TodayLessonDto | null>(null)
 const loading = ref(true)
 const currentTaskIndex = ref(0)
 const submitting = ref(false)
+const totalXpEarned = ref(0)
 
 // Vocab
 const vocabFlipped = ref(false)
@@ -186,23 +251,34 @@ const resultData = ref<TaskCompleteResult | null>(null)
 const currentTask = computed<TaskDto | null>(() => {
   if (!lesson.value) return null
   const incomplete = lesson.value.tasks.filter(t => !t.completed)
-  if (incomplete.length === 0) return null
-  return incomplete[0]
+  return incomplete.length > 0 ? incomplete[0] : null
+})
+
+const currentTaskAbsIndex = computed(() => {
+  if (!lesson.value || !currentTask.value) return -1
+  return lesson.value.tasks.findIndex(t => t.id === currentTask.value!.id)
 })
 
 const parsedOptions = computed(() => {
   if (!currentTask.value?.options) return []
-  try {
-    return JSON.parse(currentTask.value.options) as string[]
-  } catch {
-    return []
-  }
+  try { return JSON.parse(currentTask.value.options) as string[] }
+  catch { return [] }
 })
 
 const progressPercent = computed(() => {
   if (!lesson.value) return 0
   return (lesson.value.completedCount / lesson.value.totalCount) * 100
 })
+
+function particleStyle(i: number) {
+  const angle = (i / 12) * 360
+  const r = 40 + Math.random() * 30
+  return {
+    left: `${50 + r * Math.cos(angle * Math.PI / 180)}%`,
+    top: `${50 + r * Math.sin(angle * Math.PI / 180)}%`,
+    animationDelay: `${i * 0.15}s`,
+  }
+}
 
 function selectOption(opt: string) {
   selectedOption.value = opt
@@ -215,28 +291,37 @@ function checkSpelling() {
   spellingCorrect.value = spellingAnswer.value.trim().toLowerCase() === currentTask.value?.correctAnswer?.toLowerCase()
 }
 
+function skipTask() {
+  if (!currentTask.value) return
+  const task = lesson.value!.tasks.find(t => t.id === currentTask.value!.id)
+  if (task) task.completed = true
+  lesson.value!.completedCount++
+  resetTaskState()
+}
+
+function resetTaskState() {
+  vocabFlipped.value = false
+  selectedOption.value = ''
+  showResult.value = false
+  spellingAnswer.value = ''
+  spellingChecked.value = false
+  spellingCorrect.value = false
+}
+
 async function submitTask() {
   if (!currentTask.value || submitting.value) return
   submitting.value = true
   try {
     const { data } = await api.post<TaskCompleteResult>(`/tasks/${currentTask.value.id}/complete`)
     resultData.value = data
+    totalXpEarned.value += data.xpGained
     userStore.updateXp(data.totalXp)
 
-    // Mark this task as completed in local state
     const task = lesson.value!.tasks.find(t => t.id === currentTask.value!.id)
     if (task) task.completed = true
     lesson.value!.completedCount++
+    resetTaskState()
 
-    // Reset UI state
-    vocabFlipped.value = false
-    selectedOption.value = ''
-    showResult.value = false
-    spellingAnswer.value = ''
-    spellingChecked.value = false
-    spellingCorrect.value = false
-
-    // Check for celebrations
     if (data.lessonCompleted) {
       celebrationTitle.value = '🎉 今日课程完成！'
       celebrationMsg.value = '你完成了所有任务，已自动打卡！'
@@ -266,9 +351,9 @@ onMounted(async () => {
     const { data } = await api.get('/today')
     if (data.lessonId) {
       lesson.value = data
-      // Find first incomplete task index
       const idx = data.tasks.findIndex((t: TaskDto) => !t.completed)
       currentTaskIndex.value = idx >= 0 ? idx : 0
+      totalXpEarned.value = data.tasks.filter((t: TaskDto) => t.completed).reduce((sum: number, t: TaskDto) => sum + t.xpReward, 0)
     }
   } catch (e) {
     console.error(e)
@@ -280,165 +365,268 @@ onMounted(async () => {
 
 <style scoped lang="scss">
 .today-header {
-  padding: 24px 0 8px;
+  padding: 28px 0 12px;
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
 }
 
 .today-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   font-size: 24px;
   font-weight: 800;
 }
 
-.today-sub {
-  color: #667eea;
-  font-weight: 600;
-  font-size: 14px;
+.title-icon { font-size: 26px; }
+
+.day-badge {
+  padding: 6px 14px;
+  background: rgba(0, 212, 255, 0.1);
+  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  color: #00d4ff;
 }
 
+// Loading
 .loading-state {
   text-align: center;
-  padding: 60px 0;
-  color: #a0aec0;
+  padding: 80px 0;
+  color: #5a6480;
 }
 
-.loading-spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #e2e8f0;
-  border-top-color: #667eea;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  margin: 0 auto 16px;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.empty-state {
-  text-align: center;
-  padding: 60px 0;
-}
-
-.empty-icon {
-  font-size: 60px;
-  margin-bottom: 12px;
-}
-
-.lesson-info {
+.loader {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
   margin-bottom: 16px;
 }
+
+.loader-ring {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #00d4ff, #a855f7);
+  animation: typing-dots 1.2s infinite;
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.4s; }
+}
+
+// Empty
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  margin-top: 20px;
+}
+.empty-icon { font-size: 60px; margin-bottom: 12px; }
+.empty-state h3 { font-size: 20px; margin-bottom: 6px; color: #e8ecf4; }
+.empty-state p { color: #5a6480; font-size: 14px; }
+
+// Lesson Info
+.lesson-info { margin-bottom: 16px; }
 
 .lesson-title {
   font-size: 18px;
   font-weight: 700;
+  color: #e8ecf4;
   margin-bottom: 4px;
 }
 
 .lesson-desc {
   font-size: 13px;
-  color: #718096;
-  margin-bottom: 12px;
+  color: #5a6480;
+  margin-bottom: 14px;
 }
 
-.lesson-progress-row {
+// Progress dots
+.progress-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.dot {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  transition: all 0.3s;
+
+  &.completed {
+    background: linear-gradient(135deg, #10b981, #06b6d4);
+    color: white;
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+  }
+
+  &.current {
+    background: linear-gradient(135deg, #00d4ff, #a855f7);
+    color: white;
+    animation: pulse-glow 2s infinite;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.4);
+  }
+
+  &.upcoming {
+    background: rgba(255, 255, 255, 0.06);
+    color: #5a6480;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
 }
 
-.progress-text {
+.progress-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.progress-label {
   font-size: 13px;
-  color: #667eea;
-  font-weight: 600;
+  color: #00d4ff;
+  font-weight: 700;
   white-space: nowrap;
 }
 
+// Complete
 .complete-banner {
   text-align: center;
-  padding: 40px 20px;
-  background: white;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+  padding: 40px 24px;
+  position: relative;
+  overflow: hidden;
 }
 
-.complete-icon {
-  font-size: 56px;
-  margin-bottom: 12px;
+.complete-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 
-.task-counter {
-  text-align: center;
-  font-size: 13px;
-  color: #a0aec0;
-  margin-bottom: 8px;
+.particle {
+  position: absolute;
+  font-size: 14px;
+  animation: float 4s infinite ease-in-out;
 }
 
-.task-card {
-  margin-bottom: 16px;
+.complete-icon { font-size: 56px; margin-bottom: 12px; }
+.complete-banner h3 { font-size: 22px; margin-bottom: 6px; }
+.complete-banner p { color: #5a6480; font-size: 14px; margin-bottom: 20px; }
+
+.complete-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
 }
 
-// Vocab Card
+.cs-item { text-align: center; }
+.cs-val { font-size: 24px; font-weight: 800; display: block; }
+.cs-label { font-size: 11px; color: #5a6480; }
+.cs-divider {
+  width: 1px;
+  height: 36px;
+  background: rgba(255,255,255,0.08);
+}
+
+// Task area
+.task-area {
+  animation: slide-up 0.3s ease-out;
+}
+
+// Task type chips
+.task-type-chip {
+  display: inline-block;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  margin-bottom: 18px;
+
+  &.vocab {
+    background: rgba(0, 212, 255, 0.1);
+    color: #00d4ff;
+    border: 1px solid rgba(0, 212, 255, 0.15);
+  }
+  &.quiz {
+    background: rgba(245, 158, 11, 0.1);
+    color: #f59e0b;
+    border: 1px solid rgba(245, 158, 11, 0.15);
+  }
+  &.spelling {
+    background: rgba(16, 185, 129, 0.1);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.15);
+  }
+}
+
+// Vocab
 .vocab-card {
   min-height: 260px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   cursor: pointer;
-  transition: all 0.4s;
 }
 
-.vocab-front, .vocab-back {
+.vocab-content {
   text-align: center;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
-
-.vocab-type-badge, .quiz-type-badge, .spelling-type-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 600;
-  margin-bottom: 20px;
-}
-
-.vocab-type-badge { background: #ebf8ff; color: #3182ce; }
-.quiz-type-badge { background: #fefcbf; color: #d69e2e; }
-.spelling-type-badge { background: #f0fff4; color: #38a169; }
 
 .vocab-word {
-  font-size: 28px;
+  font-size: 32px;
   font-weight: 800;
-  color: #2d3748;
+  color: #e8ecf4;
   margin-bottom: 16px;
+  letter-spacing: 2px;
 }
 
-.vocab-hint {
-  color: #a0aec0;
+.tap-hint {
+  color: #5a6480;
   font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
 }
+
+.tap-icon { animation: pulse-glow 2s infinite; }
 
 .vocab-answer {
-  font-size: 24px;
-  font-weight: 700;
-  color: #667eea;
+  font-size: 26px;
+  font-weight: 800;
   margin-bottom: 12px;
 }
 
 .vocab-explain {
-  color: #718096;
+  color: #8b95b0;
   font-size: 14px;
-  margin-bottom: 20px;
-  line-height: 1.6;
+  margin-bottom: 24px;
+  line-height: 1.7;
 }
+
+// Card flip transition
+.card-flip-enter-active,
+.card-flip-leave-active {
+  transition: all 0.3s ease;
+}
+.card-flip-enter-from { opacity: 0; transform: rotateY(90deg) scale(0.9); }
+.card-flip-leave-to { opacity: 0; transform: rotateY(-90deg) scale(0.9); }
 
 // Quiz
 .quiz-question {
   font-size: 18px;
   font-weight: 700;
-  line-height: 1.5;
+  line-height: 1.6;
   margin-bottom: 20px;
+  color: #e8ecf4;
 }
 
 .quiz-options {
@@ -452,36 +640,43 @@ onMounted(async () => {
   align-items: center;
   gap: 12px;
   padding: 14px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  background: white;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.03);
   cursor: pointer;
   font-size: 15px;
-  transition: all 0.2s;
+  color: #e8ecf4;
+  transition: all 0.25s;
   text-align: left;
 
   &:hover:not(:disabled) {
-    border-color: #667eea;
-    background: #f7f8fc;
+    border-color: rgba(0, 212, 255, 0.3);
+    background: rgba(0, 212, 255, 0.05);
+  }
+
+  &.selected {
+    border-color: rgba(0, 212, 255, 0.4);
+    background: rgba(0, 212, 255, 0.08);
   }
 
   &.correct {
-    border-color: #48bb78;
-    background: #f0fff4;
+    border-color: rgba(16, 185, 129, 0.5);
+    background: rgba(16, 185, 129, 0.1);
+    box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
   }
 
   &.wrong {
-    border-color: #fc8181;
-    background: #fff5f5;
+    border-color: rgba(239, 68, 68, 0.5);
+    background: rgba(239, 68, 68, 0.1);
     animation: shake 0.4s;
   }
 }
 
-.option-letter {
-  width: 28px;
-  height: 28px;
+.opt-letter {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
-  background: #edf2f7;
+  background: rgba(255, 255, 255, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -489,31 +684,28 @@ onMounted(async () => {
   font-size: 13px;
   flex-shrink: 0;
 
-  .correct & { background: #c6f6d5; }
-  .wrong & { background: #fed7d7; }
+  .correct & { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+  .wrong & { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
 }
 
-.option-text {
-  flex: 1;
-}
+.opt-text { flex: 1; }
+.opt-icon { font-size: 18px; }
 
-.option-mark {
-  font-size: 18px;
-}
-
-.quiz-explain {
+// Explain box
+.explain-box {
   margin-top: 16px;
   text-align: center;
-}
 
-.explain-text {
-  background: #fefcbf;
-  padding: 12px 16px;
-  border-radius: 10px;
-  font-size: 14px;
-  color: #744210;
-  margin-bottom: 16px;
-  line-height: 1.5;
+  p {
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.15);
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #f59e0b;
+    margin-bottom: 16px;
+    line-height: 1.6;
+  }
 }
 
 // Spelling
@@ -521,123 +713,131 @@ onMounted(async () => {
   font-size: 18px;
   font-weight: 700;
   margin-bottom: 20px;
-  line-height: 1.5;
+  line-height: 1.6;
+  color: #e8ecf4;
 }
 
-.spelling-input-row {
+.spelling-input-area {
   display: flex;
   gap: 10px;
 }
 
 .spelling-input {
   flex: 1;
-  padding: 12px 16px;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
   font-size: 16px;
-  outline: none;
-  transition: border-color 0.2s;
+  letter-spacing: 1px;
+}
 
-  &:focus {
-    border-color: #667eea;
-  }
+.check-btn {
+  padding: 12px 24px;
+  white-space: nowrap;
 }
 
 .spelling-result {
   margin-top: 16px;
-  text-align: center;
 }
 
-.spelling-correct {
-  font-size: 24px;
-  color: #48bb78;
+.result-correct, .result-wrong {
+  text-align: center;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: 700;
   margin-bottom: 12px;
 }
 
-.spelling-wrong {
-  font-size: 16px;
-  color: #e53e3e;
-  margin-bottom: 12px;
-
-  strong {
-    color: #48bb78;
-  }
+.result-correct {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  color: #10b981;
 }
 
-// Celebration overlay
-.celebration-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(4px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-  padding: 24px;
+.result-wrong {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  font-size: 15px;
+
+  strong { font-size: 18px; }
 }
 
-.celebration-modal {
-  background: white;
-  border-radius: 24px;
-  padding: 32px 24px;
-  text-align: center;
-  max-width: 340px;
-  width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+.result-icon { margin-right: 6px; }
 
-  h2 {
-    margin-top: 8px;
-    font-size: 22px;
-  }
-
-  p {
-    color: #718096;
-    margin: 8px 0 20px;
-    font-size: 14px;
-  }
+// XP tag
+.xp-tag {
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 8px;
+  font-size: 12px;
+  margin-left: 6px;
 }
 
-.celebration-confetti {
-  font-size: 56px;
+// Skip button
+.skip-btn {
+  display: block;
+  margin: 12px auto 0;
+  font-size: 13px;
 }
 
-.celebration-stats {
+// Celebration
+.confetti-icon { font-size: 56px; }
+
+.celebrate-chips {
   display: flex;
   justify-content: center;
-  gap: 12px;
+  gap: 10px;
   margin-bottom: 16px;
+  flex-wrap: wrap;
 }
 
-.celebrate-stat {
-  padding: 6px 14px;
+.c-chip {
+  padding: 6px 16px;
   border-radius: 20px;
   font-weight: 700;
   font-size: 14px;
-  background: #ebf8ff;
-  color: #3182ce;
 
-  &.coins { background: #fefcbf; color: #d69e2e; }
-  &.streak { background: #fed7d7; color: #e53e3e; }
+  &.xp {
+    background: rgba(0, 212, 255, 0.1);
+    color: #00d4ff;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+  }
+  &.coins {
+    background: rgba(168, 85, 247, 0.1);
+    color: #c084fc;
+    border: 1px solid rgba(168, 85, 247, 0.2);
+  }
+  &.streak {
+    background: rgba(249, 115, 22, 0.1);
+    color: #fb923c;
+    border: 1px solid rgba(249, 115, 22, 0.2);
+  }
 }
 
 .new-achievements {
-  margin: 12px 0;
-  padding: 12px;
-  background: #f7fafc;
+  margin: 12px 0 16px;
+  padding: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
 
-  h4 { margin-bottom: 8px; }
+  h4 { margin-bottom: 8px; font-size: 14px; }
 }
 
-.achievement-item {
+.ach-item {
   font-size: 14px;
   padding: 4px 0;
+  color: #8b95b0;
 }
 
-@keyframes shake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-8px); }
-  75% { transform: translateX(8px); }
+// Scale-in transition
+.scale-in-enter-active,
+.scale-in-leave-active {
+  transition: all 0.3s ease;
+}
+.scale-in-enter-from,
+.scale-in-leave-to {
+  opacity: 0;
+  transform: scale(0.85);
 }
 </style>
