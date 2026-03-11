@@ -115,7 +115,7 @@
       { "taskCode": "S4D1T1", "type": "VOCAB_CARD", "question": "turn left / turn right / go straight", "correctAnswer": "左转 / 右转 / 直走", "explanation": "这三个是最基本的方向指示。", "xpReward": 10, "sortOrder": 1 },
       { "taskCode": "S4D1T2", "type": "VOCAB_CARD", "question": "Excuse me, where is the nearest...?", "correctAnswer": "打扰一下，最近的…在哪？", "explanation": "nearest = 最近的。where is...? = ...在哪里？", "xpReward": 10, "sortOrder": 2 },
       { "taskCode": "S4D1T3", "type": "QUIZ_SINGLE", "question": "\"It's across from the bank.\" 中 across from 的意思是？", "options": ["在...对面", "在...旁边", "在...后面", "在...里面"], "correctAnswer": "在...对面", "explanation": "across from = 在对面。next to = 在旁边。behind = 在后面。", "xpReward": 15, "sortOrder": 3 },
-      { "taskCode": "S4D1T4", "type": "QUIZ_SINGLE", "question": "\"Go two blocks and turn right.\" 中 block 指什么？", "options": ["街区", "积木", "障碍", "大楼"], "correctAnswer": "街区", "explanation": "block 在指路时意为'街区'，走两个街区 = 走过两个路口。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S4D1T4", "type": "QUIZ_SINGLE", "question": "\"Go two blocks and turn right.\" 中 block 指什么？", "options": ["街区", "积木", "障碍", "大楼"], "correctAnswer": "街区", "explanation": "block 在指路时意为"街区"，走两个街区 = 走过两个路口。", "xpReward": 15, "sortOrder": 4 },
       { "taskCode": "S4D1T5", "type": "SPELLING", "question": "请拼写：地铁站 (sub__y st____n)", "correctAnswer": "subway station", "explanation": "subway = 地铁(美式), underground/tube(英式)。station = 车站。", "xpReward": 20, "sortOrder": 5 }
     ]
   },
@@ -124,7 +124,7 @@
     "title": "Day 11 - 乘坐交通工具",
     "description": "掌握乘坐各种交通工具的英语表达",
     "tasks": [
-      { "taskCode": "S4D2T1", "type": "VOCAB_CARD", "question": "bus / taxi / train / subway / airplane", "correctAnswer": "公交车 / 出租车 / 火车 / 地铁 / 飞机", "explanation": "by bus/by taxi/by train 表示'乘坐...'。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S4D2T1", "type": "VOCAB_CARD", "question": "bus / taxi / train / subway / airplane", "correctAnswer": "公交车 / 出租车 / 火车 / 地铁 / 飞机", "explanation": "by bus/by taxi/by train 表示"乘坐..."。", "xpReward": 10, "sortOrder": 1 },
       { "taskCode": "S4D2T2", "type": "VOCAB_CARD", "question": "ticket / one-way / round-trip / platform", "correctAnswer": "票 / 单程 / 往返 / 站台", "explanation": "A round-trip ticket = 一张往返票。", "xpReward": 10, "sortOrder": 2 },
       { "taskCode": "S4D2T3", "type": "QUIZ_SINGLE", "question": "\"How long does it take to get there?\" 在问什么？", "options": ["到那里需要多长时间？", "到那里多少钱？", "到那里多远？", "到那里怎么走？"], "correctAnswer": "到那里需要多长时间？", "explanation": "how long = 多长时间。It takes about 30 minutes。", "xpReward": 15, "sortOrder": 3 },
       { "taskCode": "S4D2T4", "type": "QUIZ_SINGLE", "question": "boarding pass 是什么？", "options": ["登机牌", "公交卡", "驾照", "护照"], "correctAnswer": "登机牌", "explanation": "boarding = 登机/登船, pass = 通行证。坐飞机必备。", "xpReward": 15, "sortOrder": 4 },
@@ -150,7 +150,7 @@
     "tasks": [
       { "taskCode": "S5D1T1", "type": "VOCAB_CARD", "question": "meeting / deadline / project / report", "correctAnswer": "会议 / 截止日期 / 项目 / 报告", "explanation": "The deadline is Friday = 截止日期是周五。", "xpReward": 10, "sortOrder": 1 },
       { "taskCode": "S5D1T2", "type": "VOCAB_CARD", "question": "schedule / agenda / colleague / manager", "correctAnswer": "日程 / 议程 / 同事 / 经理", "explanation": "colleague = 同事(正式), coworker 也很常用。", "xpReward": 10, "sortOrder": 2 },
-      { "taskCode": "S5D1T3", "type": "QUIZ_SINGLE", "question": "\"Let's schedule a meeting for next Monday.\" 是什么意思？", "options": ["我们安排下周一开会吧", "我们取消下周一的会议", "下周一有会议吗", "会议改到下周一"], "correctAnswer": "我们安排下周一开会吧", "explanation": "schedule 作动词时意为'安排'。Let's = 让我们。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S5D1T3", "type": "QUIZ_SINGLE", "question": "\"Let's schedule a meeting for next Monday.\" 是什么意思？", "options": ["我们安排下周一开会吧", "我们取消下周一的会议", "下周一有会议吗", "会议改到下周一"], "correctAnswer": "我们安排下周一开会吧", "explanation": "schedule 作动词时意为"安排"。Let's = 让我们。", "xpReward": 15, "sortOrder": 3 },
       { "taskCode": "S5D1T4", "type": "QUIZ_SINGLE", "question": "\"Could you send me the file by email?\" 中 by email 的意思是？", "options": ["通过邮件", "在邮件之前", "关于邮件", "除了邮件"], "correctAnswer": "通过邮件", "explanation": "by = 通过某种方式。by email = 通过邮件发送。", "xpReward": 15, "sortOrder": 4 },
       { "taskCode": "S5D1T5", "type": "SPELLING", "question": "请拼写：会议 (m____ng)", "correctAnswer": "meeting", "explanation": "meeting 来自 meet(见面) + ing。have a meeting = 开会。", "xpReward": 20, "sortOrder": 5 }
     ]
@@ -174,7 +174,7 @@
     "tasks": [
       { "taskCode": "S5D3T1", "type": "VOCAB_CARD", "question": "This is [name] speaking. / May I speak to...?", "correctAnswer": "我是[名字]。/ 我能和…通话吗？", "explanation": "接电话时用 This is... 自报姓名，不说 I am...。", "xpReward": 10, "sortOrder": 1 },
       { "taskCode": "S5D3T2", "type": "VOCAB_CARD", "question": "hold on / call back / leave a message", "correctAnswer": "稍等 / 回电 / 留言", "explanation": "Could you hold on a moment? = 请稍等一下好吗？", "xpReward": 10, "sortOrder": 2 },
-      { "taskCode": "S5D3T3", "type": "QUIZ_SINGLE", "question": "\"I'm afraid he's in a meeting right now.\" 是在表达什么？", "options": ["他现在正在开会", "他很害怕开会", "他要去开会", "他取消了会议"], "correctAnswer": "他现在正在开会", "explanation": "I'm afraid... 是委婉表达坏消息的方式，不是'害怕'的意思。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S5D3T3", "type": "QUIZ_SINGLE", "question": "\"I'm afraid he's in a meeting right now.\" 是在表达什么？", "options": ["他现在正在开会", "他很害怕开会", "他要去开会", "他取消了会议"], "correctAnswer": "他现在正在开会", "explanation": "I'm afraid... 是委婉表达坏消息的方式，不是"害怕"的意思。", "xpReward": 15, "sortOrder": 3 },
       { "taskCode": "S5D3T4", "type": "QUIZ_SINGLE", "question": "\"Could you repeat that, please?\" 是在请求什么？", "options": ["请再说一遍", "请大声一点", "请说慢一点", "请挂断电话"], "correctAnswer": "请再说一遍", "explanation": "repeat = 重复。Could you...? 比 Can you...? 更礼貌。", "xpReward": 15, "sortOrder": 4 },
       { "taskCode": "S5D3T5", "type": "SPELLING", "question": "请拼写：电话 (tel____ne)", "correctAnswer": "telephone", "explanation": "telephone 可简称 phone。phone call = 电话。", "xpReward": 20, "sortOrder": 5 }
     ]
