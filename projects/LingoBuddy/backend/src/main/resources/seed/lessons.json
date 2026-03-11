@@ -1,0 +1,182 @@
+[
+  {
+    "stageId": 1, "dayIndex": 1,
+    "title": "Day 1 - 常用问候语",
+    "description": "学习基本的英语打招呼方式",
+    "tasks": [
+      { "taskCode": "S1D1T1", "type": "VOCAB_CARD", "question": "Hello / Hi", "correctAnswer": "你好", "explanation": "Hello 较正式，Hi 较随意，都可以用来打招呼。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S1D1T2", "type": "VOCAB_CARD", "question": "Good morning / Good afternoon", "correctAnswer": "早上好 / 下午好", "explanation": "morning 指早晨(到中午前)，afternoon 指下午(12点到傍晚)。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S1D1T3", "type": "QUIZ_SINGLE", "question": "\"How are you?\" 最常见的回答是？", "options": ["I'm fine, thank you.", "I'm sorry.", "Good night.", "See you."], "correctAnswer": "I'm fine, thank you.", "explanation": "这是最经典的回答方式，还可以说 I'm good / Not bad。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S1D1T4", "type": "QUIZ_SINGLE", "question": "下面哪个是告别用语？", "options": ["Goodbye", "Thank you", "Excuse me", "Please"], "correctAnswer": "Goodbye", "explanation": "Goodbye = 再见。还可以说 Bye / See you / Take care。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S1D1T5", "type": "SPELLING", "question": "请拼写：谢谢你 (t____k y__)", "correctAnswer": "thank you", "explanation": "thank you 是最基本的感谢用语，简写 thanks 也很常用。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 1, "dayIndex": 2,
+    "title": "Day 2 - 数字与时间",
+    "description": "学会说数字和询问时间",
+    "tasks": [
+      { "taskCode": "S1D2T1", "type": "VOCAB_CARD", "question": "one, two, three, four, five", "correctAnswer": "1, 2, 3, 4, 5", "explanation": "这是英语中最基础的五个数字。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S1D2T2", "type": "VOCAB_CARD", "question": "six, seven, eight, nine, ten", "correctAnswer": "6, 7, 8, 9, 10", "explanation": "学会1-10是数字学习的第一步！", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S1D2T3", "type": "QUIZ_SINGLE", "question": "\"What time is it?\" 的意思是？", "options": ["现在几点了？", "你多大了？", "你叫什么？", "多少钱？"], "correctAnswer": "现在几点了？", "explanation": "time = 时间。What time is it? 用来询问当前时间。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S1D2T4", "type": "QUIZ_SINGLE", "question": "eleven 是数字几？", "options": ["11", "12", "13", "14"], "correctAnswer": "11", "explanation": "eleven = 11, twelve = 12, thirteen = 13。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S1D2T5", "type": "SPELLING", "question": "请拼写数字 20 (tw____y)", "correctAnswer": "twenty", "explanation": "twenty = 20。类似的：thirty(30), forty(40), fifty(50)。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 1, "dayIndex": 3,
+    "title": "Day 3 - 颜色与形状",
+    "description": "认识常见的颜色和形状词汇",
+    "tasks": [
+      { "taskCode": "S1D3T1", "type": "VOCAB_CARD", "question": "red, blue, green, yellow", "correctAnswer": "红色、蓝色、绿色、黄色", "explanation": "这四个是最基础的颜色词，日常生活中频繁使用。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S1D3T2", "type": "VOCAB_CARD", "question": "black, white, orange, purple", "correctAnswer": "黑色、白色、橙色、紫色", "explanation": "orange 既是颜色词（橙色）也是水果名（橙子）。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S1D3T3", "type": "QUIZ_SINGLE", "question": "The sky is ___.", "options": ["blue", "red", "green", "yellow"], "correctAnswer": "blue", "explanation": "天空是蓝色的。sky = 天空, blue = 蓝色。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S1D3T4", "type": "QUIZ_SINGLE", "question": "circle 是什么形状？", "options": ["圆形", "正方形", "三角形", "长方形"], "correctAnswer": "圆形", "explanation": "circle=圆形, square=正方形, triangle=三角形, rectangle=长方形。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S1D3T5", "type": "SPELLING", "question": "请拼写颜色：绿色 (g___n)", "correctAnswer": "green", "explanation": "green 不仅表示绿色，也可以表示 '环保的'。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 2, "dayIndex": 1,
+    "title": "Day 4 - 自我介绍",
+    "description": "学会用英语做简单的自我介绍",
+    "tasks": [
+      { "taskCode": "S2D1T1", "type": "VOCAB_CARD", "question": "My name is... / I'm...", "correctAnswer": "我的名字是… / 我是…", "explanation": "两种自我介绍方式：正式用 My name is…，随意用 I'm…。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S2D1T2", "type": "VOCAB_CARD", "question": "Nice to meet you.", "correctAnswer": "很高兴见到你。", "explanation": "初次见面时说的客套话，对方会回答 Nice to meet you too。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S2D1T3", "type": "QUIZ_SINGLE", "question": "\"Where are you from?\" 是在问什么？", "options": ["你来自哪里？", "你要去哪里？", "你住在哪里？", "你在哪里工作？"], "correctAnswer": "你来自哪里？", "explanation": "from = 来自。回答：I'm from China / I'm from Beijing。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S2D1T4", "type": "QUIZ_SINGLE", "question": "如何用英语问别人的年龄？", "options": ["How old are you?", "How are you?", "How tall are you?", "How much is it?"], "correctAnswer": "How old are you?", "explanation": "How old = 多大年纪。回答：I'm 25 years old。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S2D1T5", "type": "SPELLING", "question": "请拼写：学生 (st____t)", "correctAnswer": "student", "explanation": "student = 学生, teacher = 老师, engineer = 工程师。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 2, "dayIndex": 2,
+    "title": "Day 5 - 家庭成员",
+    "description": "认识家庭成员的英语表达",
+    "tasks": [
+      { "taskCode": "S2D2T1", "type": "VOCAB_CARD", "question": "father / mother / parents", "correctAnswer": "父亲 / 母亲 / 父母", "explanation": "口语中常说 dad(爸爸)和 mom(妈妈)。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S2D2T2", "type": "VOCAB_CARD", "question": "brother / sister / family", "correctAnswer": "兄弟 / 姐妹 / 家庭", "explanation": "brother 不分哥弟，sister 不分姐妹，需要用 older/younger 区分。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S2D2T3", "type": "QUIZ_SINGLE", "question": "grandmother 是什么意思？", "options": ["祖母/外婆", "母亲", "阿姨", "姐姐"], "correctAnswer": "祖母/外婆", "explanation": "grand- 前缀表示隔代关系：grandfather=祖父，grandmother=祖母。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S2D2T4", "type": "QUIZ_SINGLE", "question": "\"I have two _____.\" (我有两个孩子)", "options": ["children", "parents", "brothers", "friends"], "correctAnswer": "children", "explanation": "child = 孩子(单数)，children = 孩子们(复数)。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S2D2T5", "type": "SPELLING", "question": "请拼写：家庭 (f____y)", "correctAnswer": "family", "explanation": "family 可以指一家人。My family is big = 我家人很多。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 2, "dayIndex": 3,
+    "title": "Day 6 - 兴趣爱好",
+    "description": "学会表达自己的兴趣爱好",
+    "tasks": [
+      { "taskCode": "S2D3T1", "type": "VOCAB_CARD", "question": "hobby / like / enjoy", "correctAnswer": "爱好 / 喜欢 / 享受", "explanation": "表达爱好：My hobby is... / I like... / I enjoy...。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S2D3T2", "type": "VOCAB_CARD", "question": "reading / music / sports / cooking", "correctAnswer": "阅读 / 音乐 / 运动 / 烹饪", "explanation": "这些都是常见的兴趣爱好表达。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S2D3T3", "type": "QUIZ_SINGLE", "question": "\"What do you do in your free time?\" 的意思是？", "options": ["你空闲时做什么？", "你的工作是什么？", "你什么时候有空？", "你想做什么？"], "correctAnswer": "你空闲时做什么？", "explanation": "free time = 空闲时间。这是询问爱好的常用方式。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S2D3T4", "type": "QUIZ_SINGLE", "question": "\"I'm interested in painting.\" 中 interested in 的意思是？", "options": ["对…感兴趣", "擅长…", "厌倦…", "害怕…"], "correctAnswer": "对…感兴趣", "explanation": "be interested in = 对…感兴趣。painting = 绘画。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S2D3T5", "type": "SPELLING", "question": "请拼写：音乐 (m___c)", "correctAnswer": "music", "explanation": "music 是不可数名词，不加 a/an。I like music。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 3, "dayIndex": 1,
+    "title": "Day 7 - 超市购物",
+    "description": "学习在超市购物的常用英语",
+    "tasks": [
+      { "taskCode": "S3D1T1", "type": "VOCAB_CARD", "question": "How much is this? / How much does it cost?", "correctAnswer": "这个多少钱？", "explanation": "how much 用于询问价格或不可数名词的数量。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S3D1T2", "type": "VOCAB_CARD", "question": "cheap / expensive / discount / sale", "correctAnswer": "便宜的 / 贵的 / 折扣 / 促销", "explanation": "on sale = 在打折。it's too expensive = 太贵了。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S3D1T3", "type": "QUIZ_SINGLE", "question": "\"Can I try this on?\" 是在请求什么？", "options": ["我能试穿吗？", "我能买吗？", "我能退货吗？", "我能打折吗？"], "correctAnswer": "我能试穿吗？", "explanation": "try on = 试穿/试戴。常用于买衣服鞋子时。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S3D1T4", "type": "QUIZ_SINGLE", "question": "店员说 \"Cash or card?\"，他在问什么？", "options": ["现金还是刷卡？", "大号还是小号？", "打包还是堂食？", "要不要小票？"], "correctAnswer": "现金还是刷卡？", "explanation": "cash = 现金，card = 信用卡/银行卡。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S3D1T5", "type": "SPELLING", "question": "请拼写：超市 (sup_____ket)", "correctAnswer": "supermarket", "explanation": "supermarket = 超市。super(超级) + market(市场)。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 3, "dayIndex": 2,
+    "title": "Day 8 - 餐厅点餐",
+    "description": "掌握在西餐厅点餐的实用英语",
+    "tasks": [
+      { "taskCode": "S3D2T1", "type": "VOCAB_CARD", "question": "menu / order / bill / tip", "correctAnswer": "菜单 / 点餐 / 账单 / 小费", "explanation": "Can I see the menu? = 能看下菜单吗？Can I have the bill? = 买单。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S3D2T2", "type": "VOCAB_CARD", "question": "appetizer / main course / dessert / beverage", "correctAnswer": "开胃菜 / 主菜 / 甜点 / 饮料", "explanation": "西餐一般分为前菜→主菜→甜点的顺序。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S3D2T3", "type": "QUIZ_SINGLE", "question": "\"I'd like a steak, please.\" 中 I'd like 的意思是？", "options": ["我想要", "我不喜欢", "我已经有了", "我曾经吃过"], "correctAnswer": "我想要", "explanation": "I'd like = I would like，比 I want 更礼貌。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S3D2T4", "type": "QUIZ_SINGLE", "question": "服务员问 \"How would you like your steak?\"，下面哪个不是回答？", "options": ["With chopsticks", "Medium rare", "Well done", "Rare"], "correctAnswer": "With chopsticks", "explanation": "这是在问牛排几分熟。rare=三分, medium rare=五分, well done=全熟。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S3D2T5", "type": "SPELLING", "question": "请拼写：餐厅 (rest_____t)", "correctAnswer": "restaurant", "explanation": "restaurant 源自法语，是英语中比较难拼的单词之一。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 3, "dayIndex": 3,
+    "title": "Day 9 - 水果与蔬菜",
+    "description": "学习常见水果和蔬菜的英文名",
+    "tasks": [
+      { "taskCode": "S3D3T1", "type": "VOCAB_CARD", "question": "apple / banana / orange / grape", "correctAnswer": "苹果 / 香蕉 / 橙子 / 葡萄", "explanation": "apple 在英语文化中有特殊地位：An apple a day keeps the doctor away。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S3D3T2", "type": "VOCAB_CARD", "question": "tomato / potato / carrot / onion", "correctAnswer": "番茄 / 土豆 / 胡萝卜 / 洋葱", "explanation": "tomato 和 potato 的复数加 -es: tomatoes, potatoes。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S3D3T3", "type": "QUIZ_SINGLE", "question": "watermelon 是什么水果？", "options": ["西瓜", "哈密瓜", "柠檬", "草莓"], "correctAnswer": "西瓜", "explanation": "water(水) + melon(瓜) = watermelon(西瓜)。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S3D3T4", "type": "QUIZ_SINGLE", "question": "\"I'm a vegetarian.\" 是什么意思？", "options": ["我是素食者", "我是厨师", "我很饿", "我喜欢蔬菜"], "correctAnswer": "我是素食者", "explanation": "vegetarian = 素食者。vegetable = 蔬菜。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S3D3T5", "type": "SPELLING", "question": "请拼写：草莓 (str____ry)", "correctAnswer": "strawberry", "explanation": "straw(稻草) + berry(浆果) = strawberry(草莓)。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 4, "dayIndex": 1,
+    "title": "Day 10 - 问路指路",
+    "description": "学会用英语问路和理解方向指示",
+    "tasks": [
+      { "taskCode": "S4D1T1", "type": "VOCAB_CARD", "question": "turn left / turn right / go straight", "correctAnswer": "左转 / 右转 / 直走", "explanation": "这三个是最基本的方向指示。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S4D1T2", "type": "VOCAB_CARD", "question": "Excuse me, where is the nearest...?", "correctAnswer": "打扰一下，最近的…在哪？", "explanation": "nearest = 最近的。where is...? = ...在哪里？", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S4D1T3", "type": "QUIZ_SINGLE", "question": "\"It's across from the bank.\" 中 across from 的意思是？", "options": ["在...对面", "在...旁边", "在...后面", "在...里面"], "correctAnswer": "在...对面", "explanation": "across from = 在对面。next to = 在旁边。behind = 在后面。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S4D1T4", "type": "QUIZ_SINGLE", "question": "\"Go two blocks and turn right.\" 中 block 指什么？", "options": ["街区", "积木", "障碍", "大楼"], "correctAnswer": "街区", "explanation": "block 在指路时意为"街区"，走两个街区 = 走过两个路口。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S4D1T5", "type": "SPELLING", "question": "请拼写：地铁站 (sub__y st____n)", "correctAnswer": "subway station", "explanation": "subway = 地铁(美式), underground/tube(英式)。station = 车站。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 4, "dayIndex": 2,
+    "title": "Day 11 - 乘坐交通工具",
+    "description": "掌握乘坐各种交通工具的英语表达",
+    "tasks": [
+      { "taskCode": "S4D2T1", "type": "VOCAB_CARD", "question": "bus / taxi / train / subway / airplane", "correctAnswer": "公交车 / 出租车 / 火车 / 地铁 / 飞机", "explanation": "by bus/by taxi/by train 表示"乘坐..."。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S4D2T2", "type": "VOCAB_CARD", "question": "ticket / one-way / round-trip / platform", "correctAnswer": "票 / 单程 / 往返 / 站台", "explanation": "A round-trip ticket = 一张往返票。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S4D2T3", "type": "QUIZ_SINGLE", "question": "\"How long does it take to get there?\" 在问什么？", "options": ["到那里需要多长时间？", "到那里多少钱？", "到那里多远？", "到那里怎么走？"], "correctAnswer": "到那里需要多长时间？", "explanation": "how long = 多长时间。It takes about 30 minutes。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S4D2T4", "type": "QUIZ_SINGLE", "question": "boarding pass 是什么？", "options": ["登机牌", "公交卡", "驾照", "护照"], "correctAnswer": "登机牌", "explanation": "boarding = 登机/登船, pass = 通行证。坐飞机必备。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S4D2T5", "type": "SPELLING", "question": "请拼写：机场 (air___t)", "correctAnswer": "airport", "explanation": "air(空气/航空) + port(港口) = airport(机场)。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 4, "dayIndex": 3,
+    "title": "Day 12 - 酒店住宿",
+    "description": "学习酒店入住和退房的英语表达",
+    "tasks": [
+      { "taskCode": "S4D3T1", "type": "VOCAB_CARD", "question": "check in / check out / reservation", "correctAnswer": "入住 / 退房 / 预订", "explanation": "I have a reservation under the name... = 我用...的名字预订了。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S4D3T2", "type": "VOCAB_CARD", "question": "single room / double room / suite", "correctAnswer": "单人间 / 双人间 / 套房", "explanation": "single = 单人, double = 双人, suite = 套房(最高级)。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S4D3T3", "type": "QUIZ_SINGLE", "question": "\"Is breakfast included?\" 是在问什么？", "options": ["包含早餐吗？", "早餐在哪吃？", "早餐几点？", "早餐好吃吗？"], "correctAnswer": "包含早餐吗？", "explanation": "included = 包含在内的。Yes, breakfast is included。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S4D3T4", "type": "QUIZ_SINGLE", "question": "前台说 \"Your room is on the 5th floor.\" 你的房间在几楼？", "options": ["5楼", "4楼", "6楼", "15楼"], "correctAnswer": "5楼", "explanation": "5th floor = 5楼。floor = 楼层。Take the elevator = 坐电梯。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S4D3T5", "type": "SPELLING", "question": "请拼写：钥匙 (k__)", "correctAnswer": "key", "explanation": "room key = 房间钥匙。key card = 房卡(现代酒店最常用)。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 5, "dayIndex": 1,
+    "title": "Day 13 - 办公室日常",
+    "description": "学习职场中最常用的英语表达",
+    "tasks": [
+      { "taskCode": "S5D1T1", "type": "VOCAB_CARD", "question": "meeting / deadline / project / report", "correctAnswer": "会议 / 截止日期 / 项目 / 报告", "explanation": "The deadline is Friday = 截止日期是周五。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S5D1T2", "type": "VOCAB_CARD", "question": "schedule / agenda / colleague / manager", "correctAnswer": "日程 / 议程 / 同事 / 经理", "explanation": "colleague = 同事(正式), coworker 也很常用。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S5D1T3", "type": "QUIZ_SINGLE", "question": "\"Let's schedule a meeting for next Monday.\" 是什么意思？", "options": ["我们安排下周一开会吧", "我们取消下周一的会议", "下周一有会议吗", "会议改到下周一"], "correctAnswer": "我们安排下周一开会吧", "explanation": "schedule 作动词时意为"安排"。Let's = 让我们。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S5D1T4", "type": "QUIZ_SINGLE", "question": "\"Could you send me the file by email?\" 中 by email 的意思是？", "options": ["通过邮件", "在邮件之前", "关于邮件", "除了邮件"], "correctAnswer": "通过邮件", "explanation": "by = 通过某种方式。by email = 通过邮件发送。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S5D1T5", "type": "SPELLING", "question": "请拼写：会议 (m____ng)", "correctAnswer": "meeting", "explanation": "meeting 来自 meet(见面) + ing。have a meeting = 开会。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 5, "dayIndex": 2,
+    "title": "Day 14 - 商务邮件",
+    "description": "学习写商务邮件的基本用语",
+    "tasks": [
+      { "taskCode": "S5D2T1", "type": "VOCAB_CARD", "question": "Dear... / To whom it may concern", "correctAnswer": "亲爱的… / 致相关人士", "explanation": "Dear + 名字/职位 是邮件最常见的开头。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S5D2T2", "type": "VOCAB_CARD", "question": "Best regards / Sincerely / Kind regards", "correctAnswer": "此致敬礼 / 真诚地 / 亲切的问候", "explanation": "这三个都是商务邮件常用的结尾敬语。", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S5D2T3", "type": "QUIZ_SINGLE", "question": "\"Please find attached the report.\" 是什么意思？", "options": ["请查收附件中的报告", "请找到那份报告", "请阅读报告", "请修改报告"], "correctAnswer": "请查收附件中的报告", "explanation": "attached = 附件的。这是邮件中发送附件时的经典表达。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S5D2T4", "type": "QUIZ_SINGLE", "question": "邮件中 \"FYI\" 是什么的缩写？", "options": ["For Your Information", "For Your Interest", "From Your Inbox", "Find Your Item"], "correctAnswer": "For Your Information", "explanation": "FYI = 供你参考。ASAP = As Soon As Possible(尽快)。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S5D2T5", "type": "SPELLING", "question": "请拼写：附件 (att______nt)", "correctAnswer": "attachment", "explanation": "attach(附加) + ment = attachment(附件)。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  },
+  {
+    "stageId": 5, "dayIndex": 3,
+    "title": "Day 15 - 电话沟通",
+    "description": "学习商务电话中的常用英语",
+    "tasks": [
+      { "taskCode": "S5D3T1", "type": "VOCAB_CARD", "question": "This is [name] speaking. / May I speak to...?", "correctAnswer": "我是[名字]。/ 我能和…通话吗？", "explanation": "接电话时用 This is... 自报姓名，不说 I am...。", "xpReward": 10, "sortOrder": 1 },
+      { "taskCode": "S5D3T2", "type": "VOCAB_CARD", "question": "hold on / call back / leave a message", "correctAnswer": "稍等 / 回电 / 留言", "explanation": "Could you hold on a moment? = 请稍等一下好吗？", "xpReward": 10, "sortOrder": 2 },
+      { "taskCode": "S5D3T3", "type": "QUIZ_SINGLE", "question": "\"I'm afraid he's in a meeting right now.\" 是在表达什么？", "options": ["他现在正在开会", "他很害怕开会", "他要去开会", "他取消了会议"], "correctAnswer": "他现在正在开会", "explanation": "I'm afraid... 是委婉表达坏消息的方式，不是"害怕"的意思。", "xpReward": 15, "sortOrder": 3 },
+      { "taskCode": "S5D3T4", "type": "QUIZ_SINGLE", "question": "\"Could you repeat that, please?\" 是在请求什么？", "options": ["请再说一遍", "请大声一点", "请说慢一点", "请挂断电话"], "correctAnswer": "请再说一遍", "explanation": "repeat = 重复。Could you...? 比 Can you...? 更礼貌。", "xpReward": 15, "sortOrder": 4 },
+      { "taskCode": "S5D3T5", "type": "SPELLING", "question": "请拼写：电话 (tel____ne)", "correctAnswer": "telephone", "explanation": "telephone 可简称 phone。phone call = 电话。", "xpReward": 20, "sortOrder": 5 }
+    ]
+  }
+]

@@ -1,0 +1,230 @@
+// 颜色主题
+$primary: #667eea;
+$primary-dark: #5a67d8;
+$secondary: #764ba2;
+$success: #48bb78;
+$warning: #f6ad55;
+$danger: #fc8181;
+$info: #63b3ed;
+
+$bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$bg-page: #f7f8fc;
+$text-primary: #2d3748;
+$text-secondary: #718096;
+$text-light: #a0aec0;
+
+$card-radius: 16px;
+$card-shadow: 0 4px 20px rgba(102, 126, 234, 0.1);
+
+// 全局样式
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, 'Noto Sans SC', sans-serif;
+  background: $bg-page;
+  color: $text-primary;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+// 通用卡片
+.card {
+  background: white;
+  border-radius: $card-radius;
+  box-shadow: $card-shadow;
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.15);
+  }
+}
+
+// 渐变按钮
+.btn-primary {
+  background: $bg-gradient;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+// XP 动画
+@keyframes xp-pop {
+  0% { transform: scale(0) translateY(0); opacity: 0; }
+  50% { transform: scale(1.3) translateY(-20px); opacity: 1; }
+  100% { transform: scale(1) translateY(-40px); opacity: 0; }
+}
+
+.xp-popup {
+  animation: xp-pop 1s ease-out forwards;
+  color: $warning;
+  font-weight: bold;
+  font-size: 18px;
+  position: absolute;
+  pointer-events: none;
+}
+
+// 等级进度条
+.level-progress {
+  height: 8px;
+  border-radius: 4px;
+  background: #e2e8f0;
+  overflow: hidden;
+
+  .level-progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    background: $bg-gradient;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+// 页面容器
+.page-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: 0 16px 80px;
+  min-height: 100vh;
+}
+
+// 底部导航
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 480px;
+  background: white;
+  border-top: 1px solid #edf2f7;
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 0;
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+  z-index: 100;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 4px 12px;
+  color: $text-light;
+  text-decoration: none;
+  font-size: 11px;
+  cursor: pointer;
+  transition: color 0.2s;
+
+  .nav-icon {
+    font-size: 22px;
+  }
+
+  &.active {
+    color: $primary;
+  }
+}
+
+// 打卡日历格子
+.checkin-cell {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  transition: all 0.2s;
+
+  &.checked {
+    background: $bg-gradient;
+    color: white;
+    font-weight: 600;
+  }
+
+  &.today {
+    border: 2px solid $primary;
+  }
+}
+
+// 成就卡片
+.achievement-card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  transition: all 0.3s;
+
+  &.locked {
+    opacity: 0.5;
+    filter: grayscale(0.8);
+  }
+
+  .achievement-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+}
+
+// Shake animation for wrong answer
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+// Confetti burst for correct answer
+@keyframes confetti-fall {
+  0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(60px) rotate(360deg); opacity: 0; }
+}
+
+// 滚动条美化
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 2px;
+}
