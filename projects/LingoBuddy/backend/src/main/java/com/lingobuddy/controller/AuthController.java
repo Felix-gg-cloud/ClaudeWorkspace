@@ -10,12 +10,16 @@ import com.lingobuddy.repository.UserRepository;
 import com.lingobuddy.service.CheckinService;
 import com.lingobuddy.service.LevelService;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -30,6 +34,7 @@ public class AuthController {
     private final CheckinService checkinService;
     private final DailyCheckinRepository checkinRepository;
     private final TaskProgressRepository progressRepository;
+    private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
 
     public AuthController(AuthenticationManager authenticationManager,
                           UserRepository userRepository,
@@ -46,12 +51,16 @@ public class AuthController {
     }
 
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest req, HttpServletRequest request) {
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest req,
+                                   HttpServletRequest request,
+                                   HttpServletResponse response) {
         Authentication auth = authenticationManager.authenticate(
             new UsernamePasswordAuthenticationToken(req.getUsername(), req.getPassword())
         );
-        SecurityContextHolder.getContext().setAuthentication(auth);
-        request.getSession(true);
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        context.setAuthentication(auth);
+        SecurityContextHolder.setContext(context);
+        securityContextRepository.saveContext(context, request, response);
 
         User user = userRepository.findByUsername(req.getUsername()).orElseThrow();
         return ResponseEntity.ok(buildUserInfo(user));

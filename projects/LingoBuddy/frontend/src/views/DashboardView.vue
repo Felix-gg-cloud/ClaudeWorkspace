@@ -124,8 +124,10 @@ const dailyTip = computed(() => {
 })
 
 onMounted(async () => {
-  const u = await userStore.fetchMe()
-  if (!u) router.replace('/login')
+  if (!userStore.isLoggedIn) {
+    const u = await userStore.fetchMe()
+    if (!u) router.replace('/login')
+  }
 })
 </script>
 
