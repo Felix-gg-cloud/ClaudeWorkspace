@@ -1,0 +1,855 @@
+<template>
+  <MainLayout>
+    <div class="camp-explore">
+      <!-- 顶部工具栏 -->
+      <div class="camp-toolbar">
+        <button class="btn-back" @click="goBack">← 返回大厅</button>
+        <div class="camp-stats">
+          <span class="stat">🐺 击败: {{ defeatedCount }}/{{ totalMonsters }}</span>
+          <span class="stat">💎 宝箱: {{ openedChests }}/{{ totalChests }}</span>
+        </div>
+        <button class="btn-skip" @click="skipToCombat">跳过探索 →</button>
+      </div>
+
+      <!-- Phaser 游戏容器 -->
+      <div ref="gameContainer" class="game-container"></div>
+
+      <!-- 单词怪物遭遇弹窗 -->
+      <WordEncounterDialog
+        v-if="currentEncounter && currentEncounter.type === 'monster'"
+        :encounter="currentEncounter"
+        :combo="comboCount"
+        @resolve="onEncounterResolve"
+        @close="onEncounterClose"
+      />
+
+      <!-- NPC 对话弹窗 -->
+      <Teleport to="body">
+        <div v-if="currentEncounter && currentEncounter.type === 'npc'" class="npc-dialog-overlay" @click="advanceNpc">
+          <div class="npc-dialog" @click.stop>
+            <div class="npc-avatar-frame">
+              <div class="npc-avatar">🧙</div>
+            </div>
+            <div class="npc-content">
+              <div class="npc-name">{{ currentEncounter.npcName ?? 'NPC' }}</div>
+              <p class="npc-text">{{ npcCurrentLine }}</p>
+              <div class="npc-footer">
+                <span class="npc-progress">{{ npcLineIndex + 1 }} / {{ currentEncounter.npcLines?.length ?? 0 }}</span>
+                <button class="npc-next-btn" @click="advanceNpc">
+                  {{ isLastNpcLine ? '✓ 关闭' : '继续 →' }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </Teleport>
+
+      <!-- 宝箱弹窗 -->
+      <Teleport to="body">
+        <div v-if="currentEncounter && currentEncounter.type === 'treasure'" class="treasure-overlay">
+          <div class="treasure-dialog">
+            <div class="treasure-glow"></div>
+            <div class="treasure-icon">💎</div>
+            <h3>发现宝箱！</h3>
+            <div class="treasure-rewards">
+              <div class="reward-badge">✨ +{{ currentEncounter.reward?.xp ?? 0 }} XP</div>
+              <div class="reward-badge">🪙 +{{ currentEncounter.reward?.coins ?? 0 }} 金币</div>
+            </div>
+            <button class="btn-collect" @click="collectTreasure">🎁 收取奖励</button>
+          </div>
+        </div>
+      </Teleport>
+
+      <!-- 图鉴按钮 -->
+      <button class="btn-codex" @click="showCodex = !showCodex" title="图鉴">
+        📖
+      </button>
+
+      <!-- 连击特效覆盖 -->
+      <Teleport to="body">
+        <div v-if="showComboOverlay" class="combo-overlay">
+          <div class="combo-text">{{ comboOverlayText }}</div>
+        </div>
+      </Teleport>
+
+      <!-- 随机事件弹窗 -->
+      <Teleport to="body">
+        <div v-if="randomEvent" class="random-event-overlay" @click="dismissRandomEvent">
+          <div class="random-event-dialog" @click.stop>
+            <h3 class="event-title">{{ randomEvent.title }}</h3>
+            <p class="event-message">{{ randomEvent.message }}</p>
+            <div class="event-rewards" v-if="randomEvent.reward?.xp || randomEvent.reward?.coins">
+              <span v-if="randomEvent.reward?.xp" class="reward-badge">✨ +{{ randomEvent.reward.xp }} XP</span>
+              <span v-if="randomEvent.reward?.coins" class="reward-badge">🪙 +{{ randomEvent.reward.coins }} 金币</span>
+            </div>
+            <button class="btn-event-ok" @click="dismissRandomEvent">知道了！</button>
+          </div>
+        </div>
+      </Teleport>
+
+      <!-- 图鉴面板 -->
+      <div v-if="showCodex" class="codex-overlay" @click="showCodex = false">
+        <div class="codex-panel dark-panel" @click.stop>
+          <h3 class="codex-title">📖 单词图鉴</h3>
+          <div class="codex-list" v-if="collectedWords.length > 0">
+            <div v-for="word in collectedWords" :key="word.id" class="codex-item" :class="'grade-' + getWordGrade(word.id)">
+              <div class="codex-grade-badge">{{ getWordGrade(word.id) === 'gold' ? '🥇' : getWordGrade(word.id) === 'silver' ? '🥈' : '🥉' }}</div>
+              <div class="codex-word">{{ word.wordEn }}</div>
+              <div class="codex-phonetic">{{ word.phonetic }}</div>
+              <div class="codex-meaning">{{ word.wordZh }}</div>
+              <div class="codex-sentence">{{ word.sentence }}</div>
+            </div>
+          </div>
+          <p v-else class="codex-empty">还没有收集到单词，去击败怪物吧！</p>
+          <button class="btn-close-codex" @click="showCodex = false">关闭</button>
+        </div>
+      </div>
+    </div>
+  </MainLayout>
+</template>
+
+<script setup lang="ts">
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
+import MainLayout from '@/layouts/MainLayout.vue'
+import WordEncounterDialog from '@/components/ui/WordEncounterDialog.vue'
+import { createPhaserGame, destroyPhaserGame, getCampScene } from '@/game/PhaserGame'
+import type { MapEncounter } from '@/game/config/mapData'
+import { useChapterStore } from '@/stores/chapter'
+import { useSound } from '@/composables/useSound'
+
+const router = useRouter()
+const sound = useSound()
+const chapterStore = useChapterStore()
+
+const gameContainer = ref<HTMLElement>()
+const currentEncounter = ref<MapEncounter | null>(null)
+const showCodex = ref(false)
+const collectedWords = ref<MapEncounter[]>([])
+const npcLineIndex = ref(0)
+const comboCount = ref(0)
+const showComboOverlay = ref(false)
+const comboOverlayText = ref('')
+const wordAttempts = ref<Map<string, number>>(new Map())
+const randomEvent = ref<{ type: string; title: string; message: string; reward?: { xp?: number; coins?: number } } | null>(null)
+
+const campMap = computed(() => chapterStore.currentCampMap)
+const totalMonsters = computed(() => campMap.value.encounters.filter(e => e.type === 'monster').length)
+const totalChests = computed(() => campMap.value.encounters.filter(e => e.type === 'treasure').length)
+
+const defeatedCount = computed(() => collectedWords.value.length)
+const openedChests = computed(() =>
+  campMap.value.encounters.filter(e => e.type === 'treasure' && e.defeated).length
+)
+
+const npcCurrentLine = computed(() => {
+  if (!currentEncounter.value?.npcLines) return ''
+  return currentEncounter.value.npcLines[npcLineIndex.value] ?? ''
+})
+
+const isLastNpcLine = computed(() => {
+  if (!currentEncounter.value?.npcLines) return true
+  return npcLineIndex.value >= currentEncounter.value.npcLines.length - 1
+})
+
+onMounted(() => {
+  if (gameContainer.value) {
+    // 从进度中恢复已击败/已开启状态
+    const prog = chapterStore.currentProgress
+    if (prog) {
+      for (const enc of campMap.value.encounters) {
+        if (prog.campDefeated.includes(enc.id) || prog.campOpened.includes(enc.id)) {
+          enc.defeated = true
+          if (enc.type === 'monster') {
+            collectedWords.value.push({ ...enc })
+          }
+        }
+      }
+    }
+
+    createPhaserGame(gameContainer.value, campMap.value)
+
+    // 等待场景就绪后绑定回调
+    const checkScene = setInterval(() => {
+      const scene = getCampScene()
+      if (scene) {
+        scene.onEncounter = handleEncounter
+        scene.onRandomEvent = handleRandomEvent
+        clearInterval(checkScene)
+      }
+    }, 200)
+  }
+})
+
+onBeforeUnmount(() => {
+  destroyPhaserGame()
+})
+
+function handleEncounter(encounter: MapEncounter) {
+  currentEncounter.value = encounter
+  npcLineIndex.value = 0
+  sound.click()
+}
+
+function onEncounterResolve(result: { id: string; success: boolean }) {
+  const scene = getCampScene()
+  if (scene) {
+    scene.resolveEncounter(result.id, result.success)
+  }
+
+  // 追踪尝试次数
+  const attempts = (wordAttempts.value.get(result.id) ?? 0) + 1
+  wordAttempts.value.set(result.id, attempts)
+
+  if (result.success && currentEncounter.value?.type === 'monster') {
+    comboCount.value++
+    collectedWords.value.push({ ...currentEncounter.value })
+    chapterStore.defeatCampMonster(result.id)
+    sound.correct()
+
+    // 连击 >= 2 时显示 combo 特效
+    if (comboCount.value >= 2) {
+      comboOverlayText.value = `🔥 COMBO ×${comboCount.value}`
+      showComboOverlay.value = true
+      sound.combo()
+      setTimeout(() => { showComboOverlay.value = false }, 1200)
+    }
+  } else {
+    comboCount.value = 0
+    sound.wrong()
+  }
+  currentEncounter.value = null
+}
+
+function onEncounterClose() {
+  const scene = getCampScene()
+  if (scene && currentEncounter.value) {
+    // 关闭但不算击败 — 让玩家可以再次尝试
+    scene.resolveEncounter(currentEncounter.value.id, false)
+  }
+  currentEncounter.value = null
+}
+
+function advanceNpc() {
+  if (!currentEncounter.value?.npcLines) return
+  if (isLastNpcLine.value) {
+    // 完成NPC对话
+    const scene = getCampScene()
+    if (scene) {
+      scene.resolveEncounter(currentEncounter.value.id, true)
+    }
+    currentEncounter.value = null
+  } else {
+    npcLineIndex.value++
+  }
+}
+
+function collectTreasure() {
+  const scene = getCampScene()
+  if (scene && currentEncounter.value) {
+    scene.resolveEncounter(currentEncounter.value.id, true)
+    chapterStore.openCampChest(currentEncounter.value.id)
+    sound.correct()
+  }
+  currentEncounter.value = null
+}
+
+function goBack() {
+  router.push('/dashboard')
+}
+
+function skipToCombat() {
+  router.push('/quest')
+}
+
+function getWordGrade(id: string): 'gold' | 'silver' | 'bronze' {
+  const attempts = wordAttempts.value.get(id) ?? 1
+  return attempts === 1 ? 'gold' : attempts <= 2 ? 'silver' : 'bronze'
+}
+
+function handleRandomEvent(event: { type: string; title: string; message: string; reward?: { xp?: number; coins?: number } }) {
+  randomEvent.value = event
+  sound.coin()
+}
+
+function dismissRandomEvent() {
+  randomEvent.value = null
+  const scene = getCampScene()
+  if (scene) scene.resumeAfterEvent()
+}
+</script>
+
+<style scoped lang="scss">
+@use '@/styles/variables' as *;
+
+.camp-explore {
+  position: relative;
+  height: calc(100vh - 48px);
+  overflow: hidden;
+}
+
+.camp-toolbar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 16px;
+  background: linear-gradient(180deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.3) 70%, transparent 100%);
+  z-index: 20;
+  pointer-events: none;
+
+  > * {
+    pointer-events: auto;
+  }
+
+  .btn-back, .btn-skip {
+    padding: 6px 14px;
+    border: 1px solid rgba(180, 140, 80, 0.35);
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.5);
+    color: #ddd;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+    &:hover {
+      background: rgba(180, 140, 80, 0.2);
+      color: #ffd700;
+    }
+  }
+
+  .camp-stats {
+    display: flex;
+    gap: 16px;
+    padding: 4px 12px;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(4px);
+    .stat {
+      font-size: 13px;
+      color: #ccc;
+    }
+  }
+}
+
+.game-container {
+  position: absolute;
+  inset: 0;
+  background: #0a0a0a;
+  overflow: hidden;
+
+  :deep(canvas) {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+// 触控摇杆
+.touch-controls {
+  position: absolute;
+  bottom: 30px;
+  left: 30px;
+  z-index: 20;
+
+  .dpad {
+    display: grid;
+    grid-template-areas:
+      '. up .'
+      'left . right'
+      '. down .';
+    gap: 4px;
+  }
+
+  .dpad-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.6);
+    color: #ddd;
+    font-size: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:active {
+      background: rgba(255, 215, 0, 0.3);
+    }
+  }
+
+  .dpad-up { grid-area: up; }
+  .dpad-left { grid-area: left; }
+  .dpad-right { grid-area: right; }
+  .dpad-down { grid-area: down; }
+}
+
+// NPC 对话
+.npc-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.75) 100%);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 60px;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(2px);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.npc-dialog {
+  display: flex;
+  gap: 16px;
+  padding: 20px 24px;
+  max-width: 600px;
+  width: 92vw;
+  border: 2px solid rgba(100, 120, 200, 0.4);
+  border-radius: 16px;
+  background: linear-gradient(170deg, #16142a 0%, #0e0c20 100%);
+  box-shadow:
+    0 0 30px rgba(100, 120, 200, 0.1),
+    0 15px 50px rgba(0,0,0,0.5);
+  animation: npcSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  .npc-avatar-frame {
+    width: 56px;
+    height: 56px;
+    border-radius: 14px;
+    background: rgba(100, 120, 200, 0.1);
+    border: 1.5px solid rgba(100, 120, 200, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .npc-avatar {
+    font-size: 32px;
+  }
+
+  .npc-content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .npc-name {
+    font-size: 13px;
+    font-weight: 700;
+    color: rgba(140, 160, 255, 0.8);
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+
+  .npc-text {
+    color: #d0d0e0;
+    font-size: 15px;
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .npc-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 12px;
+  }
+
+  .npc-progress {
+    font-size: 12px;
+    color: #666;
+    background: rgba(255,255,255,0.04);
+    padding: 3px 10px;
+    border-radius: 10px;
+  }
+
+  .npc-next-btn {
+    padding: 8px 18px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(140, 160, 255, 0.35);
+    background: rgba(140, 160, 255, 0.08);
+    color: #99aaff;
+    cursor: pointer;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 13px;
+    transition: all 0.2s;
+    &:hover {
+      background: rgba(140, 160, 255, 0.18);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+@keyframes npcSlideUp {
+  from { transform: translateY(30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+// 宝箱弹窗
+.treasure-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.8) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(3px);
+}
+
+.treasure-dialog {
+  text-align: center;
+  padding: 36px 44px;
+  border: 2px solid rgba(218, 165, 32, 0.5);
+  border-radius: 20px;
+  background: linear-gradient(170deg, #1a1608 0%, #100e04 100%);
+  box-shadow:
+    0 0 50px rgba(255, 215, 0, 0.1),
+    0 20px 60px rgba(0,0,0,0.5);
+  animation: treasureIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+
+  .treasure-glow {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,215,0,0.12) 0%, transparent 70%);
+    animation: glowPulse 2s ease-in-out infinite;
+  }
+
+  .treasure-icon {
+    font-size: 56px;
+    margin-bottom: 12px;
+    position: relative;
+    animation: treasureBounce 0.6s ease 0.3s;
+  }
+
+  h3 {
+    color: #ffd700;
+    margin: 0 0 18px;
+    font-size: 22px;
+    font-weight: 700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+  }
+
+  .treasure-rewards {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-bottom: 22px;
+  }
+
+  .reward-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 15px;
+    font-weight: 600;
+    background: rgba(255, 200, 60, 0.1);
+    border: 1px solid rgba(255, 200, 60, 0.3);
+    color: #ffd700;
+  }
+
+  .btn-collect {
+    padding: 12px 32px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, #b8860b, #8b6914);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(184, 134, 11, 0.3);
+    &:hover {
+      background: linear-gradient(135deg, #d4a017, #b8860b);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(184, 134, 11, 0.4);
+    }
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
+
+@keyframes treasureIn {
+  from { transform: scale(0.7); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes treasureBounce {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.25); }
+  70% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+@keyframes glowPulse {
+  0%, 100% { transform: translateX(-50%) scale(1); opacity: 0.6; }
+  50% { transform: translateX(-50%) scale(1.2); opacity: 1; }
+}
+
+// 图鉴按钮
+.btn-codex {
+  position: absolute;
+  top: 60px;
+  right: 16px;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1.5px solid rgba(180, 140, 80, 0.35);
+  background: rgba(0, 0, 0, 0.65);
+  font-size: 22px;
+  cursor: pointer;
+  z-index: 20;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  &:hover {
+    background: rgba(180, 140, 80, 0.15);
+    transform: scale(1.08);
+    border-color: rgba(180, 140, 80, 0.5);
+  }
+}
+
+// 图鉴面板
+.codex-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.8) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(3px);
+}
+
+.codex-panel {
+  width: 92vw;
+  max-width: 520px;
+  max-height: 75vh;
+  overflow-y: auto;
+  padding: 0 24px 24px;
+  border: 2px solid rgba(180, 140, 80, 0.4);
+  border-radius: 20px;
+  background: linear-gradient(170deg, #14120e 0%, #0c0a06 100%);
+  box-shadow:
+    0 0 40px rgba(180, 140, 80, 0.1),
+    0 20px 60px rgba(0,0,0,0.5);
+  animation: dialogIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  .codex-title {
+    color: #d4b880;
+    margin: 0;
+    padding: 18px 0 14px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    border-bottom: 1px solid rgba(180, 140, 80, 0.15);
+    position: sticky;
+    top: 0;
+    background: linear-gradient(170deg, #14120e 0%, #0c0a06 100%);
+    z-index: 1;
+  }
+
+  .codex-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 14px;
+  }
+
+  .codex-item {
+    padding: 14px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.2s;
+    position: relative;
+
+    &:hover {
+      background: rgba(180, 140, 80, 0.04);
+      border-color: rgba(180, 140, 80, 0.15);
+    }
+
+    &.grade-gold { border-left: 3px solid #ffd700; }
+    &.grade-silver { border-left: 3px solid #c0c0c0; }
+    &.grade-bronze { border-left: 3px solid #cd7f32; }
+
+    .codex-grade-badge {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      font-size: 16px;
+    }
+
+    .codex-word {
+      font-size: 18px;
+      font-weight: 700;
+      color: #a8d8ff;
+    }
+    .codex-phonetic {
+      font-size: 13px;
+      color: #777;
+      margin: 3px 0;
+      font-style: italic;
+    }
+    .codex-meaning {
+      font-size: 15px;
+      color: #d0d0d0;
+    }
+    .codex-sentence {
+      font-size: 13px;
+      color: #888;
+      margin-top: 6px;
+      font-style: italic;
+      padding-left: 10px;
+      border-left: 2px solid rgba(180, 140, 80, 0.2);
+    }
+  }
+
+  .codex-empty {
+    text-align: center;
+    color: #666;
+    padding: 32px 0;
+    font-size: 14px;
+  }
+
+  .btn-close-codex {
+    display: block;
+    margin: 18px auto 0;
+    padding: 10px 28px;
+    border-radius: 10px;
+    border: 1.5px solid rgba(180, 140, 80, 0.3);
+    background: rgba(180, 140, 80, 0.06);
+    color: #d4b880;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    &:hover {
+      background: rgba(180, 140, 80, 0.14);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+@keyframes dialogIn {
+  from { transform: translateY(30px) scale(0.95); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+</style>
+
+<style lang="scss">
+/* combo 特效覆盖层 (非 scoped，因为在 teleport body 上) */
+.combo-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  pointer-events: none;
+  animation: comboFade 1.2s ease forwards;
+}
+.combo-text {
+  font-size: 48px;
+  font-weight: 900;
+  color: #ffd700;
+  text-shadow:
+    0 0 20px rgba(255, 80, 0, 0.6),
+    0 0 40px rgba(255, 180, 0, 0.4),
+    0 4px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: 4px;
+  animation: comboZoom 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes comboFade {
+  0%, 70% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes comboZoom {
+  from { transform: scale(0.3) rotate(-8deg); }
+  to { transform: scale(1) rotate(0); }
+}
+
+/* 随机事件弹窗 */
+.random-event-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1500;
+  animation: fadeIn 0.2s ease;
+  backdrop-filter: blur(3px);
+}
+.random-event-dialog {
+  text-align: center;
+  padding: 28px 32px;
+  max-width: 380px;
+  width: 88vw;
+  border: 2px solid rgba(255, 200, 80, 0.4);
+  border-radius: 18px;
+  background: linear-gradient(170deg, #1a1608 0%, #0f0d06 100%);
+  box-shadow: 0 0 40px rgba(255, 200, 80, 0.1), 0 16px 50px rgba(0,0,0,0.5);
+  animation: dialogIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.event-title {
+  font-size: 20px;
+  color: #ffd700;
+  margin: 0 0 12px;
+  font-weight: 700;
+}
+.event-message {
+  color: #ccc;
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 0 0 16px;
+}
+.event-rewards {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+.event-rewards .reward-badge {
+  padding: 6px 14px;
+  border-radius: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  background: rgba(255, 200, 60, 0.1);
+  border: 1px solid rgba(255, 200, 60, 0.3);
+  color: #ffd700;
+}
+.btn-event-ok {
+  padding: 10px 28px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 200, 80, 0.35);
+  background: rgba(255, 200, 80, 0.08);
+  color: #ffd700;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  &:hover { background: rgba(255, 200, 80, 0.18); transform: translateY(-1px); }
+}
+</style>

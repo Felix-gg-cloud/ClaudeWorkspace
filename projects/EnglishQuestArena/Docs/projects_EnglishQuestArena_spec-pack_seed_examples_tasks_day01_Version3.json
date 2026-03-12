@@ -1,0 +1,455 @@
+[
+  {
+    "code": "PRE_A1_CH1_D01_WU01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 1,
+    "type": "MCQ",
+    "promptEn": "Choose the correct word: \"你好\"",
+    "promptZhHint": "提示：选择对应的英文",
+    "options": [
+      { "key": "A", "textEn": "hello", "textZh": "你好" },
+      { "key": "B", "textEn": "bye", "textZh": "再见" },
+      { "key": "C", "textEn": "goodbye", "textZh": "再见" }
+    ],
+    "answer": { "correctOptionKey": "A" },
+    "explanationEn": "“hello” is a greeting.",
+    "explanationZh": "hello 用于打招呼。",
+    "xpReward": 5,
+    "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": ["W_HELLO"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_WU02",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 2,
+    "type": "MCQ",
+    "promptEn": "Choose the correct word: \"再见\"",
+    "promptZhHint": "提示：选择对应的英文",
+    "options": [
+      { "key": "A", "textEn": "hi", "textZh": "嗨" },
+      { "key": "B", "textEn": "goodbye", "textZh": "再见" },
+      { "key": "C", "textEn": "morning", "textZh": "早晨" }
+    ],
+    "answer": { "correctOptionKey": "B" },
+    "explanationEn": "“goodbye” means you are leaving.",
+    "explanationZh": "goodbye 用于告别。",
+    "xpReward": 5,
+    "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": ["W_GOODBYE"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_C01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 3,
+    "type": "FLASHCARD",
+    "promptEn": "hello",
+    "promptZhHint": "你好",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "A common greeting.",
+    "explanationZh": "常见问候语。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "hello" },
+    "links": { "contentItemCodes": ["W_HELLO"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_C02",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 4,
+    "type": "FLASHCARD",
+    "promptEn": "hi",
+    "promptZhHint": "嗨",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "A casual greeting.",
+    "explanationZh": "更随意的问候。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "hi" },
+    "links": { "contentItemCodes": ["W_HI"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_C03",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 5,
+    "type": "FLASHCARD",
+    "promptEn": "goodbye",
+    "promptZhHint": "再见",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "A goodbye phrase.",
+    "explanationZh": "告别用语。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "goodbye" },
+    "links": { "contentItemCodes": ["W_GOODBYE"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_C04",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 6,
+    "type": "FLASHCARD",
+    "promptEn": "bye",
+    "promptZhHint": "拜拜/再见",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "A short goodbye.",
+    "explanationZh": "简短告别。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "bye" },
+    "links": { "contentItemCodes": ["W_BYE"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_C05",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 7,
+    "type": "FLASHCARD",
+    "promptEn": "good",
+    "promptZhHint": "好的/棒的",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Used in many phrases.",
+    "explanationZh": "常用于固定搭配。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "good" },
+    "links": { "contentItemCodes": ["W_GOOD"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_C06",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 8,
+    "type": "FLASHCARD",
+    "promptEn": "morning",
+    "promptZhHint": "早晨",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Morning = early day time.",
+    "explanationZh": "morning 指早晨。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "morning" },
+    "links": { "contentItemCodes": ["W_MORNING"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_C07",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 9,
+    "type": "FLASHCARD",
+    "promptEn": "I",
+    "promptZhHint": "我",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "I = the speaker.",
+    "explanationZh": "I 表示“我”。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "I" },
+    "links": { "contentItemCodes": ["W_I"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_C08",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 10,
+    "type": "FLASHCARD",
+    "promptEn": "am",
+    "promptZhHint": "是（用于 I）",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Use “am” with “I”.",
+    "explanationZh": "I 后面用 am。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "am" },
+    "links": { "contentItemCodes": ["W_AM"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_C09",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 11,
+    "type": "FLASHCARD",
+    "promptEn": "I am {playerName}.",
+    "promptZhHint": "我是{playerName}。",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Use this to introduce yourself.",
+    "explanationZh": "用这个句型介绍自己。",
+    "xpReward": 3,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "I am {playerName}." },
+    "links": { "contentItemCodes": ["P_I_AM_NAME"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_M01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 12,
+    "type": "MCQ",
+    "promptEn": "Choose the correct meaning of \"good morning\".",
+    "promptZhHint": "提示：选择正确中文意思",
+    "options": [
+      { "key": "A", "textEn": "Good morning", "textZh": "早上好" },
+      { "key": "B", "textEn": "Goodbye", "textZh": "再见" },
+      { "key": "C", "textEn": "Hi", "textZh": "嗨" }
+    ],
+    "answer": { "correctOptionKey": "A" },
+    "explanationEn": "“Good morning” is used in the morning.",
+    "explanationZh": "Good morning 用于早晨问候。",
+    "xpReward": 5,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "Good morning!" },
+    "links": { "contentItemCodes": ["W_GOOD", "W_MORNING"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_O01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 13,
+    "type": "WORD_ORDER",
+    "promptEn": "Arrange the words to make a sentence.",
+    "promptZhHint": "提示：把单词排成句子",
+    "tokens": ["{playerName}", "am", "I", "."],
+    "answer": { "correctTokens": ["I", "am", "{playerName}", "."] },
+    "explanationEn": "Use “I am ...”",
+    "explanationZh": "用 I am ... 介绍自己。",
+    "xpReward": 8,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "I am {playerName}." },
+    "links": { "contentItemCodes": ["P_I_AM_NAME"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_S01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 14,
+    "type": "SPELLING",
+    "promptEn": "Type the word you hear.",
+    "promptZhHint": "提示：听音拼写（忽略大小写）",
+    "answer": { "acceptedTexts": ["hello"] },
+    "explanationEn": "",
+    "explanationZh": "",
+    "xpReward": 8,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "hello" },
+    "links": { "contentItemCodes": ["W_HELLO"] }
+  },
+  {
+    "code": "PRE_A1_CH1_D01_S02",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 15,
+    "type": "SPELLING",
+    "promptEn": "Type the word you hear.",
+    "promptZhHint": "提示：听音拼写（忽略大小写）",
+    "answer": { "acceptedTexts": ["goodbye"] },
+    "explanationEn": "",
+    "explanationZh": "",
+    "xpReward": 8,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "goodbye" },
+    "links": { "contentItemCodes": ["W_GOODBYE"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_M02",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 16,
+    "type": "MCQ",
+    "promptEn": "Choose the best reply to: \"Hello!\"",
+    "promptZhHint": "提示：选择最合适的回复",
+    "options": [
+      { "key": "A", "textEn": "Goodbye!", "textZh": "再见！" },
+      { "key": "B", "textEn": "Hello!", "textZh": "你好！" },
+      { "key": "C", "textEn": "Bye!", "textZh": "拜拜！" }
+    ],
+    "answer": { "correctOptionKey": "B" },
+    "explanationEn": "You can reply with “Hello!” or “Hi!”",
+    "explanationZh": "可以用 Hello/Hi 回应问候。",
+    "xpReward": 5,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "Hello!" },
+    "links": { "contentItemCodes": ["W_HELLO", "W_HI"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_O02",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 17,
+    "type": "WORD_ORDER",
+    "promptEn": "Arrange the words to make a sentence.",
+    "promptZhHint": "提示：把单词排成句子",
+    "tokens": ["morning", "Good", "!"],
+    "answer": { "correctTokens": ["Good", "morning", "!"] },
+    "explanationEn": "",
+    "explanationZh": "",
+    "xpReward": 6,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "Good morning!" },
+    "links": { "contentItemCodes": ["W_GOOD", "W_MORNING"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_M03",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 18,
+    "type": "MCQ",
+    "promptEn": "Choose the correct meaning of \"I\".",
+    "promptZhHint": "提示：选择正确中文",
+    "options": [
+      { "key": "A", "textEn": "I", "textZh": "我" },
+      { "key": "B", "textEn": "I", "textZh": "你" },
+      { "key": "C", "textEn": "I", "textZh": "他" }
+    ],
+    "answer": { "correctOptionKey": "A" },
+    "explanationEn": "",
+    "explanationZh": "",
+    "xpReward": 5,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "I" },
+    "links": { "contentItemCodes": ["W_I"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_EXPL01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 19,
+    "type": "FLASHCARD",
+    "promptEn": "Tip: \"I\" + \"am\"",
+    "promptZhHint": "提示卡：I 后面用 am",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Say: I am {playerName}.",
+    "explanationZh": "说：I am {playerName}（我是...）。",
+    "xpReward": 1,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "I am {playerName}." },
+    "links": { "contentItemCodes": ["W_I", "W_AM", "P_I_AM_NAME"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_M04",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 20,
+    "type": "MCQ",
+    "promptEn": "Which one is a greeting?",
+    "promptZhHint": "提示：哪个是问候语？",
+    "options": [
+      { "key": "A", "textEn": "hello", "textZh": "你好" },
+      { "key": "B", "textEn": "bye", "textZh": "再见" },
+      { "key": "C", "textEn": "morning", "textZh": "早晨" }
+    ],
+    "answer": { "correctOptionKey": "A" },
+    "explanationEn": "",
+    "explanationZh": "",
+    "xpReward": 5,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "hello" },
+    "links": { "contentItemCodes": ["W_HELLO"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_S03",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 21,
+    "type": "SPELLING",
+    "promptEn": "Type the word you hear.",
+    "promptZhHint": "提示：听音拼写",
+    "answer": { "acceptedTexts": ["hi"] },
+    "explanationEn": "",
+    "explanationZh": "",
+    "xpReward": 6,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "hi" },
+    "links": { "contentItemCodes": ["W_HI"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_M05",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 22,
+    "type": "MCQ",
+    "promptEn": "Choose the correct sentence.",
+    "promptZhHint": "提示：选择正确句子",
+    "options": [
+      { "key": "A", "textEn": "I am {playerName}.", "textZh": "我是..." },
+      { "key": "B", "textEn": "I is {playerName}.", "textZh": "（错误）" },
+      { "key": "C", "textEn": "I bye {playerName}.", "textZh": "（错误）" }
+    ],
+    "answer": { "correctOptionKey": "A" },
+    "explanationEn": "Use “am” with “I”.",
+    "explanationZh": "I 后面用 am。",
+    "xpReward": 7,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "I am {playerName}." },
+    "links": { "contentItemCodes": ["W_I", "W_AM", "P_I_AM_NAME"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_DLG01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 23,
+    "type": "DIALOGUE_REVIEW",
+    "dialogue": {
+      "lines": [
+        { "en": "Hi!", "zh": "嗨！", "ttsTextEn": "Hi!" },
+        { "en": "Hello!", "zh": "你好！", "ttsTextEn": "Hello!" },
+        { "en": "I am {playerName}.", "zh": "我是{playerName}。", "ttsTextEn": "I am {playerName}." },
+        { "en": "Goodbye!", "zh": "再见！", "ttsTextEn": "Goodbye!" },
+        { "en": "Bye!", "zh": "拜拜！", "ttsTextEn": "Bye!" }
+      ]
+    },
+    "followUpQuestions": [
+      {
+        "type": "MCQ",
+        "promptEn": "What is the name?",
+        "promptZhHint": "提示：名字是什么？",
+        "options": [
+          { "key": "A", "textEn": "{playerName}", "textZh": "你设置的名字" },
+          { "key": "B", "textEn": "Hello", "textZh": "你好" },
+          { "key": "C", "textEn": "Morning", "textZh": "早晨" }
+        ],
+        "answer": { "correctOptionKey": "A" }
+      },
+      {
+        "type": "MCQ",
+        "promptEn": "Which word means \"再见\"?",
+        "promptZhHint": "提示：哪个表示再见？",
+        "options": [
+          { "key": "A", "textEn": "goodbye", "textZh": "再见" },
+          { "key": "B", "textEn": "hi", "textZh": "嗨" }
+        ],
+        "answer": { "correctOptionKey": "A" }
+      }
+    ],
+    "xpReward": 10,
+    "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "" },
+    "links": { "contentItemCodes": ["W_HI", "W_HELLO", "P_I_AM_NAME", "W_GOODBYE", "W_BYE"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_SUM01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 24,
+    "type": "FLASHCARD",
+    "promptEn": "Summary",
+    "promptZhHint": "总结",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "You can greet and say your name.",
+    "explanationZh": "你会打招呼，并能说 I am ... 介绍自己。",
+    "xpReward": 2,
+    "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": ["W_HELLO", "W_HI", "W_GOODBYE", "W_BYE", "P_I_AM_NAME"] }
+  },
+
+  {
+    "code": "PRE_A1_CH1_D01_END01",
+    "lessonCode": "PRE_A1_CH1_D01",
+    "orderIndex": 25,
+    "type": "FLASHCARD",
+    "promptEn": "Quest Complete!",
+    "promptZhHint": "主线完成！",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "You finished Day 1.",
+    "explanationZh": "你完成了第1天主线任务。",
+    "xpReward": 1,
+    "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": [] }
+  }
+]
