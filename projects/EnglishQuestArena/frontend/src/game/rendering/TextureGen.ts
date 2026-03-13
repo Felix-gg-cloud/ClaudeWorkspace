@@ -420,7 +420,7 @@ export function generateTextures(scene: Phaser.Scene) {
     // 身体高光
     ctx.fillStyle = 'rgba(180, 210, 255, 0.3)'
     ctx.beginPath()
-    ctx.ellipse(18, 16, 6, 7, -0.3, 0, 0, Math.PI * 2)
+    ctx.ellipse(18, 16, 6, 7, -0.3, 0, Math.PI * 2)
     ctx.fill()
     // 眼睛 — 大而神秘
     drawMonsterEye(ctx, 18, 20, 4.5, '#3366ff')
