@@ -240,7 +240,7 @@ export class CampScene extends Phaser.Scene {
           if (this.textures.exists(subKey)) diffKey = subKey
         }
         const mon = this.add.image(px, py, diffKey)
-        mon.setDepth(300 + py / 10)
+        mon.setDepth(py / 10 + 1)
         sprites.push(mon)
 
         // 呼吸动画
@@ -256,7 +256,7 @@ export class CampScene extends Phaser.Scene {
 
         // 危险光环
         const aura = this.add.circle(px, py + 4, 22, 0xff3333, 0.08)
-        aura.setDepth(299 + py / 10)
+        aura.setDepth(py / 10)
         sprites.push(aura)
         this.tweens.add({
           targets: aura,
@@ -275,7 +275,7 @@ export class CampScene extends Phaser.Scene {
           backgroundColor: 'rgba(80, 20, 20, 0.7)',
           padding: { x: 6, y: 3 },
         }).setOrigin(0.5)
-        label.setDepth(310)
+        label.setDepth(200)
         sprites.push(label)
 
         this.tweens.add({
@@ -290,12 +290,12 @@ export class CampScene extends Phaser.Scene {
       } else if (encounter.type === 'npc') {
         const npcKey = encounter.npcAvatar ? `sprite_npc_${encounter.npcAvatar}` : 'sprite_npc'
         const npc = this.add.image(px, py - 8, npcKey)
-        npc.setDepth(300 + py / 10)
+        npc.setDepth(py / 10 + 1)
         sprites.push(npc)
 
         // 感叹号气泡
         const bubbleBg = this.add.circle(px + 14, py - 38, 10, 0xffffff, 0.9)
-        bubbleBg.setDepth(311)
+        bubbleBg.setDepth(201)
         sprites.push(bubbleBg)
 
         const excl = this.add.text(px + 14, py - 38, '!', {
@@ -304,7 +304,7 @@ export class CampScene extends Phaser.Scene {
           fontStyle: 'bold',
           fontFamily: 'Arial, sans-serif',
         }).setOrigin(0.5)
-        excl.setDepth(312)
+        excl.setDepth(202)
         sprites.push(excl)
 
         this.tweens.add({
@@ -318,12 +318,12 @@ export class CampScene extends Phaser.Scene {
 
       } else if (encounter.type === 'treasure') {
         const chest = this.add.image(px, py + 2, 'sprite_chest')
-        chest.setDepth(300 + py / 10)
+        chest.setDepth(py / 10 + 1)
         sprites.push(chest)
 
         // 闪光
         const sparkle = this.add.circle(px, py - 6, 3, 0xffd700, 0.6)
-        sparkle.setDepth(310)
+        sparkle.setDepth(200)
         sprites.push(sparkle)
         this.tweens.add({
           targets: sparkle,
@@ -337,7 +337,7 @@ export class CampScene extends Phaser.Scene {
 
         // 第二个闪光
         const sparkle2 = this.add.circle(px + 8, py - 2, 2, 0xffee88, 0.4)
-        sparkle2.setDepth(310)
+        sparkle2.setDepth(200)
         sprites.push(sparkle2)
         this.tweens.add({
           targets: sparkle2,
@@ -414,7 +414,7 @@ export class CampScene extends Phaser.Scene {
 
     const playerTileX = Math.floor(this.player.x / T)
     const playerTileY = Math.floor(this.player.y / T)
-    const revealRadius = 5
+    const revealRadius = 3
 
     // 记录玩家周围已揭露的瓦片
     for (let dy = -revealRadius; dy <= revealRadius; dy++) {
@@ -437,7 +437,7 @@ export class CampScene extends Phaser.Scene {
         const dx = x - playerTileX
         const dy = y - playerTileY
         const dist = Math.sqrt(dx * dx + dy * dy)
-        const edgeAlpha = dist <= revealRadius + 2 ? 0.35 : 0.55
+        const edgeAlpha = dist <= revealRadius + 1.5 ? 0.45 : 0.7
 
         fog.fillStyle(0x0a0a0a, edgeAlpha)
         fog.fillRect(x * T, y * T, T, T)
