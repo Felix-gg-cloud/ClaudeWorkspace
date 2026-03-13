@@ -56,7 +56,7 @@ export function generateMonsterEncounters(
 
     const options = shuffled.map((w, idx) => ({
       key: KEYS[idx] ?? String.fromCharCode(65 + idx),
-      textEn: w.zh,
+      textEn: w.en,
       textZh: w.zh,
     }))
 
