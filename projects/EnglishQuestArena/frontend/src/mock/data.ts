@@ -301,7 +301,7 @@ export const mockSkillNodes: SkillNode[] = [
 ]
 
 export const mockCefrExams: CefrExam[] = [
-  { cefrLevel: 'PRE_A1', title: 'Pre-A1 入门测验', totalQuestions: 10, passRate: 0.7, timeLimitPerQuestion: 30, unlocked: true, passed: false, bestScore: undefined, attempts: 0, dailyAttemptsLeft: 3 },
+  { cefrLevel: 'PRE_A1', title: 'Pre-A1 入门测验', totalQuestions: 15, passRate: 0.7, timeLimitPerQuestion: 30, unlocked: true, passed: false, bestScore: undefined, attempts: 0, dailyAttemptsLeft: 3 },
   { cefrLevel: 'A1', title: 'A1 基础测验', totalQuestions: 15, passRate: 0.7, timeLimitPerQuestion: 25, unlocked: false, passed: false, bestScore: undefined, attempts: 0, dailyAttemptsLeft: 3 },
   { cefrLevel: 'A2', title: 'A2 进阶测验', totalQuestions: 20, passRate: 0.75, timeLimitPerQuestion: 20, unlocked: false, passed: false, bestScore: undefined, attempts: 0, dailyAttemptsLeft: 3 },
   { cefrLevel: 'B1', title: 'B1 中级测验', totalQuestions: 25, passRate: 0.8, timeLimitPerQuestion: 20, unlocked: false, passed: false, bestScore: undefined, attempts: 0, dailyAttemptsLeft: 3 },
@@ -320,6 +320,7 @@ function examTask(code: string, type: Task['type'], promptEn: string, promptZhHi
 }
 
 export const mockExamTasks: Task[] = [
+  // PRE_A1 level (15 tasks)
   examTask('exam-1', 'MCQ', 'apple', '苹果', [{ key: 'A', textEn: 'apple', textZh: '苹果' }, { key: 'B', textEn: 'banana', textZh: '香蕉' }, { key: 'C', textEn: 'grape', textZh: '葡萄' }, { key: 'D', textEn: 'pear', textZh: '梨' }], 'A', 'PRE_A1'),
   examTask('exam-2', 'MCQ_REVERSE', 'cat', '猫', [{ key: 'A', textEn: 'cat', textZh: '猫' }, { key: 'B', textEn: 'dog', textZh: '狗' }, { key: 'C', textEn: 'bird', textZh: '鸟' }, { key: 'D', textEn: 'fish', textZh: '鱼' }], 'A', 'PRE_A1'),
   examTask('exam-3', 'FILL_BLANK', 'I ___ a student.', '我是一名学生。', [{ key: 'A', textEn: 'am', textZh: 'am' }, { key: 'B', textEn: 'is', textZh: 'is' }, { key: 'C', textEn: 'are', textZh: 'are' }], 'A', 'PRE_A1'),
@@ -330,4 +331,25 @@ export const mockExamTasks: Task[] = [
   examTask('exam-8', 'MCQ_REVERSE', 'water', '水', [{ key: 'A', textEn: 'water', textZh: '水' }, { key: 'B', textEn: 'juice', textZh: '果汁' }, { key: 'C', textEn: 'milk', textZh: '牛奶' }, { key: 'D', textEn: 'tea', textZh: '茶' }], 'A', 'PRE_A1'),
   examTask('exam-9', 'FILL_BLANK', 'She ___ happy.', '她很开心。', [{ key: 'A', textEn: 'is', textZh: 'is' }, { key: 'B', textEn: 'am', textZh: 'am' }, { key: 'C', textEn: 'are', textZh: 'are' }], 'A', 'PRE_A1'),
   examTask('exam-10', 'MCQ', 'dog', '狗', [{ key: 'A', textEn: 'dog', textZh: '狗' }, { key: 'B', textEn: 'cat', textZh: '猫' }, { key: 'C', textEn: 'pig', textZh: '猪' }, { key: 'D', textEn: 'cow', textZh: '牛' }], 'A', 'PRE_A1'),
+  examTask('exam-11', 'MCQ', 'good morning', '早上好', [{ key: 'A', textEn: 'Good morning!', textZh: '早上好！' }, { key: 'B', textEn: 'Good night!', textZh: '晚安！' }, { key: 'C', textEn: 'Goodbye!', textZh: '再见！' }], 'A', 'PRE_A1'),
+  examTask('exam-12', 'MCQ_REVERSE', 'teacher', '老师', [{ key: 'A', textEn: 'teacher', textZh: '老师' }, { key: 'B', textEn: 'student', textZh: '学生' }, { key: 'C', textEn: 'boy', textZh: '男孩' }], 'A', 'PRE_A1'),
+  examTask('exam-13', 'FILL_BLANK', 'I ___ a pen.', '我有一支笔。', [{ key: 'A', textEn: 'have', textZh: 'have' }, { key: 'B', textEn: 'am', textZh: 'am' }, { key: 'C', textEn: 'is', textZh: 'is' }], 'A', 'PRE_A1'),
+  examTask('exam-14', 'MCQ', '___ is your name?', '你叫什么名字？', [{ key: 'A', textEn: 'What', textZh: '什么' }, { key: 'B', textEn: 'Where', textZh: '哪里' }, { key: 'C', textEn: 'Who', textZh: '谁' }], 'A', 'PRE_A1'),
+  examTask('exam-15', 'LISTEN_PICK', 'thank you', '谢谢你', [{ key: 'A', textEn: 'thank you', textZh: '谢谢你' }, { key: 'B', textEn: 'sorry', textZh: '对不起' }, { key: 'C', textEn: 'please', textZh: '请' }], 'A', 'PRE_A1'),
+  // A1 level (15 tasks)
+  examTask('exam-16', 'MCQ', 'How old are you?', '你几岁了？', [{ key: 'A', textEn: 'I am ten.', textZh: '我十岁。' }, { key: 'B', textEn: 'I am fine.', textZh: '我很好。' }, { key: 'C', textEn: 'I am Tom.', textZh: '我是汤姆。' }], 'A', 'A1'),
+  examTask('exam-17', 'FILL_BLANK', 'There ___ two cats.', '有两只猫。', [{ key: 'A', textEn: 'are', textZh: 'are' }, { key: 'B', textEn: 'is', textZh: 'is' }, { key: 'C', textEn: 'am', textZh: 'am' }], 'A', 'A1'),
+  examTask('exam-18', 'MCQ_REVERSE', 'breakfast', '早餐', [{ key: 'A', textEn: 'breakfast', textZh: '早餐' }, { key: 'B', textEn: 'lunch', textZh: '午餐' }, { key: 'C', textEn: 'dinner', textZh: '晚餐' }, { key: 'D', textEn: 'snack', textZh: '零食' }], 'A', 'A1'),
+  examTask('exam-19', 'MCQ', 'He ___ to school every day.', '他每天去上学。', [{ key: 'A', textEn: 'goes', textZh: 'goes' }, { key: 'B', textEn: 'go', textZh: 'go' }, { key: 'C', textEn: 'going', textZh: 'going' }], 'A', 'A1'),
+  examTask('exam-20', 'FILL_BLANK', 'This is ___ book. (my)', '这是我的书。', [{ key: 'A', textEn: 'my', textZh: 'my' }, { key: 'B', textEn: 'me', textZh: 'me' }, { key: 'C', textEn: 'I', textZh: 'I' }], 'A', 'A1'),
+  examTask('exam-21', 'MCQ', 'Where is the cat?', '猫在哪里？', [{ key: 'A', textEn: 'On the table.', textZh: '在桌子上。' }, { key: 'B', textEn: 'It is white.', textZh: '它是白色的。' }, { key: 'C', textEn: 'Yes, it is.', textZh: '是的。' }], 'A', 'A1'),
+  examTask('exam-22', 'LISTEN_PICK', 'Monday', '星期一', [{ key: 'A', textEn: 'Monday', textZh: '星期一' }, { key: 'B', textEn: 'Tuesday', textZh: '星期二' }, { key: 'C', textEn: 'Sunday', textZh: '星期日' }], 'A', 'A1'),
+  examTask('exam-23', 'MCQ_REVERSE', 'umbrella', '雨伞', [{ key: 'A', textEn: 'umbrella', textZh: '雨伞' }, { key: 'B', textEn: 'table', textZh: '桌子' }, { key: 'C', textEn: 'window', textZh: '窗户' }], 'A', 'A1'),
+  examTask('exam-24', 'FILL_BLANK', 'I ___ like rice.', '我不喜欢米饭。', [{ key: 'A', textEn: "don't", textZh: "don't" }, { key: 'B', textEn: 'not', textZh: 'not' }, { key: 'C', textEn: "doesn't", textZh: "doesn't" }], 'A', 'A1'),
+  examTask('exam-25', 'MCQ', 'Can you swim?', '你会游泳吗？', [{ key: 'A', textEn: 'Yes, I can.', textZh: '是的，我会。' }, { key: 'B', textEn: 'Yes, I am.', textZh: '是的，我是。' }, { key: 'C', textEn: 'Yes, I do.', textZh: '是的。' }], 'A', 'A1'),
+  examTask('exam-26', 'SPELLING', 'teacher', '老师', [], 'A', 'A1'),
+  examTask('exam-27', 'MCQ', 'She ___ a new bag.', '她有一个新包。', [{ key: 'A', textEn: 'has', textZh: 'has' }, { key: 'B', textEn: 'have', textZh: 'have' }, { key: 'C', textEn: 'having', textZh: 'having' }], 'A', 'A1'),
+  examTask('exam-28', 'MCQ_REVERSE', 'kitchen', '厨房', [{ key: 'A', textEn: 'kitchen', textZh: '厨房' }, { key: 'B', textEn: 'bedroom', textZh: '卧室' }, { key: 'C', textEn: 'bathroom', textZh: '浴室' }], 'A', 'A1'),
+  examTask('exam-29', 'FILL_BLANK', 'We ___ playing football.', '我们正在踢足球。', [{ key: 'A', textEn: 'are', textZh: 'are' }, { key: 'B', textEn: 'is', textZh: 'is' }, { key: 'C', textEn: 'am', textZh: 'am' }], 'A', 'A1'),
+  examTask('exam-30', 'MCQ', 'What time is it?', '现在几点？', [{ key: 'A', textEn: 'It is three o\'clock.', textZh: '三点钟。' }, { key: 'B', textEn: 'It is Monday.', textZh: '星期一。' }, { key: 'C', textEn: 'It is sunny.', textZh: '晴天。' }], 'A', 'A1'),
 ]

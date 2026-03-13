@@ -81,6 +81,10 @@
 import { ref, computed, watch } from 'vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useChapterStore } from '@/stores/chapter'
+import { useSrsStore } from '@/stores/srs'
+import { useMistakeStore } from '@/stores/mistakes'
+import { useAchievementStore } from '@/stores/achievements'
+import { useDailyGoalStore } from '@/stores/dailyGoal'
 import { useSound } from '@/composables/useSound'
 import { resolveTaskComponent } from '@/composables/useTaskCard'
 import { grantReward } from '@/composables/useReward'
@@ -89,6 +93,10 @@ import type { Task } from '@/types'
 interface TaskExt extends Task { _done: boolean }
 
 const chapterStore = useChapterStore()
+const srsStore = useSrsStore()
+const mistakeStore = useMistakeStore()
+const achievementStore = useAchievementStore()
+const dailyStore = useDailyGoalStore()
 const sound = useSound()
 
 const tasks = ref<TaskExt[]>(chapterStore.currentQuestTasks.map(t => ({ ...t, _done: false })))
@@ -122,6 +130,9 @@ function jumpTo(idx: number) {
 }
 
 function onAnswer(correct: boolean) {
+  const task = tasks.value[currentIdx.value]
+  const wordCode = task.links?.contentItemCodes?.[0] ?? task.code
+
   if (correct) {
     combo.value++
     if (combo.value > maxCombo.value) maxCombo.value = combo.value
@@ -136,8 +147,17 @@ function onAnswer(correct: boolean) {
       xpFloats.value = xpFloats.value.filter(f => f.id !== floatId)
     }, 1200)
 
+    // SRS: 答对质量为 4
+    srsStore.reviewCard(wordCode, 4)
+    // 每日目标
+    dailyStore.addXp(reward.xpEarned)
+    dailyStore.addTaskCompleted()
+    // 成就：连击 & 任务数
+    achievementStore.updateProgress('perfect_combo', maxCombo.value)
+    achievementStore.updateProgress('tasks_completed', doneCount.value + 1)
+
     // Mark done & advance
-    tasks.value[currentIdx.value]._done = true
+    task._done = true
     setTimeout(() => {
       if (!allDone.value) {
         const next = tasks.value.findIndex((t, i) => i > currentIdx.value && !t._done)
@@ -149,6 +169,19 @@ function onAnswer(correct: boolean) {
     sound.wrong()
     flashRed.value = true
     setTimeout(() => { flashRed.value = false }, 300)
+
+    // SRS: 答错质量为 1
+    srsStore.reviewCard(wordCode, 1)
+    // 错题收集
+    mistakeStore.addMistake({
+      taskCode: task.code,
+      taskType: task.type,
+      wordCode,
+      promptEn: task.promptEn,
+      promptZhHint: task.promptZhHint,
+      userAnswer: '',
+      correctAnswer: String(task.answer?.correctOptionKey ?? ''),
+    })
   }
 }
 

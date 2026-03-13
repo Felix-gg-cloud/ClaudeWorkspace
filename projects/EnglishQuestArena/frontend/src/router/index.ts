@@ -19,6 +19,7 @@ const router = createRouter({
     { path: '/skill-tree', name: 'SkillTree', component: () => import('@/views/SkillTreeView.vue') },
     { path: '/boss', name: 'Boss', component: () => import('@/views/boss/BossView.vue') },
     { path: '/cefr-exam', name: 'CefrExam', component: () => import('@/views/CefrExamView.vue') },
+    { path: '/stats', name: 'Stats', component: () => import('@/views/StatsView.vue') },
   ]
 })
 

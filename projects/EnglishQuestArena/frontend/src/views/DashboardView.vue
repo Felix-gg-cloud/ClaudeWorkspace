@@ -128,6 +128,30 @@
         </div>
       </section>
 
+      <!-- Daily goal mini -->
+      <section class="daily-goal-section">
+        <h3 class="section-title">🎯 今日进度</h3>
+        <div class="daily-mini dark-panel">
+          <div class="daily-mini-row">
+            <span>XP</span>
+            <div class="hp-bar hp-bar--gold" style="flex: 1; height: 6px; margin: 0 10px;">
+              <div class="hp-bar__fill" :style="{ width: dailyStore.todayXpProgress * 100 + '%' }"></div>
+            </div>
+            <span class="daily-num">{{ dailyStore.todayRecord.xpEarned }}/{{ dailyStore.config.targetXp }}</span>
+          </div>
+          <div class="daily-mini-row">
+            <span>任务</span>
+            <div class="hp-bar hp-bar--gold" style="flex: 1; height: 6px; margin: 0 10px;">
+              <div class="hp-bar__fill" :style="{ width: dailyStore.todayTaskProgress * 100 + '%' }"></div>
+            </div>
+            <span class="daily-num">{{ dailyStore.todayRecord.tasksCompleted }}/{{ dailyStore.config.targetTasks }}</span>
+          </div>
+          <div v-if="mistakeStore.unreviewedCount > 0" class="daily-alert">
+            ❌ {{ mistakeStore.unreviewedCount }} 道错题待复习
+          </div>
+        </div>
+      </section>
+
       <!-- Checkin streak -->
       <section class="checkin-section">
         <h3 class="section-title">📅 签到记录</h3>
@@ -156,11 +180,15 @@ import { useRouter } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useUserStore } from '@/stores/user'
 import { useChapterStore } from '@/stores/chapter'
+import { useDailyGoalStore } from '@/stores/dailyGoal'
+import { useMistakeStore } from '@/stores/mistakes'
 import { useSound } from '@/composables/useSound'
 
 const router = useRouter()
 const userStore = useUserStore()
 const chapterStore = useChapterStore()
+const dailyStore = useDailyGoalStore()
+const mistakeStore = useMistakeStore()
 const sound = useSound()
 
 const xpMax = computed(() => userStore.user?.xpToNextLevel ?? 200)
@@ -241,6 +269,7 @@ const portals = computed(() => [
   { icon: '🌟', name: '技能星图', desc: '星座图, 解锁能力', route: '/skill-tree', cls: 'portal-skill', disabled: false },
   { icon: '💀', name: 'Boss 战', desc: '挑战Boss, 赢取奖励', route: '/boss', cls: 'portal-boss', disabled: !chapterStore.isBossUnlocked },
   { icon: '🔔', name: '试炼之门', desc: '突破封印, 解锁更高等级', route: '/cefr-exam', cls: 'portal-exam', disabled: false },
+  { icon: '📊', name: '学习统计', desc: '查看学习历程与成就', route: '/stats', cls: 'portal-stats', disabled: false },
 ])
 
 function selectChapter(code: string) {
@@ -730,5 +759,41 @@ function goTo(route: string) {
   border-color: $gold;
   color: $bg-abyss;
   font-weight: 800;
+}
+
+// Daily goal mini
+.daily-goal-section {
+  margin-bottom: 24px;
+}
+
+.daily-mini {
+  padding: 16px;
+}
+
+.daily-mini-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: $text-secondary;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.daily-num {
+  font-size: 12px;
+  color: $gold;
+  font-weight: 700;
+  min-width: 50px;
+  text-align: right;
+}
+
+.daily-alert {
+  margin-top: 10px;
+  font-size: 12px;
+  color: $fire-orange;
+  font-weight: 600;
 }
 </style>

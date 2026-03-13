@@ -24,17 +24,52 @@ const ch1Words: ContentItem[] = [
   { code: 'W_AM', type: 'WORD', en: 'am', zh: '是(I am)', phonetic: '/æm/', sentence: 'I am happy.', sentenceZh: '我很开心。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: ['W_IS', 'W_NAME'] },
   { code: 'W_IS', type: 'WORD', en: 'is', zh: '是(it is)', phonetic: '/ɪz/', sentence: 'She is my friend.', sentenceZh: '她是我的朋友。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: ['W_AM', 'W_MY'] },
   { code: 'W_WHAT', type: 'WORD', en: 'what', zh: '什么', phonetic: '/wɒt/', sentence: 'What is this?', sentenceZh: '这是什么？', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: ['W_NAME', 'W_YOUR'] },
+  // Day 1 扩充: 问候相关
+  { code: 'W_GOOD', type: 'WORD', en: 'good', zh: '好的', phonetic: '/ɡʊd/', sentence: 'Good morning!', sentenceZh: '早上好！', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 1, distractors: ['W_NICE', 'W_FINE'] },
+  { code: 'W_MORNING', type: 'WORD', en: 'morning', zh: '早上', phonetic: '/ˈmɔːrnɪŋ/', sentence: 'Good morning, teacher!', sentenceZh: '早上好，老师！', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 1, distractors: ['W_NIGHT', 'W_GOOD'] },
+  { code: 'W_NIGHT', type: 'WORD', en: 'night', zh: '晚上', phonetic: '/naɪt/', sentence: 'Good night! Sleep well.', sentenceZh: '晚安！睡个好觉。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 1, distractors: ['W_MORNING', 'W_GOOD'] },
+  { code: 'W_FINE', type: 'WORD', en: 'fine', zh: '很好', phonetic: '/faɪn/', sentence: 'I am fine, thank you.', sentenceZh: '我很好，谢谢。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 1, distractors: ['W_GOOD', 'W_OK'] },
+  { code: 'W_OK', type: 'WORD', en: 'OK', zh: '好的', phonetic: '/oʊˈkeɪ/', sentence: 'OK, let us go.', sentenceZh: '好的，我们走吧。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 1, distractors: ['W_YES', 'W_FINE'] },
+  { code: 'W_NICE', type: 'WORD', en: 'nice', zh: '好的/棒的', phonetic: '/naɪs/', sentence: 'Nice to meet you!', sentenceZh: '很高兴认识你！', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 1, distractors: ['W_GOOD', 'W_FINE'] },
+  // Day 2 扩充: 人物身份
+  { code: 'W_BOY', type: 'WORD', en: 'boy', zh: '男孩', phonetic: '/bɔɪ/', sentence: 'The boy is tall.', sentenceZh: '这个男孩很高。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: ['W_GIRL', 'W_TEACHER'] },
+  { code: 'W_GIRL', type: 'WORD', en: 'girl', zh: '女孩', phonetic: '/ɡɜːrl/', sentence: 'The girl is smart.', sentenceZh: '这个女孩很聪明。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: ['W_BOY', 'W_STUDENT'] },
+  { code: 'W_TEACHER', type: 'WORD', en: 'teacher', zh: '老师', phonetic: '/ˈtiːtʃər/', sentence: 'She is a teacher.', sentenceZh: '她是一位老师。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: ['W_STUDENT', 'W_BOY'] },
+  { code: 'W_STUDENT', type: 'WORD', en: 'student', zh: '学生', phonetic: '/ˈstuːdənt/', sentence: 'I am a student.', sentenceZh: '我是一个学生。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: ['W_TEACHER', 'W_GIRL'] },
+  // Day 3: I have 句型 & 日常物品
+  { code: 'W_HAVE', type: 'WORD', en: 'have', zh: '有', phonetic: '/hæv/', sentence: 'I have a pen.', sentenceZh: '我有一支笔。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_AM', 'W_IS'] },
+  { code: 'W_A', type: 'WORD', en: 'a', zh: '一个', phonetic: '/ə/', sentence: 'I have a book.', sentenceZh: '我有一本书。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_THE', 'W_THIS'] },
+  { code: 'W_THE', type: 'WORD', en: 'the', zh: '这/那个(特指)', phonetic: '/ðə/', sentence: 'The book is on the desk.', sentenceZh: '书在桌子上。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_A', 'W_THIS'] },
+  { code: 'W_BOOK', type: 'WORD', en: 'book', zh: '书', phonetic: '/bʊk/', sentence: 'I have a book.', sentenceZh: '我有一本书。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_PEN', 'W_BAG'] },
+  { code: 'W_PEN', type: 'WORD', en: 'pen', zh: '笔', phonetic: '/pen/', sentence: 'This is my pen.', sentenceZh: '这是我的笔。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_BOOK', 'W_BAG'] },
+  { code: 'W_BAG', type: 'WORD', en: 'bag', zh: '包/书包', phonetic: '/bæɡ/', sentence: 'My bag is big.', sentenceZh: '我的包很大。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_BOOK', 'W_PEN'] },
+  { code: 'W_THIS', type: 'WORD', en: 'this', zh: '这个', phonetic: '/ðɪs/', sentence: 'This is a pen.', sentenceZh: '这是一支笔。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_THAT', 'W_THE'] },
+  { code: 'W_THAT', type: 'WORD', en: 'that', zh: '那个', phonetic: '/ðæt/', sentence: 'That is a book.', sentenceZh: '那是一本书。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_THIS', 'W_THE'] },
+  { code: 'W_IT', type: 'WORD', en: 'it', zh: '它', phonetic: '/ɪt/', sentence: 'It is a cat.', sentenceZh: '它是一只猫。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: ['W_THIS', 'W_THAT'] },
+  // Day 4: 提问与回答
+  { code: 'W_WHO', type: 'WORD', en: 'who', zh: '谁', phonetic: '/huː/', sentence: 'Who is he?', sentenceZh: '他是谁？', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 4, distractors: ['W_WHAT', 'W_WHERE'] },
+  { code: 'W_HOW', type: 'WORD', en: 'how', zh: '怎样/如何', phonetic: '/haʊ/', sentence: 'How are you?', sentenceZh: '你好吗？', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 4, distractors: ['W_WHAT', 'W_WHO'] },
+  { code: 'W_WHERE', type: 'WORD', en: 'where', zh: '哪里', phonetic: '/wer/', sentence: 'Where is the book?', sentenceZh: '书在哪里？', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 4, distractors: ['W_WHO', 'W_HOW'] },
+  { code: 'W_HERE', type: 'WORD', en: 'here', zh: '这里', phonetic: '/hɪr/', sentence: 'Come here, please.', sentenceZh: '请到这里来。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 4, distractors: ['W_THERE', 'W_WHERE'] },
+  { code: 'W_THERE', type: 'WORD', en: 'there', zh: '那里', phonetic: '/ðer/', sentence: 'The pen is over there.', sentenceZh: '笔在那边。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 4, distractors: ['W_HERE', 'W_WHERE'] },
+  { code: 'W_CAN', type: 'WORD', en: 'can', zh: '能/会', phonetic: '/kæn/', sentence: 'I can read.', sentenceZh: '我会读。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 4, distractors: ['W_HAVE', 'W_AM'] },
   // 句型/短语（不会生成 camp 怪物，但会出现在 Quest 和 Boss 题目中）
   { code: 'P_I_AM_NAME', type: 'PHRASE', en: 'I am ...', zh: '我是...', phonetic: '', sentence: 'I am Tom.', sentenceZh: '我是汤姆。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: [] },
   { code: 'P_MY_NAME_IS', type: 'PHRASE', en: 'My name is ...', zh: '我的名字是...', phonetic: '', sentence: 'My name is Amy.', sentenceZh: '我的名字是艾米。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: [] },
   { code: 'P_WHAT_IS_YOUR_NAME', type: 'PHRASE', en: 'What is your name?', zh: '你叫什么名字？', phonetic: '', sentence: 'What is your name?', sentenceZh: '你叫什么名字？', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 2, distractors: [] },
   { code: 'P_HOW_ARE_YOU', type: 'PHRASE', en: 'How are you?', zh: '你好吗？', phonetic: '', sentence: 'How are you? I am fine.', sentenceZh: '你好吗？我很好。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 1, distractors: [] },
+  // Day 3 新增短语
+  { code: 'P_I_HAVE', type: 'PHRASE', en: 'I have ...', zh: '我有...', phonetic: '', sentence: 'I have a pen.', sentenceZh: '我有一支笔。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: [] },
+  { code: 'P_THIS_IS', type: 'PHRASE', en: 'This is ...', zh: '这是...', phonetic: '', sentence: 'This is my book.', sentenceZh: '这是我的书。', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 3, distractors: [] },
+  // Day 4 新增短语
+  { code: 'P_WHERE_IS', type: 'PHRASE', en: 'Where is ...?', zh: '...在哪里？', phonetic: '', sentence: 'Where is the pen?', sentenceZh: '笔在哪里？', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 4, distractors: [] },
+  { code: 'P_CAN_YOU', type: 'PHRASE', en: 'Can you ...?', zh: '你能...吗？', phonetic: '', sentence: 'Can you read this?', sentenceZh: '你能读这个吗？', cefrLevel: 'PRE_A1', chapterCode: 'PRE_A1_CH1', dayIndex: 4, distractors: [] },
 ]
 
 const ch1Boss: BossConfig = {
   code: 'PRE_A1_CH1_BOSS',
   chapterCode: 'PRE_A1_CH1',
-  bossHp: 10,
+  bossHp: 15,
   playerHp: 5,
   comboThreshold: 5,
   comboBonusDamage: 1,
@@ -54,48 +89,79 @@ const ch1Lessons: Lesson[] = [
 ]
 
 // 地图瓦片 — 8 的位置会放怪物，由 generateMonsterEncounters 自动填充
+// 24x18 扩大地图，40+ 个怪物格容纳全部单词
 const ch1Tiles: number[][] = [
-  [3, 3, 9, 3, 3, 0, 0, 2, 2, 2, 2, 0, 0, 3, 3, 9, 3, 3, 3, 3],
-  [3, 0, 0, 0, 3, 0, 0, 2, 2, 2, 0, 0, 0, 0, 3, 0, 0, 0, 3, 3],
-  [9, 0, 4, 0, 0, 1, 1, 0, 2, 0, 0, 1, 1, 0, 0, 0, 4, 0, 0, 3],
-  [3, 0, 0, 0, 0, 1, 3, 0, 0, 0, 3, 1, 3, 0, 8, 0, 0, 0, 0, 9],
-  [3, 0, 0, 5, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 7, 0, 3],
-  [0, 0, 0, 0, 0, 1, 0, 8, 0, 0, 0, 1, 0, 0, 3, 0, 0, 0, 0, 0],
-  [0, 0, 6, 0, 0, 1, 0, 0, 0, 5, 0, 1, 0, 0, 0, 8, 0, 0, 0, 0],
-  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 6, 0, 0],
-  [0, 0, 8, 0, 0, 1, 0, 0, 7, 0, 0, 1, 0, 8, 0, 0, 0, 0, 0, 0],
-  [3, 0, 0, 0, 0, 1, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 5, 0, 0, 3],
-  [3, 0, 7, 0, 0, 1, 0, 0, 0, 0, 3, 1, 3, 0, 0, 0, 0, 8, 0, 3],
-  [9, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 4, 0, 0, 0, 9],
-  [3, 0, 8, 3, 0, 0, 0, 0, 2, 2, 0, 0, 0, 0, 0, 0, 0, 8, 3, 3],
-  [3, 3, 9, 3, 3, 0, 0, 2, 2, 2, 2, 0, 0, 3, 9, 3, 3, 3, 3, 3],
+  [3, 3, 9, 3, 3, 0, 0, 2, 2, 2, 2, 0, 0, 3, 3, 9, 3, 3, 3, 3, 0, 0, 3, 3],
+  [3, 0, 8, 0, 3, 0, 8, 0, 2, 2, 0, 8, 0, 0, 3, 0, 8, 0, 0, 3, 0, 8, 0, 3],
+  [9, 0, 4, 0, 0, 1, 1, 0, 2, 0, 0, 1, 1, 0, 0, 0, 4, 0, 8, 3, 0, 0, 4, 9],
+  [3, 0, 8, 0, 0, 1, 3, 0, 0, 0, 3, 1, 3, 0, 8, 0, 0, 0, 0, 9, 0, 8, 0, 3],
+  [3, 0, 0, 5, 0, 1, 0, 8, 0, 0, 0, 1, 0, 0, 0, 8, 0, 7, 0, 3, 0, 0, 8, 3],
+  [0, 8, 0, 0, 0, 1, 0, 0, 0, 8, 0, 1, 0, 8, 3, 0, 0, 0, 0, 0, 8, 0, 0, 0],
+  [0, 0, 6, 0, 0, 1, 0, 8, 0, 5, 0, 1, 0, 0, 0, 8, 0, 0, 8, 0, 0, 0, 6, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+  [0, 0, 8, 0, 0, 1, 0, 0, 8, 0, 0, 1, 0, 0, 8, 0, 0, 6, 0, 0, 8, 0, 0, 0],
+  [0, 8, 0, 0, 0, 1, 0, 0, 7, 0, 0, 1, 0, 8, 0, 0, 8, 0, 0, 0, 0, 8, 0, 0],
+  [3, 0, 0, 8, 0, 1, 0, 3, 0, 0, 0, 1, 0, 0, 0, 0, 5, 0, 8, 3, 0, 0, 0, 3],
+  [3, 0, 7, 0, 0, 1, 8, 0, 0, 8, 3, 1, 3, 0, 8, 0, 0, 8, 0, 3, 0, 8, 0, 3],
+  [9, 0, 0, 8, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 4, 0, 0, 0, 9, 0, 0, 8, 9],
+  [3, 0, 8, 3, 0, 0, 0, 8, 2, 2, 0, 0, 0, 8, 0, 0, 0, 8, 3, 3, 0, 8, 0, 3],
+  [3, 3, 9, 3, 3, 0, 0, 2, 2, 2, 2, 0, 0, 3, 9, 3, 3, 3, 3, 3, 0, 0, 3, 3],
+  [3, 0, 8, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 0, 0, 8, 0, 0, 0, 3, 0, 8, 0, 3],
+  [3, 3, 3, 3, 3, 0, 0, 0, 3, 3, 3, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
 ]
 
 // NPC 和宝箱 — 手动放置
 const ch1StaticEncounters: MapEncounter[] = [
   { id: 'ch1_npc_guide', type: 'npc', tileX: 2, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['欢迎来到营地，年轻的冒险者！', '在这片土地上，你会遇到许多单词怪物。', '击败它们来学习新单词吧！', '提示：用方向键或 WASD 移动。'] },
-  { id: 'ch1_npc_sage', type: 'npc', tileX: 17, tileY: 8, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['我是语法贤者。让我教你一个小窍门。', '"I am" 可以缩写为 "I\'m"。', '"You are" 可以缩写为 "You\'re"。', '记住：am 只跟 I 搭配！'] },
+  { id: 'ch1_npc_sage', type: 'npc', tileX: 22, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['我是语法贤者。让我教你一个小窍门。', '"I am" 可以缩写为 "I\'m"。', '"You are" 可以缩写为 "You\'re"。', '记住：am 只跟 I 搭配！'] },
   { id: 'ch1_chest_1', type: 'treasure', tileX: 17, tileY: 4, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 20, coins: 15 } },
-  { id: 'ch1_chest_2', type: 'treasure', tileX: 8, tileY: 9, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 15, coins: 10 } },
-  { id: 'ch1_chest_3', type: 'treasure', tileX: 2, tileY: 11, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 15, coins: 10 } },
+  { id: 'ch1_chest_2', type: 'treasure', tileX: 8, tileY: 10, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 15, coins: 10 } },
+  { id: 'ch1_chest_3', type: 'treasure', tileX: 2, tileY: 12, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 15, coins: 10 } },
+  { id: 'ch1_npc_objects', type: 'npc', tileX: 17, tileY: 9, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['学会了物品名词，你就可以说 I have a book!', 'this 指近处，that 指远处。', '试试说：This is my pen.'] },
+  { id: 'ch1_chest_4', type: 'treasure', tileX: 22, tileY: 13, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 25, coins: 20 } },
 ]
 
 // ★ 核心：从 ContentItem 自动生成怪物 encounters ★
 const ch1MonsterSlots = extractMonsterSlots(ch1Tiles)
 const ch1MonsterEncounters = generateMonsterEncounters(ch1Words, ch1MonsterSlots, 'ch1')
 const ch1CampMap: CampMapData = {
-  width: 20, height: 15, tileSize: 64, playerStart: { x: 2, y: 7 },
+  width: 24, height: 18, tileSize: 64, playerStart: { x: 2, y: 7 },
   tiles: ch1Tiles,
   encounters: [...ch1MonsterEncounters, ...ch1StaticEncounters],
 }
 
 const ch1BossTasks: Task[] = [
+  // 1. MCQ - hello 词义
   { code: 'B1_1', lessonCode: '', orderIndex: 1, type: 'MCQ', promptEn: 'Choose the meaning of "hello".', promptZhHint: '选择 hello 的意思', options: [{ key: 'A', textEn: 'hello', textZh: '你好' }, { key: 'B', textEn: 'hello', textZh: '再见' }, { key: 'C', textEn: 'hello', textZh: '谢谢' }], answer: { correctOptionKey: 'A' }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'hello' }, links: { contentItemCodes: ['W_HELLO'] } },
+  // 2. SPELLING - goodbye
   { code: 'B1_2', lessonCode: '', orderIndex: 2, type: 'SPELLING', promptEn: 'Type the word you hear.', promptZhHint: '听音拼写', answer: { acceptedTexts: ['goodbye'] }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'goodbye' }, links: { contentItemCodes: ['W_GOODBYE'] } },
+  // 3. MCQ - am 语法
   { code: 'B1_3', lessonCode: '', orderIndex: 3, type: 'MCQ', promptEn: 'Fill in: I ___ a student.', promptZhHint: '选择正确单词', options: [{ key: 'A', textEn: 'have', textZh: '有' }, { key: 'B', textEn: 'am', textZh: '是' }, { key: 'C', textEn: 'is', textZh: '是' }], answer: { correctOptionKey: 'B' }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'I am a student.' }, links: { contentItemCodes: ['W_AM'] } },
+  // 4. MCQ - name 词义
   { code: 'B1_4', lessonCode: '', orderIndex: 4, type: 'MCQ', promptEn: '"name" means ___', promptZhHint: '选择 name 的意思', options: [{ key: 'A', textEn: 'name', textZh: '年龄' }, { key: 'B', textEn: 'name', textZh: '名字' }, { key: 'C', textEn: 'name', textZh: '家庭' }], answer: { correctOptionKey: 'B' }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'name' }, links: { contentItemCodes: ['W_NAME'] } },
+  // 5. SPELLING - please
   { code: 'B1_5', lessonCode: '', orderIndex: 5, type: 'SPELLING', promptEn: 'Type the word you hear.', promptZhHint: '听音拼写', answer: { acceptedTexts: ['please'] }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'please' }, links: { contentItemCodes: ['W_PLEASE'] } },
+  // 6. WORD_ORDER - Good morning
+  { code: 'B1_6', lessonCode: '', orderIndex: 6, type: 'WORD_ORDER', promptEn: 'Put the words in order.', promptZhHint: '将单词排列成正确的句子：早上好！', fragments: ['morning', 'Good', '!'], answer: { orderedFragments: ['Good', 'morning', '!'] }, explanationEn: '', explanationZh: '', xpReward: 6, goldReward: 0, tts: { enabled: true, ttsTextEn: 'Good morning!' }, links: { contentItemCodes: ['W_GOOD', 'W_MORNING'] } },
+  // 7. FILL_BLANK - How are you
+  { code: 'B1_7', lessonCode: '', orderIndex: 7, type: 'FILL_BLANK', promptEn: 'How ___ you?', promptZhHint: '填入正确单词：你好吗？', answer: { acceptedTexts: ['are'] }, explanationEn: '"How are you?" is a common greeting.', explanationZh: '', xpReward: 6, goldReward: 0, tts: { enabled: true, ttsTextEn: 'How are you?' }, links: { contentItemCodes: ['W_HOW', 'P_HOW_ARE_YOU'] } },
+  // 8. MCQ_REVERSE - 听英文选中文
+  { code: 'B1_8', lessonCode: '', orderIndex: 8, type: 'MCQ_REVERSE', promptEn: 'What does "teacher" mean?', promptZhHint: '选择 teacher 的中文意思', options: [{ key: 'A', textEn: 'teacher', textZh: '学生' }, { key: 'B', textEn: 'teacher', textZh: '老师' }, { key: 'C', textEn: 'teacher', textZh: '男孩' }], answer: { correctOptionKey: 'B' }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'teacher' }, links: { contentItemCodes: ['W_TEACHER'] } },
+  // 9. LISTEN_PICK - 听音选单词
+  { code: 'B1_9', lessonCode: '', orderIndex: 9, type: 'LISTEN_PICK', promptEn: 'Listen and pick the correct word.', promptZhHint: '听发音选择正确单词', options: [{ key: 'A', textEn: 'book', textZh: '书' }, { key: 'B', textEn: 'bag', textZh: '包' }, { key: 'C', textEn: 'pen', textZh: '笔' }], answer: { correctOptionKey: 'A' }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'book' }, links: { contentItemCodes: ['W_BOOK'] } },
+  // 10. WORD_ORDER - I have a pen
+  { code: 'B1_10', lessonCode: '', orderIndex: 10, type: 'WORD_ORDER', promptEn: 'Put the words in order.', promptZhHint: '排列成正确句子：我有一支笔。', fragments: ['a', 'I', 'pen', 'have', '.'], answer: { orderedFragments: ['I', 'have', 'a', 'pen', '.'] }, explanationEn: '', explanationZh: '', xpReward: 6, goldReward: 0, tts: { enabled: true, ttsTextEn: 'I have a pen.' }, links: { contentItemCodes: ['W_HAVE', 'W_PEN', 'P_I_HAVE'] } },
+  // 11. SPELLING - morning
+  { code: 'B1_11', lessonCode: '', orderIndex: 11, type: 'SPELLING', promptEn: 'Type the word: 早上', promptZhHint: '拼写出"早上"', answer: { acceptedTexts: ['morning'] }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'morning' }, links: { contentItemCodes: ['W_MORNING'] } },
+  // 12. MCQ - this/that 辨析
+  { code: 'B1_12', lessonCode: '', orderIndex: 12, type: 'MCQ', promptEn: '___ is my book. (pointing to something near you)', promptZhHint: '指近处的东西用什么？', options: [{ key: 'A', textEn: 'This', textZh: '这个' }, { key: 'B', textEn: 'That', textZh: '那个' }, { key: 'C', textEn: 'It', textZh: '它' }], answer: { correctOptionKey: 'A' }, explanationEn: 'Use "this" for things near you.', explanationZh: '', xpReward: 6, goldReward: 0, tts: { enabled: true, ttsTextEn: 'This is my book.' }, links: { contentItemCodes: ['W_THIS', 'P_THIS_IS'] } },
+  // 13. FILL_BLANK - Where is
+  { code: 'B1_13', lessonCode: '', orderIndex: 13, type: 'FILL_BLANK', promptEn: '___ is the pen?', promptZhHint: '填入正确单词：笔在哪里？', answer: { acceptedTexts: ['Where', 'where'] }, explanationEn: '', explanationZh: '', xpReward: 6, goldReward: 0, tts: { enabled: true, ttsTextEn: 'Where is the pen?' }, links: { contentItemCodes: ['W_WHERE', 'P_WHERE_IS'] } },
+  // 14. MCQ_REVERSE - can 词义
+  { code: 'B1_14', lessonCode: '', orderIndex: 14, type: 'MCQ_REVERSE', promptEn: 'What does "can" mean?', promptZhHint: '选择 can 的意思', options: [{ key: 'A', textEn: 'can', textZh: '有' }, { key: 'B', textEn: 'can', textZh: '是' }, { key: 'C', textEn: 'can', textZh: '能/会' }], answer: { correctOptionKey: 'C' }, explanationEn: '', explanationZh: '', xpReward: 5, goldReward: 0, tts: { enabled: true, ttsTextEn: 'can' }, links: { contentItemCodes: ['W_CAN'] } },
+  // 15. WORD_ORDER - Can you read this?
+  { code: 'B1_15', lessonCode: '', orderIndex: 15, type: 'WORD_ORDER', promptEn: 'Put the words in order.', promptZhHint: '排列成正确句子：你能读这个吗？', fragments: ['you', 'this', 'Can', 'read', '?'], answer: { orderedFragments: ['Can', 'you', 'read', 'this', '?'] }, explanationEn: '', explanationZh: '', xpReward: 6, goldReward: 0, tts: { enabled: true, ttsTextEn: 'Can you read this?' }, links: { contentItemCodes: ['W_CAN', 'P_CAN_YOU'] } },
 ]
 
 // ============================================================
