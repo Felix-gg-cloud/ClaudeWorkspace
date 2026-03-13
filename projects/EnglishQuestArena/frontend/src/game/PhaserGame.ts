@@ -14,6 +14,8 @@ export function createPhaserGame(container: HTMLElement, mapData?: CampMapData):
   }
 
   pendingMapData = mapData ?? null
+  // 通过静态属性直接传递（最可靠，不依赖 Phaser 生命周期时序）
+  CampScene.pendingMapData = pendingMapData
 
   const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
@@ -35,13 +37,10 @@ export function createPhaserGame(container: HTMLElement, mapData?: CampMapData):
     scene: [CampScene],
     callbacks: {
       preBoot: (game) => {
-        // Inject map data into scene before create()
-        game.events.once('boot', () => {
-          if (pendingMapData) {
-            const scene = game.scene.getScene('CampScene') as CampScene | null
-            if (scene) scene.setMapData(pendingMapData)
-          }
-        })
+        // Store map data in registry so CampScene.init() can read it
+        if (pendingMapData) {
+          game.registry.set('campMapData', pendingMapData)
+        }
       },
     },
   }

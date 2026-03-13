@@ -7,6 +7,9 @@ import { generateTextures } from '../rendering/TextureGen'
 const T = 64 // 瓦片尺寸
 
 export class CampScene extends Phaser.Scene {
+  /** Static property for reliable map data injection from PhaserGame.ts */
+  static pendingMapData: CampMapData | null = null
+
   private player!: Player
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys
   private wasd!: Record<string, Phaser.Input.Keyboard.Key>
@@ -37,6 +40,17 @@ export class CampScene extends Phaser.Scene {
   /** Allow setting map data from Vue before scene starts */
   setMapData(data: CampMapData) {
     this.mapData = data
+  }
+
+  init() {
+    // 1. 优先使用静态属性（最可靠）
+    if (CampScene.pendingMapData) {
+      this.mapData = CampScene.pendingMapData
+      return
+    }
+    // 2. 备选：从 registry 读取
+    const data = this.game.registry.get('campMapData') as CampMapData | undefined
+    if (data) this.mapData = data
   }
 
   create() {
