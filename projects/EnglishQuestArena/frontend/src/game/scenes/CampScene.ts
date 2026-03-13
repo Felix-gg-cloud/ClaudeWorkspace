@@ -394,7 +394,7 @@ export class CampScene extends Phaser.Scene {
 
     const playerTileX = Math.floor(this.player.x / T)
     const playerTileY = Math.floor(this.player.y / T)
-    const revealRadius = 3
+    const revealRadius = 5
 
     // 记录玩家周围已揭露的瓦片
     for (let dy = -revealRadius; dy <= revealRadius; dy++) {
@@ -417,7 +417,7 @@ export class CampScene extends Phaser.Scene {
         const dx = x - playerTileX
         const dy = y - playerTileY
         const dist = Math.sqrt(dx * dx + dy * dy)
-        const edgeAlpha = dist <= revealRadius + 1.5 ? 0.45 : 0.7
+        const edgeAlpha = dist <= revealRadius + 2 ? 0.35 : 0.55
 
         fog.fillStyle(0x0a0a0a, edgeAlpha)
         fog.fillRect(x * T, y * T, T, T)
