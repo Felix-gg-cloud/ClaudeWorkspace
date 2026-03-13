@@ -1,6 +1,8 @@
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/EqaApplication.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/config/CorsConfig.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/config/SecurityConfig.java
+/Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/AuthController.java
+/Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/ChapterController.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/HealthController.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/BossConfig.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/BossPoolTask.java
@@ -20,3 +22,5 @@
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/TaskRepository.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/UserRepository.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/seed/SeedImporter.java
+/Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/service/AuthService.java
+/Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/service/EqaUserDetailsService.java
