@@ -216,9 +216,15 @@ export class CampScene extends Phaser.Scene {
       const sprites: Phaser.GameObjects.GameObject[] = []
 
       if (encounter.type === 'monster') {
-        const diffKey = encounter.difficulty
+        let diffKey = encounter.difficulty
           ? `sprite_monster_${encounter.difficulty}`
           : 'sprite_monster'
+        // Easy 怪物有3种外观子变体，按位置哈希分配
+        if (encounter.difficulty === 'easy') {
+          const variant = ((encounter.tileX * 7 + encounter.tileY * 13) % 3) + 1
+          const subKey = variant === 1 ? 'sprite_monster_easy' : `sprite_monster_easy_${variant}`
+          if (this.textures.exists(subKey)) diffKey = subKey
+        }
         const mon = this.add.image(px, py, diffKey)
         mon.setDepth(py / 10 + 1)
         sprites.push(mon)

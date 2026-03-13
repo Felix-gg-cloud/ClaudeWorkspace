@@ -291,16 +291,13 @@ export function generateTextures(scene: Phaser.Scene) {
   }
 
   function drawMonsterEye(ctx: CanvasRenderingContext2D, x: number, y: number, size: number, pupilColor: string, angry?: boolean) {
-    // 白底
     ctx.fillStyle = '#fff'
     ctx.beginPath()
     ctx.ellipse(x, y, size, size * 1.2, 0, 0, Math.PI * 2)
     ctx.fill()
-    // 黑色描边
     ctx.strokeStyle = 'rgba(0,0,0,0.3)'
     ctx.lineWidth = 0.5
     ctx.stroke()
-    // 虹膜
     const irisGrad = ctx.createRadialGradient(x, y + 0.5, 0, x, y + 0.5, size * 0.7)
     irisGrad.addColorStop(0, pupilColor)
     irisGrad.addColorStop(1, 'rgba(0,0,0,0.8)')
@@ -308,17 +305,14 @@ export function generateTextures(scene: Phaser.Scene) {
     ctx.beginPath()
     ctx.arc(x + 0.5, y + 0.5, size * 0.6, 0, Math.PI * 2)
     ctx.fill()
-    // 瞳孔
     ctx.fillStyle = '#000'
     ctx.beginPath()
     ctx.arc(x + 0.5, y + 0.5, size * 0.25, 0, Math.PI * 2)
     ctx.fill()
-    // 高光
     ctx.fillStyle = '#fff'
     ctx.beginPath()
     ctx.arc(x - size * 0.2, y - size * 0.3, size * 0.2, 0, Math.PI * 2)
     ctx.fill()
-    // 愤怒眉毛
     if (angry) {
       ctx.strokeStyle = 'rgba(0,0,0,0.7)'
       ctx.lineWidth = 1.5
@@ -329,137 +323,289 @@ export function generateTextures(scene: Phaser.Scene) {
     }
   }
 
-  // ===== 简单怪物 (绿色史莱姆 - 可爱圆润) =====
+  // ===== 简单怪物 (绿色小蘑菇精灵) =====
   createCanvasTexture(scene, 'sprite_monster_easy', 48, 48, (ctx) => {
-    drawMonsterShadow(ctx, 24, 44, 14)
-    // 身体 — 圆润水滴形
-    const bg = ctx.createRadialGradient(22, 26, 3, 24, 30, 18)
-    bg.addColorStop(0, '#88ee88')
-    bg.addColorStop(0.5, '#55cc55')
-    bg.addColorStop(1, '#339933')
-    ctx.fillStyle = bg
+    drawMonsterShadow(ctx, 24, 44, 12)
+    // 蘑菇伞盖
+    const capGrad = ctx.createRadialGradient(24, 18, 2, 24, 22, 16)
+    capGrad.addColorStop(0, '#55dd55')
+    capGrad.addColorStop(0.6, '#33aa33')
+    capGrad.addColorStop(1, '#228822')
+    ctx.fillStyle = capGrad
     ctx.beginPath()
-    ctx.moveTo(8, 40)
-    ctx.quadraticCurveTo(4, 28, 10, 18)
-    ctx.quadraticCurveTo(16, 10, 24, 9)
-    ctx.quadraticCurveTo(32, 10, 38, 18)
-    ctx.quadraticCurveTo(44, 28, 40, 40)
-    ctx.quadraticCurveTo(24, 46, 8, 40)
+    ctx.ellipse(24, 20, 18, 14, 0, Math.PI, Math.PI * 2)
     ctx.fill()
-    // 身体高光
-    ctx.fillStyle = 'rgba(200, 255, 200, 0.35)'
+    // 伞盖底边
+    ctx.fillStyle = '#228822'
+    ctx.fillRect(6, 19, 36, 3)
+    // 伞盖斑点
+    ctx.fillStyle = 'rgba(255, 255, 200, 0.5)'
     ctx.beginPath()
-    ctx.ellipse(18, 20, 7, 9, -0.4, 0, Math.PI * 2)
+    ctx.arc(16, 12, 3, 0, Math.PI * 2)
     ctx.fill()
-    // 小触角
-    ctx.strokeStyle = '#44aa44'
-    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.arc(28, 10, 2.5, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(34, 15, 2, 0, Math.PI * 2)
+    ctx.fill()
+    // 蘑菇柄 (身体)
+    ctx.fillStyle = '#ffe8cc'
+    ctx.beginPath()
+    ctx.moveTo(16, 22)
+    ctx.lineTo(14, 40)
+    ctx.quadraticCurveTo(24, 44, 34, 40)
+    ctx.lineTo(32, 22)
+    ctx.closePath()
+    ctx.fill()
+    // 柄高光
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.3)'
+    ctx.beginPath()
+    ctx.ellipse(22, 30, 4, 8, -0.1, 0, Math.PI * 2)
+    ctx.fill()
+    // 大眼睛
+    drawMonsterEye(ctx, 20, 30, 4, '#22aa22')
+    drawMonsterEye(ctx, 30, 30, 4, '#22aa22')
+    // 微笑
+    ctx.strokeStyle = '#886644'
+    ctx.lineWidth = 1.5
     ctx.lineCap = 'round'
     ctx.beginPath()
-    ctx.moveTo(18, 12)
-    ctx.quadraticCurveTo(15, 4, 12, 6)
+    ctx.arc(25, 35, 4, 0.2, Math.PI - 0.2)
     ctx.stroke()
+    // 小脚
+    ctx.fillStyle = '#ddbb88'
     ctx.beginPath()
-    ctx.moveTo(30, 12)
-    ctx.quadraticCurveTo(33, 4, 36, 6)
-    ctx.stroke()
-    // 触角尖端小球
-    ctx.fillStyle = '#77dd77'
-    ctx.beginPath()
-    ctx.arc(12, 6, 2, 0, Math.PI * 2)
+    ctx.ellipse(18, 42, 4, 2, 0, 0, Math.PI * 2)
     ctx.fill()
     ctx.beginPath()
-    ctx.arc(36, 6, 2, 0, Math.PI * 2)
+    ctx.ellipse(30, 42, 4, 2, 0, 0, Math.PI * 2)
+    ctx.fill()
+  })
+
+  // ===== 简单怪物变体2 (黄色仙人掌小精灵) =====
+  createCanvasTexture(scene, 'sprite_monster_easy_2', 48, 48, (ctx) => {
+    drawMonsterShadow(ctx, 24, 44, 10)
+    // 身体 — 仙人掌柱
+    const bodyG = ctx.createLinearGradient(16, 10, 32, 40)
+    bodyG.addColorStop(0, '#66cc44')
+    bodyG.addColorStop(0.5, '#44aa33')
+    bodyG.addColorStop(1, '#338822')
+    ctx.fillStyle = bodyG
+    ctx.beginPath()
+    ctx.moveTo(17, 42)
+    ctx.quadraticCurveTo(16, 12, 24, 8)
+    ctx.quadraticCurveTo(32, 12, 31, 42)
+    ctx.closePath()
+    ctx.fill()
+    // 左臂
+    ctx.beginPath()
+    ctx.moveTo(17, 24)
+    ctx.quadraticCurveTo(8, 22, 8, 16)
+    ctx.quadraticCurveTo(8, 12, 12, 14)
+    ctx.quadraticCurveTo(14, 16, 17, 20)
+    ctx.closePath()
+    ctx.fill()
+    // 右臂
+    ctx.beginPath()
+    ctx.moveTo(31, 22)
+    ctx.quadraticCurveTo(40, 20, 40, 14)
+    ctx.quadraticCurveTo(40, 10, 36, 12)
+    ctx.quadraticCurveTo(34, 14, 31, 18)
+    ctx.closePath()
+    ctx.fill()
+    // 高光
+    ctx.fillStyle = 'rgba(150, 255, 100, 0.25)'
+    ctx.beginPath()
+    ctx.ellipse(21, 22, 3, 10, 0, 0, Math.PI * 2)
+    ctx.fill()
+    // 小花
+    ctx.fillStyle = '#ffdd44'
+    ctx.beginPath()
+    ctx.arc(26, 10, 4, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = '#ff9922'
+    ctx.beginPath()
+    ctx.arc(26, 10, 2, 0, Math.PI * 2)
     ctx.fill()
     // 眼睛
-    drawMonsterEye(ctx, 18, 24, 4, '#22aa22')
-    drawMonsterEye(ctx, 30, 24, 4, '#22aa22')
+    drawMonsterEye(ctx, 21, 24, 3, '#228800')
+    drawMonsterEye(ctx, 28, 24, 3, '#228800')
     // 微笑
     ctx.strokeStyle = '#226622'
     ctx.lineWidth = 1.5
     ctx.lineCap = 'round'
     ctx.beginPath()
-    ctx.arc(24, 30, 5, 0.2, Math.PI - 0.2)
+    ctx.arc(24.5, 31, 3, 0.3, Math.PI - 0.3)
     ctx.stroke()
-    // 腮红
-    ctx.fillStyle = 'rgba(255, 150, 150, 0.25)'
-    ctx.beginPath()
-    ctx.ellipse(12, 28, 3, 2, 0, 0, Math.PI * 2)
-    ctx.fill()
-    ctx.beginPath()
-    ctx.ellipse(36, 28, 3, 2, 0, 0, Math.PI * 2)
-    ctx.fill()
   })
 
-  // ===== 中等怪物 (蓝色幽灵 - 飘逸神秘) =====
-  createCanvasTexture(scene, 'sprite_monster_medium', 48, 48, (ctx) => {
+  // ===== 简单怪物变体3 (粉色果冻虫) =====
+  createCanvasTexture(scene, 'sprite_monster_easy_3', 48, 48, (ctx) => {
     drawMonsterShadow(ctx, 24, 44, 12)
-    // 尾巴 — 波浪形底部
-    const tailGrad = ctx.createLinearGradient(24, 30, 24, 46)
-    tailGrad.addColorStop(0, '#5577dd')
-    tailGrad.addColorStop(1, 'rgba(60, 80, 180, 0.2)')
-    ctx.fillStyle = tailGrad
+    // 身体 — 毛毛虫
+    const segs: [number, number, number, string][] = [
+      [14, 38, 7, '#ff88aa'],
+      [22, 34, 8, '#ff6699'],
+      [30, 36, 7.5, '#ff88aa'],
+      [36, 40, 6.5, '#ff6699'],
+    ]
+    for (const [sx, sy, sr, sc] of segs) {
+      const sg = ctx.createRadialGradient(sx - 1, sy - 1, 1, sx, sy, sr)
+      sg.addColorStop(0, '#ffaacc')
+      sg.addColorStop(0.6, sc)
+      sg.addColorStop(1, '#cc4477')
+      ctx.fillStyle = sg
+      ctx.beginPath()
+      ctx.arc(sx, sy, sr, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    // 头部
+    const hg = ctx.createRadialGradient(12, 28, 2, 14, 30, 10)
+    hg.addColorStop(0, '#ffbbdd')
+    hg.addColorStop(0.6, '#ff6699')
+    hg.addColorStop(1, '#cc3366')
+    ctx.fillStyle = hg
     ctx.beginPath()
-    ctx.moveTo(8, 30)
-    ctx.quadraticCurveTo(12, 42, 16, 44)
-    ctx.quadraticCurveTo(20, 40, 24, 44)
-    ctx.quadraticCurveTo(28, 40, 32, 44)
-    ctx.quadraticCurveTo(36, 42, 40, 30)
-    ctx.lineTo(40, 30)
-    ctx.lineTo(8, 30)
+    ctx.arc(14, 30, 10, 0, Math.PI * 2)
     ctx.fill()
-    // 身体 — 圆形头部
-    const bg = ctx.createRadialGradient(22, 20, 2, 24, 22, 16)
+    // 触角
+    ctx.strokeStyle = '#cc4477'
+    ctx.lineWidth = 1.5
+    ctx.lineCap = 'round'
+    ctx.beginPath()
+    ctx.moveTo(10, 22)
+    ctx.quadraticCurveTo(6, 14, 4, 16)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(16, 22)
+    ctx.quadraticCurveTo(18, 14, 22, 16)
+    ctx.stroke()
+    // 触角球
+    ctx.fillStyle = '#ffaacc'
+    ctx.beginPath()
+    ctx.arc(4, 16, 2, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(22, 16, 2, 0, Math.PI * 2)
+    ctx.fill()
+    // 眼睛
+    drawMonsterEye(ctx, 10, 28, 3.5, '#cc2266')
+    drawMonsterEye(ctx, 18, 28, 3.5, '#cc2266')
+    // 微笑
+    ctx.strokeStyle = '#882244'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.arc(14, 33, 3, 0.2, Math.PI - 0.2)
+    ctx.stroke()
+    // 小脚
+    ctx.fillStyle = '#cc4477'
+    for (const [sx, sy] of [[12, 39], [16, 38], [21, 37], [26, 40], [30, 43], [35, 45]] as const) {
+      ctx.beginPath()
+      ctx.ellipse(sx, sy + 2, 1.5, 1, 0, 0, Math.PI * 2)
+      ctx.fill()
+    }
+  })
+
+  // ===== 中等怪物 (蓝色独眼蝙蝠) =====
+  createCanvasTexture(scene, 'sprite_monster_medium', 48, 48, (ctx) => {
+    drawMonsterShadow(ctx, 24, 44, 10)
+    // 翅膀 — 左
+    const wingGrad = ctx.createLinearGradient(0, 20, 20, 20)
+    wingGrad.addColorStop(0, '#3355bb')
+    wingGrad.addColorStop(1, '#5577dd')
+    ctx.fillStyle = wingGrad
+    ctx.beginPath()
+    ctx.moveTo(14, 20)
+    ctx.quadraticCurveTo(2, 10, 4, 22)
+    ctx.quadraticCurveTo(2, 32, 6, 28)
+    ctx.quadraticCurveTo(4, 36, 10, 32)
+    ctx.lineTo(14, 28)
+    ctx.closePath()
+    ctx.fill()
+    // 翅膀 — 右
+    const wingGrad2 = ctx.createLinearGradient(28, 20, 48, 20)
+    wingGrad2.addColorStop(0, '#5577dd')
+    wingGrad2.addColorStop(1, '#3355bb')
+    ctx.fillStyle = wingGrad2
+    ctx.beginPath()
+    ctx.moveTo(34, 20)
+    ctx.quadraticCurveTo(46, 10, 44, 22)
+    ctx.quadraticCurveTo(46, 32, 42, 28)
+    ctx.quadraticCurveTo(44, 36, 38, 32)
+    ctx.lineTo(34, 28)
+    ctx.closePath()
+    ctx.fill()
+    // 身体
+    const bg = ctx.createRadialGradient(24, 24, 2, 24, 26, 12)
     bg.addColorStop(0, '#88aaff')
-    bg.addColorStop(0.5, '#5577dd')
+    bg.addColorStop(0.6, '#5577dd')
     bg.addColorStop(1, '#3355bb')
     ctx.fillStyle = bg
     ctx.beginPath()
-    ctx.ellipse(24, 22, 16, 14, 0, 0, Math.PI * 2)
+    ctx.ellipse(24, 26, 12, 14, 0, 0, Math.PI * 2)
     ctx.fill()
-    // 身体高光
-    ctx.fillStyle = 'rgba(180, 210, 255, 0.3)'
+    // 耳朵
+    ctx.fillStyle = '#4466cc'
     ctx.beginPath()
-    ctx.ellipse(18, 16, 6, 7, -0.3, 0, Math.PI * 2)
+    ctx.moveTo(16, 16)
+    ctx.lineTo(12, 6)
+    ctx.lineTo(20, 14)
     ctx.fill()
-    // 眼睛 — 大而神秘
-    drawMonsterEye(ctx, 18, 20, 4.5, '#3366ff')
-    drawMonsterEye(ctx, 30, 20, 4.5, '#3366ff')
-    // 神秘嘴巴 — O形
-    ctx.fillStyle = '#223366'
     ctx.beginPath()
-    ctx.ellipse(24, 28, 3, 2.5, 0, 0, Math.PI * 2)
+    ctx.moveTo(32, 16)
+    ctx.lineTo(36, 6)
+    ctx.lineTo(28, 14)
     ctx.fill()
-    ctx.fillStyle = '#1a2244'
+    // 大独眼
+    ctx.fillStyle = '#fff'
     ctx.beginPath()
-    ctx.ellipse(24, 28, 2, 1.5, 0, 0, Math.PI * 2)
+    ctx.ellipse(24, 22, 7, 8, 0, 0, Math.PI * 2)
     ctx.fill()
-    // 浮动符文星
-    ctx.fillStyle = 'rgba(180, 220, 255, 0.6)'
-    const starPos = [[6, 12], [42, 14], [10, 38], [38, 36]]
-    for (const [sx, sy] of starPos) {
-      ctx.beginPath()
-      ctx.arc(sx, sy, 1.2, 0, Math.PI * 2)
-      ctx.fill()
-    }
-    // 额头宝石
-    ctx.fillStyle = '#aaccff'
-    ctx.beginPath()
-    ctx.moveTo(24, 9)
-    ctx.lineTo(26, 12)
-    ctx.lineTo(24, 14)
-    ctx.lineTo(22, 12)
-    ctx.closePath()
-    ctx.fill()
-    ctx.strokeStyle = '#5577dd'
+    ctx.strokeStyle = 'rgba(0,0,0,0.2)'
     ctx.lineWidth = 0.5
     ctx.stroke()
+    // 虹膜
+    const irisG = ctx.createRadialGradient(24, 23, 0, 24, 23, 5)
+    irisG.addColorStop(0, '#3399ff')
+    irisG.addColorStop(1, '#1144aa')
+    ctx.fillStyle = irisG
+    ctx.beginPath()
+    ctx.arc(24, 23, 4.5, 0, Math.PI * 2)
+    ctx.fill()
+    // 瞳孔
+    ctx.fillStyle = '#000'
+    ctx.beginPath()
+    ctx.arc(24, 23, 2, 0, Math.PI * 2)
+    ctx.fill()
+    // 高光
+    ctx.fillStyle = '#fff'
+    ctx.beginPath()
+    ctx.arc(22, 21, 1.5, 0, Math.PI * 2)
+    ctx.fill()
+    // 小嘴
+    ctx.fillStyle = '#223366'
+    ctx.beginPath()
+    ctx.ellipse(24, 32, 3, 2, 0, 0, Math.PI * 2)
+    ctx.fill()
+    // 尖齿
+    ctx.fillStyle = '#fff'
+    ctx.beginPath()
+    ctx.moveTo(22, 31)
+    ctx.lineTo(23, 34)
+    ctx.lineTo(24, 31)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.moveTo(24, 31)
+    ctx.lineTo(25, 34)
+    ctx.lineTo(26, 31)
+    ctx.fill()
   })
 
-  // ===== 困难怪物 (紫色暗影恶魔 - 威胁) =====
+  // ===== 困难怪物 (紫色暗影恶魔) =====
   createCanvasTexture(scene, 'sprite_monster_hard', 48, 48, (ctx) => {
     drawMonsterShadow(ctx, 24, 44, 15)
-    // 身体 — 三角形/棱角分明
+    // 身体 — 倒三角
     const bg = ctx.createRadialGradient(22, 24, 2, 24, 26, 18)
     bg.addColorStop(0, '#cc66dd')
     bg.addColorStop(0.5, '#9933aa')
@@ -532,44 +678,76 @@ export function generateTextures(scene: Phaser.Scene) {
     ctx.fill()
     // 暗能量粒子
     ctx.fillStyle = 'rgba(200, 100, 255, 0.5)'
-    const particles = [[5, 20], [43, 22], [6, 36], [42, 38], [24, 6]]
-    for (const [px, py] of particles) {
+    const pts: number[][] = [[5, 20], [43, 22], [6, 36], [42, 38], [24, 6]]
+    for (const p of pts) {
       ctx.beginPath()
-      ctx.arc(px, py, 1, 0, Math.PI * 2)
+      ctx.arc(p[0]!, p[1]!, 1, 0, Math.PI * 2)
       ctx.fill()
     }
   })
 
-  // ===== 默认怪物 (红色 - 向后兼容) =====
+  // ===== 默认怪物 (橙色小狐狸 - 向后兼容) =====
   createCanvasTexture(scene, 'sprite_monster', 48, 48, (ctx) => {
-    drawMonsterShadow(ctx, 24, 44, 14)
+    drawMonsterShadow(ctx, 24, 44, 12)
     // 身体
-    const bg = ctx.createRadialGradient(22, 26, 3, 24, 28, 16)
-    bg.addColorStop(0, '#ee6655')
-    bg.addColorStop(0.5, '#cc4444')
-    bg.addColorStop(1, '#993333')
+    const bg = ctx.createRadialGradient(24, 28, 3, 24, 30, 14)
+    bg.addColorStop(0, '#ff9955')
+    bg.addColorStop(0.6, '#ee7733')
+    bg.addColorStop(1, '#cc5522')
     ctx.fillStyle = bg
     ctx.beginPath()
-    ctx.moveTo(8, 40)
-    ctx.quadraticCurveTo(4, 24, 14, 16)
-    ctx.quadraticCurveTo(24, 10, 34, 16)
-    ctx.quadraticCurveTo(44, 24, 40, 40)
-    ctx.closePath()
+    ctx.ellipse(24, 30, 12, 14, 0, 0, Math.PI * 2)
     ctx.fill()
-    // 高光
-    ctx.fillStyle = 'rgba(255, 200, 200, 0.3)'
+    // 耳朵
+    ctx.fillStyle = '#ee7733'
     ctx.beginPath()
-    ctx.ellipse(18, 22, 6, 8, -0.3, 0, Math.PI * 2)
+    ctx.moveTo(14, 20)
+    ctx.lineTo(10, 8)
+    ctx.lineTo(20, 18)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.moveTo(34, 20)
+    ctx.lineTo(38, 8)
+    ctx.lineTo(28, 18)
+    ctx.fill()
+    // 内耳
+    ctx.fillStyle = '#ffccaa'
+    ctx.beginPath()
+    ctx.moveTo(15, 19)
+    ctx.lineTo(12, 11)
+    ctx.lineTo(19, 18)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.moveTo(33, 19)
+    ctx.lineTo(36, 11)
+    ctx.lineTo(29, 18)
     ctx.fill()
     // 眼睛
-    drawMonsterEye(ctx, 18, 24, 4, '#cc2222')
-    drawMonsterEye(ctx, 30, 24, 4, '#cc2222')
-    // 嘴巴
-    ctx.strokeStyle = '#662222'
-    ctx.lineWidth = 1.5
+    drawMonsterEye(ctx, 19, 26, 3.5, '#cc5500')
+    drawMonsterEye(ctx, 29, 26, 3.5, '#cc5500')
+    // 鼻子
+    ctx.fillStyle = '#332211'
     ctx.beginPath()
-    ctx.arc(24, 32, 4, 0.3, Math.PI - 0.3)
+    ctx.ellipse(24, 31, 2, 1.5, 0, 0, Math.PI * 2)
+    ctx.fill()
+    // 嘴
+    ctx.strokeStyle = '#663311'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.arc(24, 33, 3, 0.2, Math.PI - 0.2)
     ctx.stroke()
+    // 尾巴
+    ctx.fillStyle = '#ee7733'
+    ctx.beginPath()
+    ctx.moveTo(36, 36)
+    ctx.quadraticCurveTo(46, 30, 44, 24)
+    ctx.quadraticCurveTo(42, 28, 38, 34)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.beginPath()
+    ctx.moveTo(42, 26)
+    ctx.quadraticCurveTo(44, 24, 43, 28)
+    ctx.fill()
   })
 
   // ===== NPC 精灵 — 4 种类型 =====
