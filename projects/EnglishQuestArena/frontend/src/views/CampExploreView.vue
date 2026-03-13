@@ -23,22 +23,28 @@
         @close="onEncounterClose"
       />
 
-      <!-- NPC 对话弹窗 -->
+      <!-- NPC 全屏 Visual Novel 对话 -->
       <Teleport to="body">
-        <div v-if="currentEncounter && currentEncounter.type === 'npc'" class="npc-dialog-overlay" @click="advanceNpc">
-          <div class="npc-dialog" @click.stop>
-            <div class="npc-avatar-frame">
-              <div class="npc-avatar">🧙</div>
+        <div v-if="currentEncounter && currentEncounter.type === 'npc'" class="vn-overlay" @click="advanceNpc">
+          <!-- 暗色场景背景 -->
+          <div class="vn-backdrop"></div>
+
+          <!-- NPC 大型立绘 -->
+          <div class="vn-portrait" :class="'portrait-' + (currentEncounter.npcAvatar ?? 'sage')">
+            <NpcPortrait :type="(currentEncounter.npcAvatar as any) ?? 'sage'" />
+          </div>
+
+          <!-- 底部文本框 -->
+          <div class="vn-textbox" @click.stop>
+            <div class="vn-nameplate">
+              {{ currentEncounter.npcName ?? 'NPC' }}
             </div>
-            <div class="npc-content">
-              <div class="npc-name">{{ currentEncounter.npcName ?? 'NPC' }}</div>
-              <p class="npc-text">{{ npcCurrentLine }}</p>
-              <div class="npc-footer">
-                <span class="npc-progress">{{ npcLineIndex + 1 }} / {{ currentEncounter.npcLines?.length ?? 0 }}</span>
-                <button class="npc-next-btn" @click="advanceNpc">
-                  {{ isLastNpcLine ? '✓ 关闭' : '继续 →' }}
-                </button>
-              </div>
+            <p class="vn-text">{{ vnDisplayedText }}<span class="vn-cursor" v-if="vnTyping">▍</span></p>
+            <div class="vn-footer">
+              <span class="vn-progress">{{ npcLineIndex + 1 }} / {{ currentEncounter.npcLines?.length ?? 0 }}</span>
+              <button class="vn-next-btn" @click="advanceNpc">
+                {{ isLastNpcLine ? '✓ 关闭' : '继续 →' }}
+              </button>
             </div>
           </div>
         </div>
@@ -109,10 +115,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import WordEncounterDialog from '@/components/ui/WordEncounterDialog.vue'
+import NpcPortrait from '@/components/ui/NpcPortrait.vue'
 import { createPhaserGame, destroyPhaserGame, getCampScene } from '@/game/PhaserGame'
 import type { MapEncounter } from '@/game/config/mapData'
 import { useChapterStore } from '@/stores/chapter'
@@ -152,6 +159,36 @@ const isLastNpcLine = computed(() => {
   return npcLineIndex.value >= currentEncounter.value.npcLines.length - 1
 })
 
+// ---- VN 打字机效果 ----
+const vnDisplayedText = ref('')
+const vnTyping = ref(false)
+let vnTimer: ReturnType<typeof setInterval> | null = null
+
+function startTypewriter(text: string) {
+  if (vnTimer) clearInterval(vnTimer)
+  vnDisplayedText.value = ''
+  vnTyping.value = true
+  let i = 0
+  vnTimer = setInterval(() => {
+    if (i < text.length) {
+      vnDisplayedText.value += text[i++]
+    } else {
+      vnTyping.value = false
+      if (vnTimer) { clearInterval(vnTimer); vnTimer = null }
+    }
+  }, 35)
+}
+
+function skipTypewriter() {
+  if (vnTimer) { clearInterval(vnTimer); vnTimer = null }
+  vnDisplayedText.value = npcCurrentLine.value
+  vnTyping.value = false
+}
+
+watch(npcCurrentLine, (text) => {
+  if (text) startTypewriter(text)
+})
+
 onMounted(() => {
   if (gameContainer.value) {
     // 从进度中恢复已击败/已开启状态
@@ -183,11 +220,16 @@ onMounted(() => {
 
 onBeforeUnmount(() => {
   destroyPhaserGame()
+  if (vnTimer) { clearInterval(vnTimer); vnTimer = null }
 })
 
 function handleEncounter(encounter: MapEncounter) {
   currentEncounter.value = encounter
   npcLineIndex.value = 0
+  // 如果是NPC，启动打字机
+  if (encounter.type === 'npc' && encounter.npcLines?.[0]) {
+    startTypewriter(encounter.npcLines[0])
+  }
   sound.click()
 }
 
@@ -232,6 +274,11 @@ function onEncounterClose() {
 
 function advanceNpc() {
   if (!currentEncounter.value?.npcLines) return
+  // 如果正在打字，先跳过打字动画
+  if (vnTyping.value) {
+    skipTypewriter()
+    return
+  }
   if (isLastNpcLine.value) {
     // 完成NPC对话
     const scene = getCampScene()
@@ -388,114 +435,146 @@ function dismissRandomEvent() {
   .dpad-down { grid-area: down; }
 }
 
-// NPC 对话
-.npc-dialog-overlay {
+// ===== Visual Novel 全屏对话 =====
+.vn-overlay {
   position: fixed;
   inset: 0;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.75) 100%);
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-bottom: 60px;
   z-index: 1000;
-  animation: fadeIn 0.2s ease;
-  backdrop-filter: blur(2px);
+  cursor: pointer;
 }
 
+.vn-backdrop {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center bottom, rgba(10, 8, 30, 0.6) 0%, rgba(0, 0, 0, 0.92) 100%);
+  backdrop-filter: blur(6px);
+  animation: vnFadeIn 0.3s ease;
+}
+
+@keyframes vnFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.vn-portrait {
+  position: absolute;
+  bottom: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: vnPortraitEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  &.portrait-sage {
+    filter: drop-shadow(0 0 30px rgba(120, 80, 220, 0.4)) drop-shadow(0 0 60px rgba(120, 80, 220, 0.15));
+  }
+  &.portrait-guide {
+    filter: drop-shadow(0 0 30px rgba(60, 180, 80, 0.4)) drop-shadow(0 0 60px rgba(60, 180, 80, 0.15));
+  }
+  &.portrait-knight {
+    filter: drop-shadow(0 0 30px rgba(200, 80, 40, 0.4)) drop-shadow(0 0 60px rgba(200, 80, 40, 0.15));
+  }
+  &.portrait-merchant {
+    filter: drop-shadow(0 0 30px rgba(200, 160, 80, 0.4)) drop-shadow(0 0 60px rgba(200, 160, 80, 0.15));
+  }
+}
+
+@keyframes vnPortraitEnter {
+  from {
+    transform: translateX(-50%) translateY(30px) scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(-50%) translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.vn-textbox {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px 24px 32px;
+  background: linear-gradient(to top, rgba(10, 8, 30, 0.97) 0%, rgba(10, 8, 30, 0.92) 60%, rgba(10, 8, 30, 0.7) 100%);
+  border-top: 2px solid rgba(100, 120, 200, 0.35);
+  cursor: default;
+  animation: vnTextboxIn 0.4s ease 0.15s both;
+}
+
+@keyframes vnTextboxIn {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.vn-nameplate {
+  display: inline-block;
+  padding: 5px 18px;
+  background: linear-gradient(135deg, #5544aa, #3322aa);
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 800;
+  color: #e8e0ff;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 12px rgba(80, 60, 180, 0.3);
+}
+
+.vn-text {
+  font-size: 17px;
+  line-height: 1.9;
+  color: #e0e0f0;
+  min-height: 52px;
+  margin: 0;
+  letter-spacing: 0.3px;
+}
+
+.vn-cursor {
+  color: rgba(140, 160, 255, 0.8);
+  animation: vnBlink 0.6s steps(2) infinite;
+}
+
+@keyframes vnBlink {
+  50% { opacity: 0; }
+}
+
+.vn-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+}
+
+.vn-progress {
+  font-size: 12px;
+  color: #555;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 3px 12px;
+  border-radius: 10px;
+}
+
+.vn-next-btn {
+  padding: 10px 22px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(140, 160, 255, 0.35);
+  background: rgba(140, 160, 255, 0.08);
+  color: #99aaff;
+  cursor: pointer;
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 14px;
+  transition: all 0.2s;
+  &:hover {
+    background: rgba(140, 160, 255, 0.18);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(100, 120, 255, 0.15);
+  }
+}
+
+// 宝箱弹窗
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-.npc-dialog {
-  display: flex;
-  gap: 16px;
-  padding: 20px 24px;
-  max-width: 600px;
-  width: 92vw;
-  border: 2px solid rgba(100, 120, 200, 0.4);
-  border-radius: 16px;
-  background: linear-gradient(170deg, #16142a 0%, #0e0c20 100%);
-  box-shadow:
-    0 0 30px rgba(100, 120, 200, 0.1),
-    0 15px 50px rgba(0,0,0,0.5);
-  animation: npcSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-
-  .npc-avatar-frame {
-    width: 56px;
-    height: 56px;
-    border-radius: 14px;
-    background: rgba(100, 120, 200, 0.1);
-    border: 1.5px solid rgba(100, 120, 200, 0.3);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-  }
-
-  .npc-avatar {
-    font-size: 32px;
-  }
-
-  .npc-content {
-    flex: 1;
-    min-width: 0;
-  }
-
-  .npc-name {
-    font-size: 13px;
-    font-weight: 700;
-    color: rgba(140, 160, 255, 0.8);
-    margin-bottom: 6px;
-    letter-spacing: 0.5px;
-  }
-
-  .npc-text {
-    color: #d0d0e0;
-    font-size: 15px;
-    line-height: 1.7;
-    margin: 0;
-  }
-
-  .npc-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 12px;
-  }
-
-  .npc-progress {
-    font-size: 12px;
-    color: #666;
-    background: rgba(255,255,255,0.04);
-    padding: 3px 10px;
-    border-radius: 10px;
-  }
-
-  .npc-next-btn {
-    padding: 8px 18px;
-    border-radius: 10px;
-    border: 1.5px solid rgba(140, 160, 255, 0.35);
-    background: rgba(140, 160, 255, 0.08);
-    color: #99aaff;
-    cursor: pointer;
-    white-space: nowrap;
-    font-weight: 600;
-    font-size: 13px;
-    transition: all 0.2s;
-    &:hover {
-      background: rgba(140, 160, 255, 0.18);
-      transform: translateY(-1px);
-    }
-  }
-}
-
-@keyframes npcSlideUp {
-  from { transform: translateY(30px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-// 宝箱弹窗
 .treasure-overlay {
   position: fixed;
   inset: 0;

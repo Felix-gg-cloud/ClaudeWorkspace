@@ -17,6 +17,8 @@ export interface MapEncounter {
   difficulty?: MonsterDifficulty
   options?: Array<{ key: string; textEn: string; textZh: string }>
   correctKey?: string
+  npcName?: string
+  npcAvatar?: 'sage' | 'guide' | 'knight' | 'merchant'
   npcLines?: string[]
   reward?: { xp: number; coins: number }
 }
@@ -178,6 +180,8 @@ export const defaultCampMap: CampMapData = {
       id: 'npc_guide', type: 'npc', tileX: 2, tileY: 6,
       wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '',
       defeated: false,
+      npcName: '冒险向导',
+      npcAvatar: 'guide',
       npcLines: [
         '欢迎来到营地，年轻的冒险者！',
         '在这片土地上，你会遇到许多单词怪物。',
@@ -189,6 +193,8 @@ export const defaultCampMap: CampMapData = {
       id: 'npc_sage', type: 'npc', tileX: 17, tileY: 8,
       wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '',
       defeated: false,
+      npcName: '语法贤者',
+      npcAvatar: 'sage',
       npcLines: [
         '我是语法贤者。让我教你一个小窍门。',
         '"I am" 可以缩写为 "I\'m"。',

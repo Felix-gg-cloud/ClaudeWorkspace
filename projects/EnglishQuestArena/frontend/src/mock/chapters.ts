@@ -113,12 +113,12 @@ const ch1Tiles: number[][] = [
 
 // NPC 和宝箱 — 手动放置
 const ch1StaticEncounters: MapEncounter[] = [
-  { id: 'ch1_npc_guide', type: 'npc', tileX: 2, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['欢迎来到营地，年轻的冒险者！', '在这片土地上，你会遇到许多单词怪物。', '击败它们来学习新单词吧！', '提示：用方向键或 WASD 移动。'] },
-  { id: 'ch1_npc_sage', type: 'npc', tileX: 22, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['我是语法贤者。让我教你一个小窍门。', '"I am" 可以缩写为 "I\'m"。', '"You are" 可以缩写为 "You\'re"。', '记住：am 只跟 I 搭配！'] },
+  { id: 'ch1_npc_guide', type: 'npc', tileX: 2, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcName: '冒险向导', npcAvatar: 'guide' as const, npcLines: ['欢迎来到营地，年轻的冒险者！', '在这片土地上，你会遇到许多单词怪物。', '击败它们来学习新单词吧！', '提示：用方向键或 WASD 移动。'] },
+  { id: 'ch1_npc_sage', type: 'npc', tileX: 22, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcName: '语法贤者', npcAvatar: 'sage' as const, npcLines: ['我是语法贤者。让我教你一个小窍门。', '"I am" 可以缩写为 "I\'m"。', '"You are" 可以缩写为 "You\'re"。', '记住：am 只跟 I 搭配！'] },
   { id: 'ch1_chest_1', type: 'treasure', tileX: 17, tileY: 4, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 20, coins: 15 } },
   { id: 'ch1_chest_2', type: 'treasure', tileX: 8, tileY: 10, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 15, coins: 10 } },
   { id: 'ch1_chest_3', type: 'treasure', tileX: 2, tileY: 12, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 15, coins: 10 } },
-  { id: 'ch1_npc_objects', type: 'npc', tileX: 17, tileY: 9, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['学会了物品名词，你就可以说 I have a book!', 'this 指近处，that 指远处。', '试试说：This is my pen.'] },
+  { id: 'ch1_npc_objects', type: 'npc', tileX: 17, tileY: 9, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcName: '物品学者', npcAvatar: 'merchant' as const, npcLines: ['学会了物品名词，你就可以说 I have a book!', 'this 指近处，that 指远处。', '试试说：This is my pen.'] },
   { id: 'ch1_chest_4', type: 'treasure', tileX: 22, tileY: 13, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 25, coins: 20 } },
 ]
 
@@ -234,8 +234,8 @@ const ch2Tiles: number[][] = [
 ]
 
 const ch2StaticEncounters: MapEncounter[] = [
-  { id: 'ch2_npc_1', type: 'npc', tileX: 2, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['冒险者，欢迎来到数字之境！', '学会数字，你就能数清战利品了。', '试试用英语数到五：one, two, three, four, five'] },
-  { id: 'ch2_npc_2', type: 'npc', tileX: 17, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['颜色也是很重要的基础知识！', 'red = 红, blue = 蓝, green = 绿', '试试描述你身边的事物颜色吧！'] },
+  { id: 'ch2_npc_1', type: 'npc', tileX: 2, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcName: '数字导师', npcAvatar: 'guide' as const, npcLines: ['冒险者，欢迎来到数字之境！', '学会数字，你就能数清战利品了。', '试试用英语数到五：one, two, three, four, five'] },
+  { id: 'ch2_npc_2', type: 'npc', tileX: 17, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcName: '色彩贤者', npcAvatar: 'sage' as const, npcLines: ['颜色也是很重要的基础知识！', 'red = 红, blue = 蓝, green = 绿', '试试描述你身边的事物颜色吧！'] },
   { id: 'ch2_chest_1', type: 'treasure', tileX: 7, tileY: 2, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 18, coins: 12 } },
   { id: 'ch2_chest_2', type: 'treasure', tileX: 12, tileY: 2, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 18, coins: 12 } },
   { id: 'ch2_chest_3', type: 'treasure', tileX: 2, tileY: 12, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 20, coins: 15 } },
@@ -327,8 +327,8 @@ const ch3Tiles: number[][] = [
 ]
 
 const ch3StaticEncounters: MapEncounter[] = [
-  { id: 'ch3_npc_1', type: 'npc', tileX: 3, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['冒险者你好！这里是动物森林🌲', '在这里你会遇到很多可爱的动物单词。', 'cat 是猫，dog 是狗，记住了吗？'] },
-  { id: 'ch3_npc_2', type: 'npc', tileX: 16, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcLines: ['家庭是最温暖的地方！', 'mom 是妈妈，dad 是爸爸。', '试着说：I love my mom and dad!'] },
+  { id: 'ch3_npc_1', type: 'npc', tileX: 3, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcName: '森林向导', npcAvatar: 'knight' as const, npcLines: ['冒险者你好！这里是动物森林🌲', '在这里你会遇到很多可爱的动物单词。', 'cat 是猫，dog 是狗，记住了吗？'] },
+  { id: 'ch3_npc_2', type: 'npc', tileX: 16, tileY: 6, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, npcName: '家族长老', npcAvatar: 'sage' as const, npcLines: ['家庭是最温暖的地方！', 'mom 是妈妈，dad 是爸爸。', '试着说：I love my mom and dad!'] },
   { id: 'ch3_chest_1', type: 'treasure', tileX: 4, tileY: 3, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 22, coins: 15 } },
   { id: 'ch3_chest_2', type: 'treasure', tileX: 15, tileY: 3, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 22, coins: 15 } },
   { id: 'ch3_chest_3', type: 'treasure', tileX: 4, tileY: 11, wordEn: '', wordZh: '', phonetic: '', sentence: '', sentenceZh: '', defeated: false, reward: { xp: 25, coins: 18 } },
