@@ -458,7 +458,7 @@ function dismissRandomEvent() {
 
 .vn-portrait {
   position: absolute;
-  bottom: 200px;
+  bottom: 180px;
   left: 50%;
   transform: translateX(-50%);
   animation: vnPortraitEnter 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);

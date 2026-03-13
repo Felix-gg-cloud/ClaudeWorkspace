@@ -433,19 +433,19 @@ export function generateTextures(scene: Phaser.Scene) {
     })
   })
 
-  // ===== NPC 精灵 (贤者) =====
-  createCanvasTexture(scene, 'sprite_npc', 48, 64, (ctx) => {
+  // ===== NPC 精灵 — 4 种类型 =====
+  // 通用 NPC 辅助
+  function drawNpcBase(ctx: CanvasRenderingContext2D, headColor: string, robeColor1: string, robeColor2: string) {
     // 阴影
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.12)'
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.15)'
     ctx.beginPath()
     ctx.ellipse(24, 60, 14, 4, 0, 0, Math.PI * 2)
     ctx.fill()
-
     // 长袍
-    const robeGrad = ctx.createLinearGradient(24, 20, 24, 58)
-    robeGrad.addColorStop(0, '#6655aa')
-    robeGrad.addColorStop(1, '#443388')
-    ctx.fillStyle = robeGrad
+    const rg = ctx.createLinearGradient(24, 24, 24, 58)
+    rg.addColorStop(0, robeColor1)
+    rg.addColorStop(1, robeColor2)
+    ctx.fillStyle = rg
     ctx.beginPath()
     ctx.moveTo(14, 28)
     ctx.lineTo(10, 58)
@@ -453,17 +453,42 @@ export function generateTextures(scene: Phaser.Scene) {
     ctx.lineTo(34, 28)
     ctx.closePath()
     ctx.fill()
-
-    // 腰带
-    ctx.fillStyle = '#daa520'
-    ctx.fillRect(14, 36, 20, 3)
-
     // 头部
-    ctx.fillStyle = '#ffcc88'
+    ctx.fillStyle = headColor
     ctx.beginPath()
     ctx.arc(24, 20, 10, 0, Math.PI * 2)
     ctx.fill()
+    // 眼睛
+    ctx.fillStyle = '#fff'
+    ctx.beginPath()
+    ctx.ellipse(20, 19, 3, 2.5, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.ellipse(28, 19, 3, 2.5, 0, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = '#222'
+    ctx.beginPath()
+    ctx.arc(20.5, 19, 1.5, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(28.5, 19, 1.5, 0, Math.PI * 2)
+    ctx.fill()
+    // 高光
+    ctx.fillStyle = '#fff'
+    ctx.beginPath()
+    ctx.arc(19.5, 17.5, 0.7, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.arc(27.5, 17.5, 0.7, 0, Math.PI * 2)
+    ctx.fill()
+  }
 
+  // 贤者 (紫袍 + 尖帽 + 法杖)
+  createCanvasTexture(scene, 'sprite_npc_sage', 48, 64, (ctx) => {
+    drawNpcBase(ctx, '#ffcc88', '#6655aa', '#443388')
+    // 腰带
+    ctx.fillStyle = '#daa520'
+    ctx.fillRect(14, 36, 20, 3)
     // 帽子
     ctx.fillStyle = '#5544aa'
     ctx.beginPath()
@@ -472,23 +497,226 @@ export function generateTextures(scene: Phaser.Scene) {
     ctx.lineTo(36, 18)
     ctx.quadraticCurveTo(38, 8, 24, 0)
     ctx.fill()
-
-    // 帽檐
     ctx.fillStyle = '#4433aa'
     ctx.beginPath()
     ctx.ellipse(24, 16, 16, 4, 0, 0, Math.PI * 2)
     ctx.fill()
-
-    // 眼睛
-    ctx.fillStyle = '#332244'
+    // 帽子星星
+    ctx.fillStyle = '#ffd700'
+    ctx.globalAlpha = 0.8
     ctx.beginPath()
-    ctx.arc(20, 20, 1.5, 0, Math.PI * 2)
+    ctx.arc(26, 8, 2, 0, Math.PI * 2)
     ctx.fill()
+    ctx.globalAlpha = 1
+    // 法杖
+    ctx.strokeStyle = '#8B4513'
+    ctx.lineWidth = 2
     ctx.beginPath()
-    ctx.arc(28, 20, 1.5, 0, Math.PI * 2)
+    ctx.moveTo(40, 16)
+    ctx.lineTo(42, 58)
+    ctx.stroke()
+    ctx.fillStyle = '#aa77ff'
+    ctx.beginPath()
+    ctx.arc(40, 14, 4, 0, Math.PI * 2)
     ctx.fill()
-
+    ctx.fillStyle = 'rgba(170,120,255,0.4)'
+    ctx.beginPath()
+    ctx.arc(40, 14, 7, 0, Math.PI * 2)
+    ctx.fill()
+    // 胡子
+    ctx.fillStyle = '#ccc'
+    ctx.beginPath()
+    ctx.moveTo(20, 24)
+    ctx.quadraticCurveTo(24, 38, 24, 40)
+    ctx.quadraticCurveTo(24, 38, 28, 24)
+    ctx.closePath()
+    ctx.fill()
     // 微笑
+    ctx.strokeStyle = '#884444'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.arc(24, 23, 4, 0.1, Math.PI - 0.1)
+    ctx.stroke()
+  })
+
+  // 向导 (绿衣 + 弓 + 羽毛帽)
+  createCanvasTexture(scene, 'sprite_npc_guide', 48, 64, (ctx) => {
+    drawNpcBase(ctx, '#f5c78a', '#2d7d46', '#1a5530')
+    // 皮甲内衬
+    ctx.fillStyle = '#8b6914'
+    ctx.fillRect(17, 28, 14, 18)
+    // 腰带
+    ctx.fillStyle = '#5a3a1a'
+    ctx.fillRect(14, 38, 20, 3)
+    ctx.fillStyle = '#daa520'
+    ctx.beginPath()
+    ctx.arc(24, 39, 2, 0, Math.PI * 2)
+    ctx.fill()
+    // 帽子
+    ctx.fillStyle = '#2a6e3a'
+    ctx.beginPath()
+    ctx.moveTo(24, 4)
+    ctx.quadraticCurveTo(12, 12, 14, 18)
+    ctx.lineTo(34, 18)
+    ctx.quadraticCurveTo(36, 12, 24, 4)
+    ctx.fill()
+    // 羽毛
+    ctx.strokeStyle = '#ff5533'
+    ctx.lineWidth = 1.5
+    ctx.beginPath()
+    ctx.moveTo(32, 12)
+    ctx.quadraticCurveTo(38, 2, 35, -2)
+    ctx.stroke()
+    // 短发
+    ctx.fillStyle = '#664422'
+    ctx.beginPath()
+    ctx.ellipse(24, 14, 11, 6, 0, Math.PI, Math.PI * 2)
+    ctx.fill()
+    // 弓
+    ctx.strokeStyle = '#8B4513'
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.moveTo(6, 22)
+    ctx.quadraticCurveTo(0, 40, 6, 56)
+    ctx.stroke()
+    ctx.strokeStyle = '#aaa'
+    ctx.lineWidth = 0.5
+    ctx.beginPath()
+    ctx.moveTo(6, 22)
+    ctx.lineTo(6, 56)
+    ctx.stroke()
+    // 微笑
+    ctx.strokeStyle = '#995544'
+    ctx.lineWidth = 1.2
+    ctx.beginPath()
+    ctx.arc(24, 22, 5, 0.1, Math.PI - 0.1)
+    ctx.stroke()
+  })
+
+  // 骑士 (铁甲 + 红披风 + 剑)
+  createCanvasTexture(scene, 'sprite_npc_knight', 48, 64, (ctx) => {
+    // 红披风
+    ctx.fillStyle = '#8b2222'
+    ctx.beginPath()
+    ctx.moveTo(12, 26)
+    ctx.quadraticCurveTo(6, 42, 8, 58)
+    ctx.lineTo(40, 58)
+    ctx.quadraticCurveTo(42, 42, 36, 26)
+    ctx.closePath()
+    ctx.fill()
+    drawNpcBase(ctx, '#eebb88', '#999', '#777')
+    // 铁甲高光
+    ctx.fillStyle = 'rgba(255,255,255,0.15)'
+    ctx.fillRect(18, 28, 4, 20)
+    // 肩甲
+    ctx.fillStyle = '#aaa'
+    ctx.beginPath()
+    ctx.ellipse(14, 28, 6, 4, 0.3, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.beginPath()
+    ctx.ellipse(34, 28, 6, 4, -0.3, 0, Math.PI * 2)
+    ctx.fill()
+    // 短发
+    ctx.fillStyle = '#333'
+    ctx.beginPath()
+    ctx.ellipse(24, 14, 11, 6, 0, Math.PI, Math.PI * 2)
+    ctx.fill()
+    // 疤痕
+    ctx.strokeStyle = 'rgba(180,80,60,0.6)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(28, 17)
+    ctx.lineTo(30, 23)
+    ctx.stroke()
+    // 剑
+    ctx.strokeStyle = '#bbb'
+    ctx.lineWidth = 2.5
+    ctx.beginPath()
+    ctx.moveTo(42, 12)
+    ctx.lineTo(44, 56)
+    ctx.stroke()
+    ctx.strokeStyle = 'rgba(255,255,255,0.4)'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.moveTo(42, 14)
+    ctx.lineTo(43, 50)
+    ctx.stroke()
+    ctx.fillStyle = '#daa520'
+    ctx.fillRect(38, 15, 8, 3)
+    // 嘴
+    ctx.strokeStyle = '#996644'
+    ctx.lineWidth = 1.2
+    ctx.beginPath()
+    ctx.moveTo(21, 23)
+    ctx.lineTo(27, 23)
+    ctx.stroke()
+  })
+
+  // 商人/学者 (棕大衣 + 眼镜 + 书)
+  createCanvasTexture(scene, 'sprite_npc_merchant', 48, 64, (ctx) => {
+    drawNpcBase(ctx, '#ffcc88', '#8b6914', '#5a4510')
+    // 内衬
+    ctx.fillStyle = '#eed8a0'
+    ctx.fillRect(18, 28, 12, 18)
+    // 纽扣
+    ctx.fillStyle = '#daa520'
+    for (let y = 32; y <= 42; y += 5) {
+      ctx.beginPath()
+      ctx.arc(24, y, 1.2, 0, Math.PI * 2)
+      ctx.fill()
+    }
+    // 整齐头发
+    ctx.fillStyle = '#554430'
+    ctx.beginPath()
+    ctx.ellipse(24, 14, 12, 6, 0, Math.PI, Math.PI * 2)
+    ctx.fill()
+    // 圆框眼镜
+    ctx.strokeStyle = '#b8860b'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.arc(20, 19, 4.5, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.arc(28, 19, 4.5, 0, Math.PI * 2)
+    ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(24.5, 19)
+    ctx.lineTo(23.5, 19)
+    ctx.stroke()
+    // 书
+    ctx.fillStyle = '#8b1a1a'
+    ctx.save()
+    ctx.translate(4, 36)
+    ctx.rotate(-0.15)
+    ctx.fillRect(0, 0, 10, 14)
+    ctx.fillStyle = '#ffe8c0'
+    ctx.fillRect(1, 1, 8, 12)
+    ctx.restore()
+    // 微笑
+    ctx.strokeStyle = '#aa7755'
+    ctx.lineWidth = 1
+    ctx.beginPath()
+    ctx.arc(24, 23, 4, 0.15, Math.PI - 0.15)
+    ctx.stroke()
+  })
+
+  // 兼容旧引用：sprite_npc → sage
+  createCanvasTexture(scene, 'sprite_npc', 48, 64, (ctx) => {
+    // 复用 sage 的绘制
+    drawNpcBase(ctx, '#ffcc88', '#6655aa', '#443388')
+    ctx.fillStyle = '#daa520'
+    ctx.fillRect(14, 36, 20, 3)
+    ctx.fillStyle = '#5544aa'
+    ctx.beginPath()
+    ctx.moveTo(24, 0)
+    ctx.quadraticCurveTo(10, 8, 12, 18)
+    ctx.lineTo(36, 18)
+    ctx.quadraticCurveTo(38, 8, 24, 0)
+    ctx.fill()
+    ctx.fillStyle = '#4433aa'
+    ctx.beginPath()
+    ctx.ellipse(24, 16, 16, 4, 0, 0, Math.PI * 2)
+    ctx.fill()
     ctx.strokeStyle = '#884444'
     ctx.lineWidth = 1
     ctx.beginPath()

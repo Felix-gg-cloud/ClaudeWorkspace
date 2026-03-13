@@ -7,12 +7,11 @@ import { ref, onMounted, watch } from 'vue'
 
 const props = defineProps<{
   type: 'sage' | 'guide' | 'knight' | 'merchant'
-  /** 是否播放入场动画 */
   animate?: boolean
 }>()
 
-const W = 200
-const H = 320
+const W = 280
+const H = 440
 const canvas = ref<HTMLCanvasElement>()
 
 function draw() {
@@ -30,681 +29,923 @@ function draw() {
   }
 }
 
-// =================== 贤者 (紫袍法师) ===================
-function drawSage(ctx: CanvasRenderingContext2D) {
-  // 魔法光圈
-  const auraGrad = ctx.createRadialGradient(100, 180, 20, 100, 180, 120)
-  auraGrad.addColorStop(0, 'rgba(120, 80, 220, 0.15)')
-  auraGrad.addColorStop(0.6, 'rgba(120, 80, 220, 0.05)')
-  auraGrad.addColorStop(1, 'transparent')
-  ctx.fillStyle = auraGrad
-  ctx.fillRect(0, 40, W, 280)
+/* ═══════════════════════════════════════
+   共用：大眼动漫脸
+   ═══════════════════════════════════════ */
+function drawAnimeFace(
+  ctx: CanvasRenderingContext2D,
+  cx: number, cy: number,       // 脸部中心
+  skinColor: string,
+  eyeColor: string,
+  mouth: 'smile' | 'grin' | 'serious' = 'smile',
+) {
+  const skin = skinColor
+  const skinLight = lighten(skinColor, 30)
+  const skinShadow = darken(skinColor, 25)
 
-  // 阴影
-  ctx.fillStyle = 'rgba(0,0,0,0.25)'
+  // 脸型 — 倒蛋型
+  ctx.fillStyle = skin
   ctx.beginPath()
-  ctx.ellipse(100, 310, 50, 10, 0, 0, Math.PI * 2)
+  ctx.ellipse(cx, cy - 4, 38, 44, 0, 0, Math.PI * 2)
+  ctx.fill()
+  // 下巴 V 收
+  ctx.beginPath()
+  ctx.moveTo(cx - 28, cy + 10)
+  ctx.quadraticCurveTo(cx, cy + 50, cx + 28, cy + 10)
   ctx.fill()
 
-  // 长袍
-  const robeGrad = ctx.createLinearGradient(100, 110, 100, 310)
-  robeGrad.addColorStop(0, '#7755cc')
-  robeGrad.addColorStop(0.5, '#5533aa')
-  robeGrad.addColorStop(1, '#332277')
-  ctx.fillStyle = robeGrad
+  // 脸颊高光
+  ctx.fillStyle = skinLight
   ctx.beginPath()
-  ctx.moveTo(60, 140)
-  ctx.quadraticCurveTo(40, 250, 35, 310)
-  ctx.lineTo(165, 310)
-  ctx.quadraticCurveTo(160, 250, 140, 140)
+  ctx.ellipse(cx - 12, cy - 14, 18, 22, -0.1, 0, Math.PI * 2)
+  ctx.fill()
+
+  // 腮红
+  ctx.fillStyle = 'rgba(255, 140, 140, 0.18)'
+  ctx.beginPath()
+  ctx.ellipse(cx - 26, cy + 12, 10, 6, 0, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.beginPath()
+  ctx.ellipse(cx + 26, cy + 12, 10, 6, 0, 0, Math.PI * 2)
+  ctx.fill()
+
+  // 大眼睛
+  drawAnimeEye(ctx, cx - 16, cy - 2, eyeColor, false)
+  drawAnimeEye(ctx, cx + 16, cy - 2, eyeColor, true)
+
+  // 鼻子 — 简笔
+  ctx.strokeStyle = skinShadow
+  ctx.lineWidth = 1.5
+  ctx.beginPath()
+  ctx.moveTo(cx, cy + 10)
+  ctx.lineTo(cx - 2, cy + 16)
+  ctx.stroke()
+
+  // 嘴巴
+  if (mouth === 'smile') {
+    ctx.strokeStyle = darken(skinColor, 40)
+    ctx.lineWidth = 2
+    ctx.beginPath()
+    ctx.arc(cx, cy + 24, 8, 0.15, Math.PI - 0.15)
+    ctx.stroke()
+  } else if (mouth === 'grin') {
+    ctx.fillStyle = darken(skinColor, 50)
+    ctx.beginPath()
+    ctx.arc(cx, cy + 24, 9, 0, Math.PI)
+    ctx.fill()
+    ctx.fillStyle = '#fff'
+    ctx.beginPath()
+    ctx.arc(cx, cy + 24, 9, 0.1, Math.PI - 0.1)
+    ctx.fill()
+    ctx.fillStyle = darken(skinColor, 50)
+    ctx.beginPath()
+    ctx.arc(cx, cy + 24, 9, 0, Math.PI)
+    ctx.fill()
+    // 上齿
+    ctx.fillStyle = '#fff'
+    ctx.fillRect(cx - 7, cy + 24, 14, 4)
+  } else {
+    ctx.strokeStyle = darken(skinColor, 40)
+    ctx.lineWidth = 2.5
+    ctx.beginPath()
+    ctx.moveTo(cx - 7, cy + 26)
+    ctx.lineTo(cx + 7, cy + 26)
+    ctx.stroke()
+  }
+}
+
+function drawAnimeEye(ctx: CanvasRenderingContext2D, cx: number, cy: number, color: string, isRight: boolean) {
+  const dir = isRight ? 1 : -1
+  // 眼白
+  ctx.fillStyle = '#fff'
+  ctx.beginPath()
+  ctx.ellipse(cx, cy, 11, 13, 0, 0, Math.PI * 2)
+  ctx.fill()
+
+  // 虹膜
+  const irisGrad = ctx.createRadialGradient(cx + dir, cy - 1, 2, cx + dir, cy, 9)
+  irisGrad.addColorStop(0, lighten(color, 40))
+  irisGrad.addColorStop(0.4, color)
+  irisGrad.addColorStop(1, darken(color, 30))
+  ctx.fillStyle = irisGrad
+  ctx.beginPath()
+  ctx.ellipse(cx + dir, cy, 8, 10, 0, 0, Math.PI * 2)
+  ctx.fill()
+
+  // 瞳孔
+  ctx.fillStyle = '#111'
+  ctx.beginPath()
+  ctx.ellipse(cx + dir, cy + 1, 4, 5, 0, 0, Math.PI * 2)
+  ctx.fill()
+
+  // 大高光
+  ctx.fillStyle = 'rgba(255,255,255,0.9)'
+  ctx.beginPath()
+  ctx.ellipse(cx - 2 * dir, cy - 4, 3.5, 4, -0.3, 0, Math.PI * 2)
+  ctx.fill()
+  // 小高光
+  ctx.fillStyle = 'rgba(255,255,255,0.7)'
+  ctx.beginPath()
+  ctx.arc(cx + 3 * dir, cy + 3, 2, 0, Math.PI * 2)
+  ctx.fill()
+
+  // 上眼线
+  ctx.strokeStyle = '#222'
+  ctx.lineWidth = 2.5
+  ctx.beginPath()
+  ctx.ellipse(cx, cy, 11, 13, 0, Math.PI + 0.3, -0.3)
+  ctx.stroke()
+
+  // 睫毛
+  ctx.lineWidth = 2
+  ctx.beginPath()
+  ctx.moveTo(cx - 10 * (isRight ? -1 : 1), cy - 6)
+  ctx.lineTo(cx - 13 * (isRight ? -1 : 1), cy - 10)
+  ctx.stroke()
+
+  // 眉毛
+  ctx.strokeStyle = '#333'
+  ctx.lineWidth = 3
+  ctx.beginPath()
+  ctx.moveTo(cx - 10, cy - 18)
+  ctx.quadraticCurveTo(cx, cy - 22, cx + 10, cy - 18)
+  ctx.stroke()
+}
+
+/* ═══════════════════════════════════════
+   贤者 — 紫袍魔法师
+   ═══════════════════════════════════════ */
+function drawSage(ctx: CanvasRenderingContext2D) {
+  const CX = 140, FACE_Y = 145
+
+  // 魔法光圈背景
+  drawAura(ctx, CX, 260, 140, 'rgba(130, 90, 240, 0.12)', 'rgba(100, 60, 220, 0.04)')
+
+  // 阴影
+  drawShadow(ctx, CX, 425, 60)
+
+  // ── 长袍 ──
+  const robeG = ctx.createLinearGradient(CX, 180, CX, 430)
+  robeG.addColorStop(0, '#8866dd')
+  robeG.addColorStop(0.4, '#6644bb')
+  robeG.addColorStop(1, '#3a2277')
+  ctx.fillStyle = robeG
+  ctx.beginPath()
+  ctx.moveTo(CX - 50, 200)
+  ctx.quadraticCurveTo(CX - 70, 320, CX - 75, 430)
+  ctx.lineTo(CX + 75, 430)
+  ctx.quadraticCurveTo(CX + 70, 320, CX + 50, 200)
   ctx.closePath()
   ctx.fill()
 
   // 袍子高光
   ctx.fillStyle = 'rgba(200, 170, 255, 0.08)'
   ctx.beginPath()
-  ctx.moveTo(75, 140)
-  ctx.quadraticCurveTo(60, 230, 55, 310)
-  ctx.lineTo(85, 310)
-  ctx.quadraticCurveTo(80, 230, 85, 140)
+  ctx.moveTo(CX - 30, 200)
+  ctx.quadraticCurveTo(CX - 45, 310, CX - 50, 430)
+  ctx.lineTo(CX - 25, 430)
+  ctx.quadraticCurveTo(CX - 30, 310, CX - 18, 200)
   ctx.closePath()
   ctx.fill()
 
-  // 袍子暗面
-  ctx.fillStyle = 'rgba(0, 0, 0, 0.1)'
+  // 袍子褶皱暗线
+  ctx.strokeStyle = 'rgba(30, 10, 60, 0.15)'
+  ctx.lineWidth = 1.5
   ctx.beginPath()
-  ctx.moveTo(120, 140)
-  ctx.quadraticCurveTo(140, 230, 145, 310)
-  ctx.lineTo(165, 310)
-  ctx.quadraticCurveTo(155, 250, 140, 140)
+  ctx.moveTo(CX + 10, 220)
+  ctx.quadraticCurveTo(CX + 20, 320, CX + 25, 430)
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.moveTo(CX + 30, 210)
+  ctx.quadraticCurveTo(CX + 45, 330, CX + 55, 430)
+  ctx.stroke()
+
+  // ── 领口V 字 ──
+  ctx.fillStyle = '#ffcc88'
+  ctx.beginPath()
+  ctx.moveTo(CX - 20, 190)
+  ctx.lineTo(CX, 225)
+  ctx.lineTo(CX + 20, 190)
   ctx.closePath()
   ctx.fill()
 
-  // 腰带
+  // ── 金腰带 ──
   ctx.fillStyle = '#daa520'
   ctx.beginPath()
-  ctx.moveTo(55, 190)
-  ctx.quadraticCurveTo(100, 198, 145, 190)
-  ctx.quadraticCurveTo(100, 202, 55, 194)
+  ctx.moveTo(CX - 55, 265)
+  ctx.quadraticCurveTo(CX, 278, CX + 55, 265)
+  ctx.quadraticCurveTo(CX, 282, CX - 55, 270)
   ctx.closePath()
   ctx.fill()
   // 腰带扣
-  ctx.fillStyle = '#ffd700'
-  ctx.beginPath()
-  ctx.arc(100, 194, 6, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.fillStyle = '#b8860b'
-  ctx.beginPath()
-  ctx.arc(100, 194, 3, 0, Math.PI * 2)
-  ctx.fill()
+  drawGem(ctx, CX, 272, 8, '#ffd700', '#b8860b')
 
-  // 领口V字
-  ctx.fillStyle = '#ffcc88'
+  // ── 胡须 ──
+  ctx.fillStyle = '#ddd'
   ctx.beginPath()
-  ctx.moveTo(85, 130)
-  ctx.lineTo(100, 155)
-  ctx.lineTo(115, 130)
+  ctx.moveTo(CX - 16, 175)
+  ctx.quadraticCurveTo(CX - 5, 255, CX, 260)
+  ctx.quadraticCurveTo(CX + 5, 255, CX + 16, 175)
+  ctx.closePath()
+  ctx.fill()
+  // 胡须高光
+  ctx.fillStyle = 'rgba(255,255,255,0.25)'
+  ctx.beginPath()
+  ctx.moveTo(CX - 6, 180)
+  ctx.quadraticCurveTo(CX, 240, CX, 248)
+  ctx.quadraticCurveTo(CX + 2, 235, CX + 4, 178)
   ctx.closePath()
   ctx.fill()
 
-  // 头部
-  ctx.fillStyle = '#ffcc88'
-  ctx.beginPath()
-  ctx.ellipse(100, 100, 32, 36, 0, 0, Math.PI * 2)
-  ctx.fill()
-  // 头部高光
-  ctx.fillStyle = 'rgba(255, 230, 200, 0.3)'
-  ctx.beginPath()
-  ctx.ellipse(90, 88, 16, 18, -0.2, 0, Math.PI * 2)
-  ctx.fill()
+  // ── 脸 ──
+  drawAnimeFace(ctx, CX, FACE_Y, '#ffcc88', '#6633cc', 'smile')
 
-  // 胡子
-  ctx.fillStyle = '#cccccc'
+  // ── 帽子 ──
+  const hatG = ctx.createLinearGradient(CX, 30, CX, 120)
+  hatG.addColorStop(0, '#7755cc')
+  hatG.addColorStop(1, '#4422aa')
+  ctx.fillStyle = hatG
   ctx.beginPath()
-  ctx.moveTo(80, 115)
-  ctx.quadraticCurveTo(100, 170, 100, 180)
-  ctx.quadraticCurveTo(100, 170, 120, 115)
-  ctx.closePath()
-  ctx.fill()
-  ctx.fillStyle = 'rgba(255,255,255,0.2)'
-  ctx.beginPath()
-  ctx.moveTo(88, 120)
-  ctx.quadraticCurveTo(100, 160, 100, 168)
-  ctx.quadraticCurveTo(100, 155, 105, 118)
-  ctx.closePath()
-  ctx.fill()
-
-  // 帽子
-  const hatGrad = ctx.createLinearGradient(100, 10, 100, 80)
-  hatGrad.addColorStop(0, '#6644bb')
-  hatGrad.addColorStop(1, '#4422aa')
-  ctx.fillStyle = hatGrad
-  ctx.beginPath()
-  ctx.moveTo(100, 8)
-  ctx.quadraticCurveTo(55, 40, 56, 80)
-  ctx.quadraticCurveTo(100, 72, 144, 80)
-  ctx.quadraticCurveTo(145, 40, 100, 8)
+  ctx.moveTo(CX + 5, 20)
+  ctx.quadraticCurveTo(CX - 55, 70, CX - 55, 120)
+  ctx.quadraticCurveTo(CX, 110, CX + 58, 120)
+  ctx.quadraticCurveTo(CX + 55, 70, CX + 5, 20)
   ctx.fill()
   // 帽檐
   ctx.fillStyle = '#553399'
   ctx.beginPath()
-  ctx.ellipse(100, 78, 52, 12, 0, 0, Math.PI * 2)
+  ctx.ellipse(CX, 118, 62, 14, 0, 0, Math.PI * 2)
   ctx.fill()
-  // 帽子星星
-  drawStar(ctx, 105, 40, 5, '#ffd700', 0.7)
-  drawStar(ctx, 90, 55, 3.5, '#ffc855', 0.5)
+  // 帽子星星装饰
+  drawStarShape(ctx, CX + 10, 60, 8, '#ffd700', 0.8)
+  drawStarShape(ctx, CX - 8, 80, 5, '#ffc855', 0.6)
+  drawStarShape(ctx, CX + 20, 85, 4, '#ffe088', 0.4)
 
-  // 眼睛
-  drawEyes(ctx, 86, 96, 96, 96, '#4422aa')
-
-  // 眉毛
-  ctx.strokeStyle = '#887766'
-  ctx.lineWidth = 2
+  // ── 头发（从帽子下露出）──
+  ctx.fillStyle = '#888'
   ctx.beginPath()
-  ctx.arc(86, 90, 8, Math.PI + 0.3, Math.PI * 2 - 0.3)
-  ctx.stroke()
-  ctx.beginPath()
-  ctx.arc(114, 90, 8, Math.PI + 0.3, Math.PI * 2 - 0.3)
-  ctx.stroke()
-
-  // 微笑
-  ctx.strokeStyle = '#aa7755'
-  ctx.lineWidth = 1.5
-  ctx.beginPath()
-  ctx.arc(100, 108, 8, 0.15, Math.PI - 0.15)
-  ctx.stroke()
-
-  // 法杖 (右手)
-  ctx.strokeStyle = '#8B4513'
-  ctx.lineWidth = 5
-  ctx.beginPath()
-  ctx.moveTo(155, 150)
-  ctx.lineTo(165, 310)
-  ctx.stroke()
-  // 法杖顶端宝珠
-  const orbGrad = ctx.createRadialGradient(155, 140, 2, 155, 140, 14)
-  orbGrad.addColorStop(0, '#fff')
-  orbGrad.addColorStop(0.3, '#aa88ff')
-  orbGrad.addColorStop(0.7, '#7744dd')
-  orbGrad.addColorStop(1, '#4422aa')
-  ctx.fillStyle = orbGrad
-  ctx.beginPath()
-  ctx.arc(155, 140, 14, 0, Math.PI * 2)
+  ctx.moveTo(CX - 42, 125)
+  ctx.quadraticCurveTo(CX - 48, 155, CX - 45, 170)
+  ctx.lineTo(CX - 38, 170)
+  ctx.quadraticCurveTo(CX - 42, 150, CX - 38, 128)
+  ctx.closePath()
   ctx.fill()
-  // 宝珠光晕
-  ctx.fillStyle = 'rgba(170, 130, 255, 0.3)'
   ctx.beginPath()
-  ctx.arc(155, 140, 22, 0, Math.PI * 2)
-  ctx.fill()
-
-  // 魔法粒子
-  drawSparkles(ctx, [
-    { x: 155, y: 120, r: 2, color: '#ddbbff' },
-    { x: 145, y: 130, r: 1.5, color: '#ccaaff' },
-    { x: 168, y: 135, r: 1.5, color: '#eeccff' },
-    { x: 148, y: 148, r: 1, color: '#ddbbff' },
-  ])
-}
-
-// =================== 向导 (绿衣冒险者) ===================
-function drawGuide(ctx: CanvasRenderingContext2D) {
-  // 暖光
-  const auraGrad = ctx.createRadialGradient(100, 180, 20, 100, 180, 120)
-  auraGrad.addColorStop(0, 'rgba(60, 180, 80, 0.12)')
-  auraGrad.addColorStop(1, 'transparent')
-  ctx.fillStyle = auraGrad
-  ctx.fillRect(0, 40, W, 280)
-
-  // 阴影
-  ctx.fillStyle = 'rgba(0,0,0,0.25)'
-  ctx.beginPath()
-  ctx.ellipse(100, 310, 45, 10, 0, 0, Math.PI * 2)
-  ctx.fill()
-
-  // 斗篷
-  const cloakGrad = ctx.createLinearGradient(100, 100, 100, 310)
-  cloakGrad.addColorStop(0, '#2d7d46')
-  cloakGrad.addColorStop(1, '#1a5530')
-  ctx.fillStyle = cloakGrad
-  ctx.beginPath()
-  ctx.moveTo(50, 130)
-  ctx.quadraticCurveTo(30, 220, 40, 300)
-  ctx.lineTo(160, 300)
-  ctx.quadraticCurveTo(170, 220, 150, 130)
+  ctx.moveTo(CX + 42, 125)
+  ctx.quadraticCurveTo(CX + 48, 155, CX + 45, 170)
+  ctx.lineTo(CX + 38, 170)
+  ctx.quadraticCurveTo(CX + 42, 150, CX + 38, 128)
   ctx.closePath()
   ctx.fill()
 
-  // 内衬 (棕色皮甲)
-  ctx.fillStyle = '#8b6914'
+  // ── 法杖（右手）──
+  ctx.strokeStyle = '#6B3A10'
+  ctx.lineWidth = 7
   ctx.beginPath()
-  ctx.moveTo(70, 140)
-  ctx.lineTo(65, 260)
-  ctx.lineTo(135, 260)
-  ctx.lineTo(130, 140)
+  ctx.moveTo(CX + 75, 190)
+  ctx.quadraticCurveTo(CX + 80, 310, CX + 85, 430)
+  ctx.stroke()
+  // 木纹
+  ctx.strokeStyle = 'rgba(255,255,255,0.1)'
+  ctx.lineWidth = 1
+  for (let t = 0; t < 5; t++) {
+    const y = 210 + t * 45
+    ctx.beginPath()
+    ctx.moveTo(CX + 73, y)
+    ctx.quadraticCurveTo(CX + 78, y + 5, CX + 73, y + 10)
+    ctx.stroke()
+  }
+
+  // 法杖顶端宝珠
+  const orbG = ctx.createRadialGradient(CX + 74, 178, 3, CX + 74, 180, 20)
+  orbG.addColorStop(0, '#fff')
+  orbG.addColorStop(0.2, '#cc99ff')
+  orbG.addColorStop(0.5, '#8855dd')
+  orbG.addColorStop(1, '#4422aa')
+  ctx.fillStyle = orbG
+  ctx.beginPath()
+  ctx.arc(CX + 74, 180, 18, 0, Math.PI * 2)
+  ctx.fill()
+  // 宝珠外光晕
+  ctx.fillStyle = 'rgba(170, 130, 255, 0.25)'
+  ctx.beginPath()
+  ctx.arc(CX + 74, 180, 28, 0, Math.PI * 2)
+  ctx.fill()
+  // 宝珠十字高光
+  ctx.strokeStyle = 'rgba(255,255,255,0.5)'
+  ctx.lineWidth = 1.5
+  ctx.beginPath()
+  ctx.moveTo(CX + 74, 165)
+  ctx.lineTo(CX + 74, 195)
+  ctx.moveTo(CX + 59, 180)
+  ctx.lineTo(CX + 89, 180)
+  ctx.stroke()
+
+  // 魔法粒子
+  drawFloatingParticles(ctx, CX + 74, 180, 35, 'rgba(200,160,255,0.6)', 6)
+}
+
+/* ═══════════════════════════════════════
+   向导 — 绿衣弓手
+   ═══════════════════════════════════════ */
+function drawGuide(ctx: CanvasRenderingContext2D) {
+  const CX = 140, FACE_Y = 148
+
+  drawAura(ctx, CX, 260, 130, 'rgba(60, 200, 90, 0.1)', 'rgba(40, 160, 60, 0.03)')
+  drawShadow(ctx, CX, 425, 55)
+
+  // ── 斗篷 ──
+  const cloakG = ctx.createLinearGradient(CX, 160, CX, 430)
+  cloakG.addColorStop(0, '#357a48')
+  cloakG.addColorStop(0.5, '#2a6038')
+  cloakG.addColorStop(1, '#1a4028')
+  ctx.fillStyle = cloakG
+  ctx.beginPath()
+  ctx.moveTo(CX - 45, 190)
+  ctx.quadraticCurveTo(CX - 75, 310, CX - 65, 420)
+  ctx.lineTo(CX + 65, 420)
+  ctx.quadraticCurveTo(CX + 75, 310, CX + 45, 190)
+  ctx.closePath()
+  ctx.fill()
+
+  // 斗篷高光
+  ctx.fillStyle = 'rgba(100, 220, 120, 0.06)'
+  ctx.beginPath()
+  ctx.moveTo(CX - 25, 200)
+  ctx.quadraticCurveTo(CX - 50, 310, CX - 45, 420)
+  ctx.lineTo(CX - 20, 420)
+  ctx.quadraticCurveTo(CX - 25, 310, CX - 10, 200)
+  ctx.closePath()
+  ctx.fill()
+
+  // ── 皮甲内衬 ──
+  ctx.fillStyle = '#9b7520'
+  ctx.beginPath()
+  ctx.moveTo(CX - 30, 200)
+  ctx.lineTo(CX - 35, 340)
+  ctx.lineTo(CX + 35, 340)
+  ctx.lineTo(CX + 30, 200)
   ctx.closePath()
   ctx.fill()
   // 皮甲纹路
-  ctx.strokeStyle = 'rgba(0,0,0,0.15)'
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)'
   ctx.lineWidth = 1
-  for (let y = 160; y < 250; y += 20) {
+  for (let y = 220; y < 330; y += 24) {
     ctx.beginPath()
-    ctx.moveTo(70, y)
-    ctx.lineTo(130, y)
+    ctx.moveTo(CX - 30, y)
+    ctx.lineTo(CX + 30, y)
     ctx.stroke()
   }
 
-  // 腰带
-  ctx.fillStyle = '#5a3a1a'
-  ctx.fillRect(62, 200, 76, 8)
-  ctx.fillStyle = '#daa520'
-  ctx.beginPath()
-  ctx.arc(100, 204, 5, 0, Math.PI * 2)
-  ctx.fill()
-
   // 领口
-  ctx.fillStyle = '#ffcc88'
+  ctx.fillStyle = '#f5c78a'
   ctx.beginPath()
-  ctx.moveTo(80, 128)
-  ctx.lineTo(100, 150)
-  ctx.lineTo(120, 128)
+  ctx.moveTo(CX - 22, 188)
+  ctx.lineTo(CX, 215)
+  ctx.lineTo(CX + 22, 188)
   ctx.closePath()
   ctx.fill()
 
-  // 头部
-  ctx.fillStyle = '#f5c78a'
-  ctx.beginPath()
-  ctx.ellipse(100, 96, 30, 34, 0, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.fillStyle = 'rgba(255, 225, 195, 0.3)'
-  ctx.beginPath()
-  ctx.ellipse(92, 86, 14, 16, -0.2, 0, Math.PI * 2)
-  ctx.fill()
+  // ── 腰带 ──
+  ctx.fillStyle = '#5a3a1a'
+  ctx.fillRect(CX - 40, 275, 80, 10)
+  drawGem(ctx, CX, 280, 6, '#daa520', '#8b6914')
 
-  // 短发
-  ctx.fillStyle = '#664422'
+  // ── 脸 ──
+  drawAnimeFace(ctx, CX, FACE_Y, '#f5c78a', '#2a7530', 'grin')
+
+  // ── 头发 ──
+  ctx.fillStyle = '#774422'
   ctx.beginPath()
-  ctx.ellipse(100, 78, 32, 22, 0, Math.PI, Math.PI * 2)
+  ctx.ellipse(CX, 118, 42, 28, 0, Math.PI, Math.PI * 2)
   ctx.fill()
   // 刘海
   ctx.beginPath()
-  ctx.moveTo(68, 86)
-  ctx.quadraticCurveTo(75, 74, 90, 76)
-  ctx.lineTo(80, 90)
+  ctx.moveTo(CX - 38, 130)
+  ctx.quadraticCurveTo(CX - 28, 108, CX - 10, 112)
+  ctx.lineTo(CX - 25, 140)
+  ctx.closePath()
+  ctx.fill()
+  // 后发长
+  ctx.beginPath()
+  ctx.moveTo(CX + 36, 128)
+  ctx.quadraticCurveTo(CX + 48, 160, CX + 42, 190)
+  ctx.lineTo(CX + 35, 185)
+  ctx.quadraticCurveTo(CX + 40, 155, CX + 32, 130)
   ctx.closePath()
   ctx.fill()
 
-  // 帽子
-  ctx.fillStyle = '#2a6e3a'
+  // ── 帽子 ──
+  ctx.fillStyle = '#2d7a40'
   ctx.beginPath()
-  ctx.moveTo(100, 52)
-  ctx.quadraticCurveTo(60, 70, 66, 86)
-  ctx.quadraticCurveTo(100, 78, 134, 86)
-  ctx.quadraticCurveTo(140, 70, 100, 52)
+  ctx.moveTo(CX, 78)
+  ctx.quadraticCurveTo(CX - 50, 100, CX - 48, 125)
+  ctx.quadraticCurveTo(CX, 115, CX + 48, 125)
+  ctx.quadraticCurveTo(CX + 50, 100, CX, 78)
   ctx.fill()
-  // 帽子羽毛
-  ctx.strokeStyle = '#ff6644'
-  ctx.lineWidth = 2.5
+  // 帽子暗面
+  ctx.fillStyle = 'rgba(0,0,0,0.1)'
   ctx.beginPath()
-  ctx.moveTo(125, 70)
-  ctx.quadraticCurveTo(145, 40, 135, 25)
-  ctx.stroke()
-  ctx.strokeStyle = '#ff8844'
-  ctx.lineWidth = 1.5
-  ctx.beginPath()
-  ctx.moveTo(125, 70)
-  ctx.quadraticCurveTo(148, 45, 140, 32)
-  ctx.stroke()
+  ctx.moveTo(CX + 10, 82)
+  ctx.quadraticCurveTo(CX + 50, 100, CX + 48, 125)
+  ctx.quadraticCurveTo(CX + 30, 118, CX + 15, 90)
+  ctx.closePath()
+  ctx.fill()
 
-  // 眼睛
-  drawEyes(ctx, 88, 94, 112, 94, '#2a5520')
-
-  // 微笑（开朗的笑容）
-  ctx.strokeStyle = '#aa7755'
-  ctx.lineWidth = 2
+  // 大红羽毛
+  ctx.save()
+  ctx.translate(CX + 40, 105)
+  ctx.rotate(-0.3)
+  const featherG = ctx.createLinearGradient(0, 0, 0, -70)
+  featherG.addColorStop(0, '#cc3300')
+  featherG.addColorStop(1, '#ff6633')
+  ctx.fillStyle = featherG
   ctx.beginPath()
-  ctx.arc(100, 105, 10, 0.1, Math.PI - 0.1)
-  ctx.stroke()
-
-  // 弓 (左肩)
-  ctx.strokeStyle = '#8B4513'
-  ctx.lineWidth = 4
-  ctx.beginPath()
-  ctx.moveTo(38, 130)
-  ctx.quadraticCurveTo(22, 200, 38, 270)
-  ctx.stroke()
-  // 弓弦
-  ctx.strokeStyle = '#ccc'
+  ctx.moveTo(0, 0)
+  ctx.quadraticCurveTo(-12, -35, -5, -65)
+  ctx.quadraticCurveTo(3, -40, 5, -65)
+  ctx.quadraticCurveTo(12, -35, 0, 0)
+  ctx.fill()
+  // 羽轴
+  ctx.strokeStyle = 'rgba(0,0,0,0.2)'
   ctx.lineWidth = 1
   ctx.beginPath()
-  ctx.moveTo(38, 130)
-  ctx.lineTo(38, 270)
+  ctx.moveTo(0, 0)
+  ctx.lineTo(0, -60)
+  ctx.stroke()
+  ctx.restore()
+
+  // ── 弓（左肩）──
+  ctx.strokeStyle = '#7a4510'
+  ctx.lineWidth = 5
+  ctx.beginPath()
+  ctx.moveTo(CX - 65, 175)
+  ctx.quadraticCurveTo(CX - 85, 280, CX - 65, 380)
+  ctx.stroke()
+  // 弓弦
+  ctx.strokeStyle = 'rgba(200,200,200,0.6)'
+  ctx.lineWidth = 1.5
+  ctx.beginPath()
+  ctx.moveTo(CX - 65, 175)
+  ctx.lineTo(CX - 65, 380)
   ctx.stroke()
 
-  // 指引手势
+  // ── 右手指引 ──
   ctx.fillStyle = '#f5c78a'
   ctx.beginPath()
-  ctx.ellipse(155, 190, 8, 10, 0.3, 0, Math.PI * 2)
+  ctx.ellipse(CX + 68, 260, 10, 12, 0.2, 0, Math.PI * 2)
   ctx.fill()
-  // 手指
-  ctx.fillStyle = '#f5c78a'
+  // 食指
   ctx.save()
-  ctx.translate(165, 182)
-  ctx.rotate(-0.5)
-  ctx.fillRect(-3, -14, 6, 14)
+  ctx.translate(CX + 80, 252)
+  ctx.rotate(-0.6)
+  ctx.fillRect(-4, -18, 8, 18)
+  ctx.beginPath()
+  ctx.arc(0, -18, 4, 0, Math.PI * 2)
+  ctx.fill()
   ctx.restore()
 }
 
-// =================== 骑士 (铁甲 + 红披风) ===================
+/* ═══════════════════════════════════════
+   骑士 — 铁甲红披
+   ═══════════════════════════════════════ */
 function drawKnight(ctx: CanvasRenderingContext2D) {
-  // 光效
-  const auraGrad = ctx.createRadialGradient(100, 180, 20, 100, 180, 120)
-  auraGrad.addColorStop(0, 'rgba(200, 100, 50, 0.12)')
-  auraGrad.addColorStop(1, 'transparent')
-  ctx.fillStyle = auraGrad
-  ctx.fillRect(0, 40, W, 280)
+  const CX = 140, FACE_Y = 145
 
-  // 阴影
-  ctx.fillStyle = 'rgba(0,0,0,0.3)'
-  ctx.beginPath()
-  ctx.ellipse(100, 310, 50, 10, 0, 0, Math.PI * 2)
-  ctx.fill()
+  drawAura(ctx, CX, 260, 140, 'rgba(220, 80, 40, 0.1)', 'rgba(180, 40, 20, 0.03)')
+  drawShadow(ctx, CX, 425, 60)
 
-  // 红披风
+  // ── 红披风 ──
   ctx.fillStyle = '#8b2222'
   ctx.beginPath()
-  ctx.moveTo(55, 135)
-  ctx.quadraticCurveTo(25, 230, 35, 310)
-  ctx.lineTo(165, 310)
-  ctx.quadraticCurveTo(175, 230, 145, 135)
+  ctx.moveTo(CX - 50, 195)
+  ctx.quadraticCurveTo(CX - 85, 310, CX - 78, 430)
+  ctx.lineTo(CX + 78, 430)
+  ctx.quadraticCurveTo(CX + 85, 310, CX + 50, 195)
   ctx.closePath()
   ctx.fill()
-  ctx.fillStyle = 'rgba(180, 40, 40, 0.15)'
+  // 披风高光
+  ctx.fillStyle = 'rgba(200, 60, 40, 0.12)'
   ctx.beginPath()
-  ctx.moveTo(65, 135)
-  ctx.quadraticCurveTo(45, 230, 50, 310)
-  ctx.lineTo(75, 310)
-  ctx.quadraticCurveTo(70, 230, 80, 135)
+  ctx.moveTo(CX - 30, 200)
+  ctx.quadraticCurveTo(CX - 60, 310, CX - 55, 430)
+  ctx.lineTo(CX - 30, 430)
+  ctx.quadraticCurveTo(CX - 35, 310, CX - 15, 200)
+  ctx.closePath()
+  ctx.fill()
+  // 褶皱暗线
+  ctx.strokeStyle = 'rgba(60, 0, 0, 0.15)'
+  ctx.lineWidth = 1.5
+  ctx.beginPath()
+  ctx.moveTo(CX + 20, 210)
+  ctx.quadraticCurveTo(CX + 40, 340, CX + 50, 430)
+  ctx.stroke()
+
+  // ── 铁甲 ──
+  const armorG = ctx.createLinearGradient(CX - 50, 195, CX + 50, 195)
+  armorG.addColorStop(0, '#888')
+  armorG.addColorStop(0.25, '#bbb')
+  armorG.addColorStop(0.45, '#ddd')
+  armorG.addColorStop(0.55, '#ccc')
+  armorG.addColorStop(0.75, '#aaa')
+  armorG.addColorStop(1, '#777')
+  ctx.fillStyle = armorG
+  ctx.beginPath()
+  ctx.moveTo(CX - 40, 195)
+  ctx.lineTo(CX - 45, 340)
+  ctx.lineTo(CX + 45, 340)
+  ctx.lineTo(CX + 40, 195)
   ctx.closePath()
   ctx.fill()
 
-  // 铁甲身体
-  const armorGrad = ctx.createLinearGradient(60, 130, 140, 130)
-  armorGrad.addColorStop(0, '#888')
-  armorGrad.addColorStop(0.3, '#bbb')
-  armorGrad.addColorStop(0.5, '#ddd')
-  armorGrad.addColorStop(0.7, '#bbb')
-  armorGrad.addColorStop(1, '#777')
-  ctx.fillStyle = armorGrad
-  ctx.beginPath()
-  ctx.moveTo(65, 135)
-  ctx.lineTo(60, 250)
-  ctx.lineTo(140, 250)
-  ctx.lineTo(135, 135)
-  ctx.closePath()
-  ctx.fill()
-
-  // 盔甲中线
-  ctx.strokeStyle = 'rgba(0,0,0,0.15)'
+  // 盔甲纹饰
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)'
   ctx.lineWidth = 1
   ctx.beginPath()
-  ctx.moveTo(100, 140)
-  ctx.lineTo(100, 250)
+  ctx.moveTo(CX, 200)
+  ctx.lineTo(CX, 340)
+  ctx.stroke()
+  // 胸甲十字纹
+  ctx.strokeStyle = 'rgba(218,165,32,0.3)'
+  ctx.lineWidth = 2
+  ctx.beginPath()
+  ctx.moveTo(CX - 15, 230)
+  ctx.lineTo(CX + 15, 230)
+  ctx.moveTo(CX, 215)
+  ctx.lineTo(CX, 250)
   ctx.stroke()
 
   // 肩甲
-  ctx.fillStyle = '#aaa'
+  const shoulderG = ctx.createLinearGradient(0, 0, 30, 0)
+  shoulderG.addColorStop(0, '#999')
+  shoulderG.addColorStop(0.5, '#ccc')
+  shoulderG.addColorStop(1, '#888')
+  ctx.fillStyle = shoulderG
   ctx.beginPath()
-  ctx.ellipse(60, 140, 18, 12, 0.3, 0, Math.PI * 2)
+  ctx.ellipse(CX - 48, 198, 22, 14, 0.3, 0, Math.PI * 2)
   ctx.fill()
   ctx.beginPath()
-  ctx.ellipse(140, 140, 18, 12, -0.3, 0, Math.PI * 2)
+  ctx.ellipse(CX + 48, 198, 22, 14, -0.3, 0, Math.PI * 2)
   ctx.fill()
-
-  // 腰带
-  ctx.fillStyle = '#8b6914'
-  ctx.fillRect(58, 215, 84, 8)
-  ctx.fillStyle = '#ffd700'
+  // 肩甲铆钉
+  ctx.fillStyle = '#daa520'
   ctx.beginPath()
-  ctx.arc(100, 219, 6, 0, Math.PI * 2)
+  ctx.arc(CX - 48, 198, 3, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.beginPath()
+  ctx.arc(CX + 48, 198, 3, 0, Math.PI * 2)
   ctx.fill()
 
   // 领口
-  ctx.fillStyle = '#ffcc88'
-  ctx.beginPath()
-  ctx.moveTo(80, 128)
-  ctx.lineTo(100, 142)
-  ctx.lineTo(120, 128)
-  ctx.closePath()
-  ctx.fill()
-
-  // 头部
   ctx.fillStyle = '#eebb88'
   ctx.beginPath()
-  ctx.ellipse(100, 96, 30, 34, 0, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.fillStyle = 'rgba(255, 220, 190, 0.3)'
-  ctx.beginPath()
-  ctx.ellipse(92, 86, 14, 16, -0.2, 0, Math.PI * 2)
-  ctx.fill()
-
-  // 短发 (深色)
-  ctx.fillStyle = '#333'
-  ctx.beginPath()
-  ctx.ellipse(100, 76, 33, 22, 0, Math.PI, Math.PI * 2)
-  ctx.fill()
-
-  // 疤痕
-  ctx.strokeStyle = 'rgba(180, 100, 80, 0.5)'
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.moveTo(118, 88)
-  ctx.lineTo(125, 105)
-  ctx.stroke()
-
-  // 眼睛（锐利）
-  drawEyes(ctx, 86, 94, 112, 94, '#884422', true)
-
-  // 坚定表情
-  ctx.strokeStyle = '#996644'
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.moveTo(90, 110)
-  ctx.lineTo(110, 110)
-  ctx.stroke()
-
-  // 大剑 (右手)
-  ctx.strokeStyle = '#999'
-  ctx.lineWidth = 6
-  ctx.beginPath()
-  ctx.moveTo(160, 100)
-  ctx.lineTo(170, 300)
-  ctx.stroke()
-  // 剑刃高光
-  ctx.strokeStyle = 'rgba(255,255,255,0.4)'
-  ctx.lineWidth = 2
-  ctx.beginPath()
-  ctx.moveTo(160, 105)
-  ctx.lineTo(168, 280)
-  ctx.stroke()
-  // 剑柄
-  ctx.fillStyle = '#5a3a1a'
-  ctx.fillRect(150, 95, 20, 10)
-  // 剑格
-  ctx.fillStyle = '#daa520'
-  ctx.fillRect(146, 102, 28, 5)
-}
-
-// =================== 商人 (书生/学者) ===================
-function drawMerchant(ctx: CanvasRenderingContext2D) {
-  // 暖光
-  const auraGrad = ctx.createRadialGradient(100, 180, 20, 100, 180, 120)
-  auraGrad.addColorStop(0, 'rgba(200, 160, 80, 0.12)')
-  auraGrad.addColorStop(1, 'transparent')
-  ctx.fillStyle = auraGrad
-  ctx.fillRect(0, 40, W, 280)
-
-  // 阴影
-  ctx.fillStyle = 'rgba(0,0,0,0.25)'
-  ctx.beginPath()
-  ctx.ellipse(100, 310, 45, 10, 0, 0, Math.PI * 2)
-  ctx.fill()
-
-  // 长大衣
-  const coatGrad = ctx.createLinearGradient(100, 130, 100, 310)
-  coatGrad.addColorStop(0, '#8b6914')
-  coatGrad.addColorStop(0.5, '#6b5210')
-  coatGrad.addColorStop(1, '#4a380a')
-  ctx.fillStyle = coatGrad
-  ctx.beginPath()
-  ctx.moveTo(55, 140)
-  ctx.quadraticCurveTo(40, 240, 42, 310)
-  ctx.lineTo(158, 310)
-  ctx.quadraticCurveTo(160, 240, 145, 140)
+  ctx.moveTo(CX - 22, 188)
+  ctx.lineTo(CX, 208)
+  ctx.lineTo(CX + 22, 188)
   ctx.closePath()
   ctx.fill()
 
-  // 内衬
-  ctx.fillStyle = '#eed8a0'
+  // ── 腰带 ──
+  ctx.fillStyle = '#8b6914'
+  ctx.fillRect(CX - 48, 295, 96, 12)
+  drawGem(ctx, CX, 301, 8, '#ffd700', '#b8860b')
+
+  // ── 脸 ──
+  drawAnimeFace(ctx, CX, FACE_Y, '#eebb88', '#884422', 'serious')
+
+  // ── 头发 ──
+  ctx.fillStyle = '#2a2a2a'
   ctx.beginPath()
-  ctx.moveTo(80, 140)
-  ctx.lineTo(78, 260)
-  ctx.lineTo(122, 260)
-  ctx.lineTo(120, 140)
+  ctx.ellipse(CX, 112, 42, 30, 0, Math.PI, Math.PI * 2)
+  ctx.fill()
+  // 鬓角
+  ctx.beginPath()
+  ctx.moveTo(CX - 38, 118)
+  ctx.quadraticCurveTo(CX - 45, 145, CX - 40, 165)
+  ctx.lineTo(CX - 34, 160)
+  ctx.quadraticCurveTo(CX - 38, 140, CX - 34, 120)
+  ctx.closePath()
+  ctx.fill()
+  ctx.beginPath()
+  ctx.moveTo(CX + 38, 118)
+  ctx.quadraticCurveTo(CX + 45, 145, CX + 40, 165)
+  ctx.lineTo(CX + 34, 160)
+  ctx.quadraticCurveTo(CX + 38, 140, CX + 34, 120)
+  ctx.closePath()
+  ctx.fill()
+
+  // ── 疤痕 ──
+  ctx.strokeStyle = 'rgba(200, 80, 60, 0.55)'
+  ctx.lineWidth = 2.5
+  ctx.beginPath()
+  ctx.moveTo(CX + 22, 130)
+  ctx.lineTo(CX + 28, 158)
+  ctx.stroke()
+
+  // ── 大剑（右手）──
+  // 剑刃
+  ctx.fillStyle = '#bbb'
+  ctx.beginPath()
+  ctx.moveTo(CX + 78, 90)
+  ctx.lineTo(CX + 82, 90)
+  ctx.lineTo(CX + 88, 400)
+  ctx.lineTo(CX + 72, 400)
+  ctx.closePath()
+  ctx.fill()
+  // 剑刃高光
+  ctx.fillStyle = 'rgba(255,255,255,0.3)'
+  ctx.beginPath()
+  ctx.moveTo(CX + 78, 95)
+  ctx.lineTo(CX + 80, 95)
+  ctx.lineTo(CX + 82, 390)
+  ctx.lineTo(CX + 76, 390)
+  ctx.closePath()
+  ctx.fill()
+  // 剑柄
+  ctx.fillStyle = '#5a3a1a'
+  ctx.fillRect(CX + 68, 82, 24, 14)
+  // 护手
+  ctx.fillStyle = '#daa520'
+  ctx.fillRect(CX + 64, 93, 32, 6)
+  // 柄头宝石
+  drawGem(ctx, CX + 80, 78, 6, '#cc2222', '#881111')
+}
+
+/* ═══════════════════════════════════════
+   商人/学者 — 棕衣眼镜
+   ═══════════════════════════════════════ */
+function drawMerchant(ctx: CanvasRenderingContext2D) {
+  const CX = 140, FACE_Y = 148
+
+  drawAura(ctx, CX, 260, 130, 'rgba(210, 170, 80, 0.1)', 'rgba(180, 140, 50, 0.03)')
+  drawShadow(ctx, CX, 425, 55)
+
+  // ── 大衣 ──
+  const coatG = ctx.createLinearGradient(CX, 190, CX, 430)
+  coatG.addColorStop(0, '#9b7520')
+  coatG.addColorStop(0.5, '#7a5c18')
+  coatG.addColorStop(1, '#544010')
+  ctx.fillStyle = coatG
+  ctx.beginPath()
+  ctx.moveTo(CX - 50, 200)
+  ctx.quadraticCurveTo(CX - 68, 310, CX - 62, 430)
+  ctx.lineTo(CX + 62, 430)
+  ctx.quadraticCurveTo(CX + 68, 310, CX + 50, 200)
+  ctx.closePath()
+  ctx.fill()
+
+  // 大衣分割线
+  ctx.strokeStyle = 'rgba(0,0,0,0.12)'
+  ctx.lineWidth = 1.5
+  ctx.beginPath()
+  ctx.moveTo(CX - 5, 200)
+  ctx.lineTo(CX - 8, 430)
+  ctx.stroke()
+  ctx.beginPath()
+  ctx.moveTo(CX + 5, 200)
+  ctx.lineTo(CX + 8, 430)
+  ctx.stroke()
+
+  // ── 内衬衬衫 ──
+  ctx.fillStyle = '#f0e8c8'
+  ctx.beginPath()
+  ctx.moveTo(CX - 25, 200)
+  ctx.lineTo(CX - 28, 340)
+  ctx.lineTo(CX + 28, 340)
+  ctx.lineTo(CX + 25, 200)
   ctx.closePath()
   ctx.fill()
 
   // 领口
   ctx.fillStyle = '#ffcc88'
   ctx.beginPath()
-  ctx.moveTo(82, 128)
-  ctx.lineTo(100, 148)
-  ctx.lineTo(118, 128)
+  ctx.moveTo(CX - 24, 190)
+  ctx.lineTo(CX, 218)
+  ctx.lineTo(CX + 24, 190)
   ctx.closePath()
   ctx.fill()
 
-  // 多个纽扣
+  // ── 纽扣 ──
   ctx.fillStyle = '#daa520'
-  for (let y = 160; y <= 240; y += 22) {
+  for (let y = 232; y <= 325; y += 28) {
     ctx.beginPath()
-    ctx.arc(100, y, 3, 0, Math.PI * 2)
+    ctx.arc(CX, y, 4, 0, Math.PI * 2)
     ctx.fill()
+    ctx.fillStyle = 'rgba(0,0,0,0.15)'
+    ctx.beginPath()
+    ctx.arc(CX, y, 2, 0, Math.PI * 2)
+    ctx.fill()
+    ctx.fillStyle = '#daa520'
   }
 
-  // 头部
-  ctx.fillStyle = '#ffcc88'
-  ctx.beginPath()
-  ctx.ellipse(100, 96, 30, 34, 0, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.fillStyle = 'rgba(255, 230, 200, 0.3)'
-  ctx.beginPath()
-  ctx.ellipse(92, 86, 14, 16, -0.2, 0, Math.PI * 2)
-  ctx.fill()
+  // ── 脸 ──
+  drawAnimeFace(ctx, CX, FACE_Y, '#ffcc88', '#664422', 'smile')
 
-  // 整齐的头发
+  // ── 整齐头发 ──
   ctx.fillStyle = '#554430'
   ctx.beginPath()
-  ctx.ellipse(100, 76, 33, 22, 0, Math.PI, Math.PI * 2)
+  ctx.ellipse(CX, 116, 42, 28, 0, Math.PI, Math.PI * 2)
+  ctx.fill()
+  // 整齐分头
+  ctx.fillStyle = '#443320'
+  ctx.beginPath()
+  ctx.moveTo(CX - 5, 90)
+  ctx.quadraticCurveTo(CX - 40, 105, CX - 42, 130)
+  ctx.lineTo(CX - 38, 140)
+  ctx.quadraticCurveTo(CX - 35, 115, CX, 95)
+  ctx.closePath()
   ctx.fill()
 
-  // 圆框眼镜
+  // ── 圆框眼镜 ──
   ctx.strokeStyle = '#b8860b'
-  ctx.lineWidth = 2
+  ctx.lineWidth = 2.5
   ctx.beginPath()
-  ctx.arc(86, 94, 10, 0, Math.PI * 2)
+  ctx.arc(CX - 16, FACE_Y - 2, 14, 0, Math.PI * 2)
   ctx.stroke()
   ctx.beginPath()
-  ctx.arc(114, 94, 10, 0, Math.PI * 2)
+  ctx.arc(CX + 16, FACE_Y - 2, 14, 0, Math.PI * 2)
   ctx.stroke()
   // 镜桥
+  ctx.lineWidth = 2
   ctx.beginPath()
-  ctx.moveTo(96, 94)
-  ctx.lineTo(104, 94)
+  ctx.moveTo(CX + 2, FACE_Y - 2)
+  ctx.lineTo(CX - 2, FACE_Y - 2)
   ctx.stroke()
-
-  // 眼睛
-  ctx.fillStyle = '#554430'
-  ctx.beginPath()
-  ctx.arc(86, 94, 2.5, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.beginPath()
-  ctx.arc(114, 94, 2.5, 0, Math.PI * 2)
-  ctx.fill()
-  // 眼睛高光
-  ctx.fillStyle = '#fff'
-  ctx.beginPath()
-  ctx.arc(84, 92, 1, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.beginPath()
-  ctx.arc(112, 92, 1, 0, Math.PI * 2)
-  ctx.fill()
-
-  // 温和微笑
-  ctx.strokeStyle = '#aa7755'
+  // 镜臂
   ctx.lineWidth = 1.5
   ctx.beginPath()
-  ctx.arc(100, 106, 7, 0.15, Math.PI - 0.15)
+  ctx.moveTo(CX - 30, FACE_Y - 2)
+  ctx.lineTo(CX - 38, FACE_Y - 8)
   ctx.stroke()
+  ctx.beginPath()
+  ctx.moveTo(CX + 30, FACE_Y - 2)
+  ctx.lineTo(CX + 38, FACE_Y - 8)
+  ctx.stroke()
+  // 镜片反光
+  ctx.fillStyle = 'rgba(255,255,255,0.12)'
+  ctx.beginPath()
+  ctx.ellipse(CX - 20, FACE_Y - 6, 5, 8, -0.3, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.beginPath()
+  ctx.ellipse(CX + 12, FACE_Y - 6, 5, 8, -0.3, 0, Math.PI * 2)
+  ctx.fill()
 
-  // 书本 (左手)
-  ctx.fillStyle = '#8b1a1a'
+  // ── 大本书（左手）──
   ctx.save()
-  ctx.translate(35, 190)
-  ctx.rotate(-0.15)
-  ctx.fillRect(0, 0, 30, 40)
+  ctx.translate(CX - 72, 260)
+  ctx.rotate(-0.12)
+  // 书脊
+  ctx.fillStyle = '#7a1515'
+  ctx.fillRect(-2, 0, 6, 55)
+  // 封面
+  ctx.fillStyle = '#9b2020'
+  ctx.fillRect(4, 0, 38, 55)
+  // 封面装饰
+  ctx.strokeStyle = '#daa520'
+  ctx.lineWidth = 1
+  ctx.strokeRect(8, 4, 30, 47)
+  ctx.strokeRect(12, 8, 22, 39)
   // 书页
-  ctx.fillStyle = '#ffe8c0'
-  ctx.fillRect(3, 2, 24, 36)
-  // 书页线
-  ctx.strokeStyle = 'rgba(0,0,0,0.1)'
-  ctx.lineWidth = 0.5
-  for (let y = 8; y < 34; y += 5) {
+  ctx.fillStyle = '#fffae0'
+  ctx.fillRect(4, 2, 36, 51)
+  // 文字线
+  ctx.strokeStyle = 'rgba(0,0,0,0.08)'
+  ctx.lineWidth = 0.8
+  for (let y = 10; y < 48; y += 6) {
     ctx.beginPath()
-    ctx.moveTo(6, y)
-    ctx.lineTo(24, y)
+    ctx.moveTo(8, y)
+    ctx.lineTo(36, y)
     ctx.stroke()
   }
   ctx.restore()
 
-  // 羽毛笔 (右手)
-  ctx.strokeStyle = '#daa520'
-  ctx.lineWidth = 2
+  // ── 羽毛笔（右手）──
+  ctx.save()
+  ctx.translate(CX + 68, 240)
+  ctx.rotate(-0.2)
+  // 笔杆
+  ctx.strokeStyle = '#b8860b'
+  ctx.lineWidth = 2.5
   ctx.beginPath()
-  ctx.moveTo(155, 170)
-  ctx.quadraticCurveTo(160, 150, 155, 130)
+  ctx.moveTo(0, 0)
+  ctx.lineTo(-5, -60)
   ctx.stroke()
   // 羽毛
-  ctx.fillStyle = '#fff8e0'
+  const featherG = ctx.createLinearGradient(-5, -60, -5, -110)
+  featherG.addColorStop(0, '#f8f0d8')
+  featherG.addColorStop(1, '#fff')
+  ctx.fillStyle = featherG
   ctx.beginPath()
-  ctx.moveTo(155, 130)
-  ctx.quadraticCurveTo(140, 120, 145, 105)
-  ctx.quadraticCurveTo(155, 115, 165, 105)
-  ctx.quadraticCurveTo(160, 120, 155, 130)
+  ctx.moveTo(-5, -60)
+  ctx.quadraticCurveTo(-22, -75, -15, -100)
+  ctx.quadraticCurveTo(-5, -85, 5, -100)
+  ctx.quadraticCurveTo(12, -75, -5, -60)
+  ctx.fill()
+  // 羽轴
+  ctx.strokeStyle = 'rgba(0,0,0,0.15)'
+  ctx.lineWidth = 0.8
+  ctx.beginPath()
+  ctx.moveTo(-5, -60)
+  ctx.lineTo(-5, -95)
+  ctx.stroke()
+  ctx.restore()
+
+  // 墨水滴
+  ctx.fillStyle = 'rgba(20, 20, 80, 0.4)'
+  ctx.beginPath()
+  ctx.arc(CX + 70, 245, 2, 0, Math.PI * 2)
+  ctx.fill()
+  ctx.beginPath()
+  ctx.arc(CX + 74, 250, 1.2, 0, Math.PI * 2)
   ctx.fill()
 }
 
-// =================== 辅助函数 ===================
-function drawEyes(ctx: CanvasRenderingContext2D, lx: number, ly: number, rx: number, ry: number, color: string, sharp = false) {
-  // 眼白
-  ctx.fillStyle = '#fff'
-  ctx.beginPath()
-  ctx.ellipse(lx, ly, sharp ? 7 : 6, sharp ? 5 : 6, 0, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.beginPath()
-  ctx.ellipse(rx, ry, sharp ? 7 : 6, sharp ? 5 : 6, 0, 0, Math.PI * 2)
-  ctx.fill()
+/* ═══════════════════════════════════════
+   辅助函数
+   ═══════════════════════════════════════ */
+function drawAura(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, inner: string, outer: string) {
+  const g = ctx.createRadialGradient(cx, cy, r * 0.15, cx, cy, r)
+  g.addColorStop(0, inner)
+  g.addColorStop(0.7, outer)
+  g.addColorStop(1, 'transparent')
+  ctx.fillStyle = g
+  ctx.fillRect(0, 40, W, H - 40)
+}
 
-  // 虹膜
-  ctx.fillStyle = color
+function drawShadow(ctx: CanvasRenderingContext2D, cx: number, y: number, rx: number) {
+  ctx.fillStyle = 'rgba(0,0,0,0.3)'
   ctx.beginPath()
-  ctx.arc(lx + 1, ly, 3.5, 0, Math.PI * 2)
+  ctx.ellipse(cx, y, rx, 12, 0, 0, Math.PI * 2)
   ctx.fill()
-  ctx.beginPath()
-  ctx.arc(rx + 1, ry, 3.5, 0, Math.PI * 2)
-  ctx.fill()
+}
 
-  // 瞳孔
-  ctx.fillStyle = '#111'
+function drawGem(ctx: CanvasRenderingContext2D, cx: number, cy: number, r: number, color1: string, color2: string) {
+  const g = ctx.createRadialGradient(cx - r * 0.3, cy - r * 0.3, r * 0.1, cx, cy, r)
+  g.addColorStop(0, lighten(color1, 40))
+  g.addColorStop(0.5, color1)
+  g.addColorStop(1, color2)
+  ctx.fillStyle = g
   ctx.beginPath()
-  ctx.arc(lx + 1, ly, 1.8, 0, Math.PI * 2)
+  ctx.arc(cx, cy, r, 0, Math.PI * 2)
   ctx.fill()
-  ctx.beginPath()
-  ctx.arc(rx + 1, ry, 1.8, 0, Math.PI * 2)
-  ctx.fill()
-
   // 高光
-  ctx.fillStyle = '#fff'
+  ctx.fillStyle = 'rgba(255,255,255,0.5)'
   ctx.beginPath()
-  ctx.arc(lx - 1, ly - 2, 1.5, 0, Math.PI * 2)
-  ctx.fill()
-  ctx.beginPath()
-  ctx.arc(rx - 1, ry - 2, 1.5, 0, Math.PI * 2)
+  ctx.arc(cx - r * 0.25, cy - r * 0.25, r * 0.35, 0, Math.PI * 2)
   ctx.fill()
 }
 
-function drawStar(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, color: string, alpha: number) {
+function drawStarShape(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, color: string, alpha: number) {
   ctx.save()
   ctx.globalAlpha = alpha
   ctx.fillStyle = color
   ctx.beginPath()
   for (let i = 0; i < 5; i++) {
-    const angle = (i * 4 * Math.PI) / 5 - Math.PI / 2
-    const method = i === 0 ? 'moveTo' : 'lineTo'
-    ctx[method](x + r * Math.cos(angle), y + r * Math.sin(angle))
+    const a = (i * 4 * Math.PI) / 5 - Math.PI / 2
+    const m = i === 0 ? 'moveTo' : 'lineTo'
+    ctx[m](x + r * Math.cos(a), y + r * Math.sin(a))
   }
   ctx.closePath()
   ctx.fill()
   ctx.restore()
 }
 
-function drawSparkles(ctx: CanvasRenderingContext2D, particles: Array<{ x: number; y: number; r: number; color: string }>) {
-  for (const p of particles) {
-    ctx.fillStyle = p.color
-    ctx.globalAlpha = 0.7
+function drawFloatingParticles(ctx: CanvasRenderingContext2D, cx: number, cy: number, spread: number, color: string, count: number) {
+  ctx.fillStyle = color
+  // 使用固定种子位置（不随机，防止每次重绘位置变化）
+  const positions = [
+    { dx: -0.7, dy: -0.8 }, { dx: 0.6, dy: -0.6 },
+    { dx: -0.5, dy: 0.5 }, { dx: 0.8, dy: 0.3 },
+    { dx: -0.3, dy: -0.4 }, { dx: 0.2, dy: 0.7 },
+  ]
+  for (let i = 0; i < Math.min(count, positions.length); i++) {
+    const p = positions[i]
+    const px = cx + p.dx * spread
+    const py = cy + p.dy * spread
+    const r = 1.5 + (i % 3)
     ctx.beginPath()
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2)
+    ctx.arc(px, py, r, 0, Math.PI * 2)
     ctx.fill()
   }
-  ctx.globalAlpha = 1
+}
+
+function lighten(hex: string, amount: number): string {
+  const c = hexToRgb(hex)
+  return `rgb(${Math.min(255, c.r + amount)},${Math.min(255, c.g + amount)},${Math.min(255, c.b + amount)})`
+}
+
+function darken(hex: string, amount: number): string {
+  const c = hexToRgb(hex)
+  return `rgb(${Math.max(0, c.r - amount)},${Math.max(0, c.g - amount)},${Math.max(0, c.b - amount)})`
+}
+
+function hexToRgb(hex: string): { r: number; g: number; b: number } {
+  const h = hex.replace('#', '')
+  return {
+    r: parseInt(h.substring(0, 2), 16),
+    g: parseInt(h.substring(2, 4), 16),
+    b: parseInt(h.substring(4, 6), 16),
+  }
 }
 
 onMounted(draw)

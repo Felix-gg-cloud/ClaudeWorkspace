@@ -268,7 +268,8 @@ export class CampScene extends Phaser.Scene {
         })
 
       } else if (encounter.type === 'npc') {
-        const npc = this.add.image(px, py - 8, 'sprite_npc')
+        const npcKey = encounter.npcAvatar ? `sprite_npc_${encounter.npcAvatar}` : 'sprite_npc'
+        const npc = this.add.image(px, py - 8, npcKey)
         npc.setDepth(py / 10 + 1)
         sprites.push(npc)
 
