@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User } from '@/types'
-import { mockUser } from '@/mock/data'
+import http from '@/api/http'
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
@@ -9,16 +9,49 @@ export const useUserStore = defineStore('user', () => {
 
   const displayName = computed(() => user.value?.displayName || 'Hero')
 
-  function login(_username: string, _password: string): boolean {
-    // Mock login
-    user.value = { ...mockUser }
-    isLoggedIn.value = true
-    return true
+  /** 登录 */
+  async function login(username: string, password: string): Promise<boolean> {
+    try {
+      const { data } = await http.post('/auth/login', { username, password })
+      user.value = mapUser(data)
+      isLoggedIn.value = true
+      return true
+    } catch {
+      return false
+    }
   }
 
-  function logout() {
+  /** 注册 */
+  async function register(username: string, password: string, displayName?: string): Promise<boolean> {
+    try {
+      const { data } = await http.post('/auth/register', { username, password, displayName: displayName || 'Hero' })
+      user.value = mapUser(data)
+      isLoggedIn.value = true
+      return true
+    } catch {
+      return false
+    }
+  }
+
+  /** 退出 */
+  async function logout() {
+    try { await http.post('/auth/logout') } catch { /* ignore */ }
     user.value = null
     isLoggedIn.value = false
+  }
+
+  /** 恢复会话（页面刷新时调用） */
+  async function restoreSession(): Promise<boolean> {
+    try {
+      const { data } = await http.get('/auth/me')
+      user.value = mapUser(data)
+      isLoggedIn.value = true
+      return true
+    } catch {
+      user.value = null
+      isLoggedIn.value = false
+      return false
+    }
   }
 
   function updateProfile(name: string, voice: 'en-US' | 'en-GB') {
@@ -29,24 +62,50 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  function addXp(amount: number) {
+  /** 加 XP（同步到后端 + 本地） */
+  async function addXp(amount: number) {
     if (!user.value) return
     user.value.totalXp += amount
-    // Check level up
+    // 检查升级
     if (user.value.totalXp >= user.value.xpToNextLevel) {
       user.value.currentLevel++
       user.value.skillPoints++
     }
+    try { await http.post('/progress/xp', { xp: amount }) } catch { /* ignore */ }
   }
 
   function addCoins(amount: number) {
     if (user.value) user.value.coins += amount
   }
 
-  // Replace {playerName} in text
+  /** 从后端数据同步用户状态（其他 API 返回 totalXp/coins 时调用） */
+  function syncFromServer(data: { totalXp?: number; coins?: number }) {
+    if (!user.value) return
+    if (data.totalXp !== undefined) user.value.totalXp = data.totalXp
+    if (data.coins !== undefined) user.value.coins = data.coins
+  }
+
   function replacePlayerName(text: string): string {
     return text.replace(/\{playerName\}/g, displayName.value)
   }
 
-  return { user, isLoggedIn, displayName, login, logout, updateProfile, addXp, addCoins, replacePlayerName }
+  return { user, isLoggedIn, displayName, login, register, logout, restoreSession, updateProfile, addXp, addCoins, syncFromServer, replacePlayerName }
 })
+
+function mapUser(data: Record<string, unknown>): User {
+  return {
+    id: data.id as number,
+    username: data.username as string,
+    displayName: (data.displayName as string) || 'Hero',
+    ttsVoice: (data.ttsVoice as 'en-US' | 'en-GB') || 'en-US',
+    cefrLevel: (data.cefrLevel as User['cefrLevel']) || 'PRE_A1',
+    currentLevel: (data.currentLevel as number) || 1,
+    totalXp: (data.totalXp as number) || 0,
+    xpToNextLevel: (data.xpToNextLevel as number) || 200,
+    coins: (data.coins as number) || 0,
+    skillPoints: (data.skillPoints as number) || 0,
+    streak: (data.streak as number) || 0,
+    totalCheckins: (data.totalCheckins as number) || 0,
+    firstLogin: (data.firstLogin as boolean) ?? true,
+  }
+}

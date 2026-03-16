@@ -80,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useChapterStore } from '@/stores/chapter'
@@ -88,6 +88,10 @@ import type { Lesson } from '@/types'
 
 const router = useRouter()
 const chapterStore = useChapterStore()
+
+onMounted(async () => {
+  await chapterStore.loadLessons(chapterStore.currentChapterCode)
+})
 
 const chapter = computed(() => ({
   code: chapterStore.currentChapter.code,

@@ -142,7 +142,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useSrsStore } from '@/stores/srs'
 import { useMistakeStore } from '@/stores/mistakes'
@@ -153,6 +153,13 @@ const srsStore = useSrsStore()
 const mistakeStore = useMistakeStore()
 const achievementStore = useAchievementStore()
 const dailyStore = useDailyGoalStore()
+
+onMounted(async () => {
+  await Promise.all([
+    srsStore.loadAll(),
+    achievementStore.loadAchievements(),
+  ])
+})
 
 const weekRecords = computed(() => dailyStore.getRecentRecords(7).reverse())
 

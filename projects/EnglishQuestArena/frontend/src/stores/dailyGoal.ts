@@ -1,5 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import http from '@/api/http'
+import { useUserStore } from '@/stores/user'
 
 // 每日目标 & 打卡系统
 export interface DailyRecord {
@@ -12,9 +14,9 @@ export interface DailyRecord {
 }
 
 export interface DailyGoalConfig {
-  targetXp: number           // 每日目标XP
-  targetTasks: number        // 每日目标任务数
-  targetMinutes: number      // 每日目标学习时长
+  targetXp: number
+  targetTasks: number
+  targetMinutes: number
 }
 
 const STORAGE_KEY = 'eqa_daily_goal'
@@ -92,7 +94,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     todayRecord.value.xpEarned >= config.value.targetXp
   )
 
-  // 记录 XP 获得
   function addXp(amount: number) {
     const rec = ensureToday()
     rec.xpEarned += amount
@@ -100,21 +101,18 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     persist()
   }
 
-  // 记录任务完成
   function addTaskCompleted(count = 1) {
     const rec = ensureToday()
     rec.tasksCompleted += count
     persist()
   }
 
-  // 记录新词学习
   function addWordLearned(count = 1) {
     const rec = ensureToday()
     rec.wordsLearned += count
     persist()
   }
 
-  // 记录学习时长
   function addTimeSpent(minutes: number) {
     const rec = ensureToday()
     rec.timeSpentMinutes += minutes
@@ -124,7 +122,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
   function checkGoal(rec: DailyRecord) {
     if (!rec.goalMet && rec.xpEarned >= config.value.targetXp) {
       rec.goalMet = true
-      // 更新连续天数
       currentStreak.value++
       if (currentStreak.value > bestStreak.value) {
         bestStreak.value = currentStreak.value
@@ -132,13 +129,39 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     }
   }
 
-  // 设置每日目标
+  /** 签到（调用后端） */
+  async function checkin() {
+    try {
+      const { data } = await http.post('/checkin')
+      const d = data as Record<string, unknown>
+      currentStreak.value = (d.streak as number) || 0
+      const userStore = useUserStore()
+      userStore.syncFromServer({ totalXp: d.totalXp as number, coins: d.coins as number })
+      return d
+    } catch {
+      return null
+    }
+  }
+
+  /** 获取签到历史 */
+  async function loadCheckinHistory() {
+    try {
+      const { data } = await http.get('/checkin/history')
+      const list = data as Record<string, unknown>[]
+      if (list.length > 0) {
+        currentStreak.value = (list[0].streak as number) || 0
+      }
+      return list
+    } catch {
+      return []
+    }
+  }
+
   function updateConfig(newConfig: Partial<DailyGoalConfig>) {
     Object.assign(config.value, newConfig)
     persist()
   }
 
-  // 获取最近N天的记录
   function getRecentRecords(days = 7): DailyRecord[] {
     const result: DailyRecord[] = []
     const now = new Date()
@@ -153,7 +176,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     return result
   }
 
-  // 获取总计统计
   const totalStats = computed(() => {
     const all = Object.values(records.value)
     return {
@@ -181,5 +203,7 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     addTimeSpent,
     updateConfig,
     getRecentRecords,
+    checkin,
+    loadCheckinHistory,
   }
 })

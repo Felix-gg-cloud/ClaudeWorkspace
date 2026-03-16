@@ -50,9 +50,14 @@ public class BossController {
             taskMap.put("taskCode", t.getTaskCode());
             taskMap.put("taskType", t.getTaskType());
             taskMap.put("promptEn", t.getPromptEn());
+            taskMap.put("promptZhHint", t.getPromptZhHint());
             taskMap.put("options", t.getOptions());
             taskMap.put("answer", t.getAnswer());
+            taskMap.put("explanationEn", t.getExplanationEn());
+            taskMap.put("explanationZh", t.getExplanationZh());
             taskMap.put("ttsEnabled", t.isTtsEnabled());
+            taskMap.put("ttsTextEn", t.getTtsTextEn());
+            taskMap.put("contentItemCodes", t.getContentItemCodes());
             taskList.add(taskMap);
         }
         result.put("tasks", taskList);

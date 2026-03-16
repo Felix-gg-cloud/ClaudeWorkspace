@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
+let sessionChecked = false
+
 const router = createRouter({
   history: createWebHashHistory(),
   routes: [
@@ -23,8 +25,15 @@ const router = createRouter({
   ]
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const userStore = useUserStore()
+
+  // 首次导航：尝试恢复后端会话
+  if (!sessionChecked) {
+    sessionChecked = true
+    await userStore.restoreSession()
+  }
+
   if (!to.meta.guest && !userStore.isLoggedIn) {
     return '/login'
   }

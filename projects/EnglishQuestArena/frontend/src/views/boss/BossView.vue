@@ -116,7 +116,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import BossSvg from '@/components/boss/BossSvg.vue'
 import { useUserStore } from '@/stores/user'
@@ -128,6 +128,14 @@ import type { Task } from '@/types'
 const userStore = useUserStore()
 const chapterStore = useChapterStore()
 const sound = useSound()
+
+const dataLoading = ref(true)
+
+onMounted(async () => {
+  await chapterStore.loadBossData(chapterStore.currentChapterCode)
+  dataLoading.value = false
+  bossHp.value = bossConfig.value.bossHp
+})
 
 const bossConfig = computed(() => chapterStore.currentBossConfig)
 const bossTier = computed(() => bossConfig.value.tier)

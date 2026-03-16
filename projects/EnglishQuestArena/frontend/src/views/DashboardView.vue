@@ -175,7 +175,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useUserStore } from '@/stores/user'
@@ -190,6 +190,11 @@ const chapterStore = useChapterStore()
 const dailyStore = useDailyGoalStore()
 const mistakeStore = useMistakeStore()
 const sound = useSound()
+
+onMounted(async () => {
+  await chapterStore.loadChapters()
+  await chapterStore.loadLessons(chapterStore.currentChapterCode)
+})
 
 const xpMax = computed(() => userStore.user?.xpToNextLevel ?? 200)
 const xpPercent = computed(() => {

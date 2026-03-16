@@ -1,46 +1,28 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import type { ChapterProgress, ChapterPhase, Lesson, BossConfig } from '@/types'
-import { chapterConfigs, chapterLessons, chapterCampMaps, chapterBossTasks } from '@/mock/chapters'
+import type { ChapterProgress, ChapterPhase, Lesson, BossConfig, Task } from '@/types'
+import { chapterConfigs, chapterCampMaps } from '@/mock/chapters'
 import type { CampMapData } from '@/game/config/mapData'
-import type { Task } from '@/types'
-import { generateQuestTasks } from '@/data/questGenerator'
+import http from '@/api/http'
 
-const STORAGE_KEY = 'eqa_chapter_progress'
+const OPENED_KEY = 'eqa_camp_opened'
 
-function loadFromStorage(): Record<string, ChapterProgress> | null {
+function loadOpened(): Record<string, string[]> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = localStorage.getItem(OPENED_KEY)
     if (raw) return JSON.parse(raw)
   } catch { /* ignore */ }
-  return null
-}
-
-function saveToStorage(data: Record<string, ChapterProgress>) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
-}
-
-// Default initial progress: CH1 is in 'camp' phase, rest locked
-function defaultProgress(): Record<string, ChapterProgress> {
-  const map: Record<string, ChapterProgress> = {}
-  for (const ch of chapterConfigs) {
-    map[ch.code] = {
-      chapterCode: ch.code,
-      phase: ch.orderIndex === 1 ? 'camp' : 'locked',
-      campDefeated: [],
-      campOpened: [],
-      questDaysCompleted: [],
-      bossDefeated: false,
-    }
-  }
-  return map
+  return {}
 }
 
 export const useChapterStore = defineStore('chapter', () => {
   const currentChapterCode = ref('PRE_A1_CH1')
-  const progressMap = ref<Record<string, ChapterProgress>>(
-    loadFromStorage() ?? defaultProgress()
-  )
+  const progressMap = ref<Record<string, ChapterProgress>>({})
+  const lessonsCache = ref<Record<string, Lesson[]>>({})
+  const questTasksCache = ref<Task[]>([])
+  const bossDataCache = ref<{ config: BossConfig; tasks: Task[] } | null>(null)
+  const campOpened = ref<Record<string, string[]>>(loadOpened())
+  const loading = ref(false)
 
   // ---- Getters ----
 
@@ -59,7 +41,7 @@ export const useChapterStore = defineStore('chapter', () => {
   )
 
   const currentLessons = computed<Lesson[]>(() =>
-    chapterLessons[currentChapterCode.value] ?? []
+    lessonsCache.value[currentChapterCode.value] ?? []
   )
 
   const currentCampMap = computed<CampMapData>(() =>
@@ -67,14 +49,13 @@ export const useChapterStore = defineStore('chapter', () => {
   )
 
   const currentBossConfig = computed<BossConfig>(() =>
-    currentChapter.value.bossConfig
+    bossDataCache.value?.config ?? currentChapter.value.bossConfig
   )
 
   const currentBossTasks = computed<Task[]>(() =>
-    chapterBossTasks[currentChapterCode.value] ?? []
+    bossDataCache.value?.tasks ?? []
   )
 
-  // 当前应进行的 Quest 天数 (已完成天数的下一天)
   const currentQuestDayIndex = computed<number>(() => {
     const completed = currentProgress.value?.questDaysCompleted ?? []
     const lessons = currentLessons.value
@@ -82,14 +63,8 @@ export const useChapterStore = defineStore('chapter', () => {
     return nextLesson?.dayIndex ?? 1
   })
 
-  // 当前 Quest 天的自动生成任务
-  const currentQuestTasks = computed<Task[]>(() => {
-    const chapter = currentChapter.value
-    if (!chapter) return []
-    return generateQuestTasks(chapter.words, currentQuestDayIndex.value, chapter.code)
-  })
+  const currentQuestTasks = computed<Task[]>(() => questTasksCache.value)
 
-  // Camp completion percentage
   const campCompletionRate = computed(() => {
     const map = currentCampMap.value
     if (!map) return 0
@@ -100,14 +75,12 @@ export const useChapterStore = defineStore('chapter', () => {
     return defeated / monsters.length
   })
 
-  // Is quest unlocked? Camp >= threshold OR already past camp
   const isQuestUnlocked = computed(() => {
     const phase = currentPhase.value
     if (phase === 'quest' || phase === 'boss' || phase === 'completed') return true
     return campCompletionRate.value >= (currentChapter.value?.campUnlockRate ?? 0.8)
   })
 
-  // Is boss unlocked? All quest days completed
   const isBossUnlocked = computed(() => {
     const phase = currentPhase.value
     if (phase === 'boss' || phase === 'completed') return true
@@ -117,13 +90,11 @@ export const useChapterStore = defineStore('chapter', () => {
     return lessons.length > 0 && completed.length >= lessons.length
   })
 
-  // All learned words across completed chapters (for Arena SRS pool)
   const allLearnedWords = computed(() => {
     const words: typeof chapterConfigs[0]['words'] = []
     for (const ch of chapterConfigs) {
       const prog = progressMap.value[ch.code]
       if (!prog) continue
-      // Include words from chapters where camp has been at least partially explored
       if (prog.phase !== 'locked') {
         words.push(...ch.words)
       }
@@ -131,52 +102,170 @@ export const useChapterStore = defineStore('chapter', () => {
     return words
   })
 
-  // ---- Actions ----
+  // ---- API Actions ----
 
-  function persist() {
-    saveToStorage(progressMap.value)
+  /** 从后端加载全部章节进度 */
+  async function loadChapters() {
+    try {
+      const { data } = await http.get('/chapters')
+      const map: Record<string, ChapterProgress> = {}
+      for (const ch of data as Record<string, unknown>[]) {
+        map[ch.code as string] = {
+          chapterCode: ch.code as string,
+          phase: (ch.phase as ChapterPhase) || 'locked',
+          campDefeated: (ch.campDefeated as string[]) || [],
+          campOpened: campOpened.value[ch.code as string] || [],
+          questDaysCompleted: (ch.questDaysCompleted as number[]) || [],
+          bossDefeated: (ch.bossDefeated as boolean) || false,
+        }
+      }
+      progressMap.value = map
+    } catch {
+      // 离线时保留本地默认
+      if (Object.keys(progressMap.value).length === 0) {
+        for (const ch of chapterConfigs) {
+          progressMap.value[ch.code] = {
+            chapterCode: ch.code,
+            phase: ch.orderIndex === 1 ? 'camp' : 'locked',
+            campDefeated: [],
+            campOpened: [],
+            questDaysCompleted: [],
+            bossDefeated: false,
+          }
+        }
+      }
+    }
   }
+
+  /** 加载某章节课时列表 */
+  async function loadLessons(chapterCode: string) {
+    try {
+      const { data } = await http.get(`/quest/${chapterCode}/lessons`)
+      lessonsCache.value[chapterCode] = (data as Record<string, unknown>[]).map(l => ({
+        code: l.code as string,
+        chapterCode: l.chapterCode as string,
+        dayIndex: l.dayIndex as number,
+        titleEn: l.titleEn as string,
+        titleZh: l.titleZh as string,
+        estimatedMinutes: l.estimatedMinutes as number,
+        targetTaskCount: 30,
+        autoDrillEnabled: true,
+        completed: l.completed as boolean,
+        current: false,
+      }))
+    } catch { /* ignore */ }
+  }
+
+  /** 加载某天的 Quest 任务 */
+  async function loadQuestTasks(chapterCode: string, dayIndex: number) {
+    loading.value = true
+    try {
+      const { data } = await http.get(`/quest/${chapterCode}/day/${dayIndex}/tasks`)
+      questTasksCache.value = (data as Record<string, unknown>[]).map(mapBackendTask)
+    } catch {
+      questTasksCache.value = []
+    } finally {
+      loading.value = false
+    }
+  }
+
+  /** 加载 Boss 数据 */
+  async function loadBossData(chapterCode: string) {
+    loading.value = true
+    try {
+      const { data } = await http.get(`/boss/${chapterCode}`)
+      const d = data as Record<string, unknown>
+      bossDataCache.value = {
+        config: {
+          code: d.code as string,
+          chapterCode: d.chapterCode as string,
+          bossName: d.bossName as string,
+          bossType: (d.bossTitle as string) || 'gatekeeper',
+          bossHp: d.bossHp as number,
+          playerHp: d.playerHp as number,
+          comboThreshold: 3,
+          comboBonusDamage: ((d.damageCorrect as number) || 1) * 2,
+          bossDamage: (d.damageWrong as number) || 1,
+          dailyRetryLimit: 3,
+          tier: 1,
+        },
+        tasks: ((d.tasks as Record<string, unknown>[]) || []).map(mapBossTask),
+      }
+    } catch {
+      bossDataCache.value = null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  // ---- Mutation Actions ----
 
   function setCurrentChapter(code: string) {
     currentChapterCode.value = code
   }
 
-  function defeatCampMonster(encounterId: string) {
+  async function defeatCampMonster(encounterId: string) {
     const prog = progressMap.value[currentChapterCode.value]
     if (!prog || prog.campDefeated.includes(encounterId)) return
+
+    const map = currentCampMap.value
+    const totalMonsters = map ? map.encounters.filter(e => e.type === 'monster').length : 0
+
     prog.campDefeated.push(encounterId)
-    // Auto-advance phase if threshold met
+
+    try {
+      await http.post('/progress/camp', {
+        chapterCode: currentChapterCode.value,
+        encounterId,
+        totalMonsters,
+      })
+    } catch { /* ignore */ }
+
+    // 自动推进阶段
     if (prog.phase === 'camp' && campCompletionRate.value >= (currentChapter.value?.campUnlockRate ?? 0.8)) {
       prog.phase = 'quest'
     }
-    persist()
   }
 
   function openCampChest(encounterId: string) {
-    const prog = progressMap.value[currentChapterCode.value]
+    const code = currentChapterCode.value
+    const prog = progressMap.value[code]
     if (!prog || prog.campOpened.includes(encounterId)) return
     prog.campOpened.push(encounterId)
-    persist()
+    if (!campOpened.value[code]) campOpened.value[code] = []
+    campOpened.value[code].push(encounterId)
+    localStorage.setItem(OPENED_KEY, JSON.stringify(campOpened.value))
   }
 
-  function completeQuestDay(dayIndex: number) {
-    const prog = progressMap.value[currentChapterCode.value]
+  async function completeQuestDay(dayIndex: number) {
+    const code = currentChapterCode.value
+    const prog = progressMap.value[code]
     if (!prog || prog.questDaysCompleted.includes(dayIndex)) return
     prog.questDaysCompleted.push(dayIndex)
-    // Auto-advance to boss phase if all days done
-    const lessons = currentLessons.value
-    if (prog.questDaysCompleted.length >= lessons.length) {
-      prog.phase = 'boss'
+
+    const lessonCode = `${code}_D${String(dayIndex).padStart(2, '0')}`
+    try {
+      const { data } = await http.post('/progress/quest-day', { lessonCode, xpEarned: 0 })
+      const d = data as Record<string, unknown>
+      if (d.allDaysCompleted) {
+        prog.phase = 'boss'
+      }
+    } catch {
+      const lessons = currentLessons.value
+      if (prog.questDaysCompleted.length >= lessons.length) {
+        prog.phase = 'boss'
+      }
     }
-    persist()
   }
 
-  function defeatBoss() {
-    const prog = progressMap.value[currentChapterCode.value]
+  async function defeatBoss() {
+    const code = currentChapterCode.value
+    const prog = progressMap.value[code]
     if (!prog) return
     prog.bossDefeated = true
     prog.phase = 'completed'
-    // Unlock next chapter
+
+    // 解锁下一章
     const currentOrder = currentChapter.value.orderIndex
     const next = chapterConfigs.find(c => c.orderIndex === currentOrder + 1)
     if (next) {
@@ -185,27 +274,47 @@ export const useChapterStore = defineStore('chapter', () => {
         nextProg.phase = 'camp'
       }
     }
-    persist()
+
+    try {
+      await http.post('/progress/boss', {
+        bossCode: currentBossConfig.value.code,
+        chapterCode: code,
+        victory: true,
+        bossHpRemaining: 0,
+        playerHpRemaining: 0,
+        maxCombo: 0,
+        xpEarned: 100,
+      })
+    } catch { /* ignore */ }
   }
 
-  // Advance to quest phase manually (if already eligible)
   function advanceToQuest() {
     const prog = progressMap.value[currentChapterCode.value]
     if (prog && prog.phase === 'camp' && isQuestUnlocked.value) {
       prog.phase = 'quest'
-      persist()
     }
   }
 
   function resetProgress() {
-    progressMap.value = defaultProgress()
+    const map: Record<string, ChapterProgress> = {}
+    for (const ch of chapterConfigs) {
+      map[ch.code] = {
+        chapterCode: ch.code,
+        phase: ch.orderIndex === 1 ? 'camp' : 'locked',
+        campDefeated: [],
+        campOpened: [],
+        questDaysCompleted: [],
+        bossDefeated: false,
+      }
+    }
+    progressMap.value = map
     currentChapterCode.value = 'PRE_A1_CH1'
-    persist()
   }
 
   return {
     currentChapterCode,
     progressMap,
+    loading,
     allChapters,
     currentChapter,
     currentProgress,
@@ -220,6 +329,10 @@ export const useChapterStore = defineStore('chapter', () => {
     isQuestUnlocked,
     isBossUnlocked,
     allLearnedWords,
+    loadChapters,
+    loadLessons,
+    loadQuestTasks,
+    loadBossData,
     setCurrentChapter,
     defeatCampMonster,
     openCampChest,
@@ -229,3 +342,76 @@ export const useChapterStore = defineStore('chapter', () => {
     resetProgress,
   }
 })
+
+/** 将后端 Quest 任务映射为前端 Task 类型 */
+function mapBackendTask(t: Record<string, unknown>): Task {
+  const type = t.type as string
+  return {
+    code: t.code as string,
+    lessonCode: (t.lessonCode as string) || '',
+    orderIndex: (t.orderIndex as number) || 0,
+    type: type as Task['type'],
+    promptEn: (t.promptEn as string) || '',
+    promptZhHint: (t.promptZhHint as string) || '',
+    options: t.options as Task['options'],
+    answer: (t.answer as Record<string, unknown>) || {},
+    explanationEn: (t.explanationEn as string) || '',
+    explanationZh: (t.explanationZh as string) || '',
+    xpReward: (t.xpReward as number) || 5,
+    goldReward: 0,
+    tts: { enabled: (t.ttsEnabled as boolean) ?? true, ttsTextEn: (t.ttsTextEn as string) || (t.promptEn as string) || '' },
+    links: { contentItemCodes: (t.contentItemCodes as string[]) || [] },
+  }
+}
+
+/** 将后端 Boss 题池任务映射为前端 Task 类型 */
+function mapBossTask(t: Record<string, unknown>): Task {
+  let options: Task['options']
+  try {
+    options = typeof t.options === 'string' ? JSON.parse(t.options) : t.options as Task['options']
+  } catch { options = undefined }
+
+  let answer: Record<string, unknown>
+  try {
+    const raw = t.answer
+    if (typeof raw === 'string') {
+      // 可能是 JSON 对象字符串或纯 key 字符串
+      if (raw.startsWith('{') || raw.startsWith('[')) {
+        answer = JSON.parse(raw)
+      } else {
+        answer = { correctOptionKey: raw }
+      }
+    } else {
+      answer = (raw as Record<string, unknown>) || {}
+    }
+  } catch {
+    answer = { correctOptionKey: t.answer as string }
+  }
+
+  let contentItemCodes: string[] = []
+  try {
+    const raw = t.contentItemCodes
+    if (typeof raw === 'string' && raw) {
+      contentItemCodes = raw.startsWith('[') ? JSON.parse(raw) : raw.split(',')
+    } else if (Array.isArray(raw)) {
+      contentItemCodes = raw as string[]
+    }
+  } catch { /* ignore */ }
+
+  return {
+    code: (t.taskCode as string) || '',
+    lessonCode: '',
+    orderIndex: 0,
+    type: (t.taskType as Task['type']) || 'MCQ',
+    promptEn: (t.promptEn as string) || '',
+    promptZhHint: (t.promptZhHint as string) || '',
+    options,
+    answer,
+    explanationEn: (t.explanationEn as string) || '',
+    explanationZh: (t.explanationZh as string) || '',
+    xpReward: 5,
+    goldReward: 0,
+    tts: { enabled: (t.ttsEnabled as boolean) ?? true, ttsTextEn: (t.ttsTextEn as string) || '' },
+    links: { contentItemCodes },
+  }
+}

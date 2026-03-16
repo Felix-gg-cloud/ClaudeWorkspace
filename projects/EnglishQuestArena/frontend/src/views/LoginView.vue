@@ -22,7 +22,7 @@
 
       <!-- Login Card -->
       <div class="login-card">
-        <h2 class="card-title">冒险者登录</h2>
+        <h2 class="card-title">{{ isRegister ? '创建冒险者' : '冒险者登录' }}</h2>
 
         <div v-if="error" class="error-msg">
           <span>⚠️</span> {{ error }}
@@ -34,7 +34,7 @@
             v-model="username"
             class="input-dark"
             placeholder="输入你的冒险者名称"
-            @keyup.enter="handleLogin"
+            @keyup.enter="handleSubmit"
           />
         </div>
 
@@ -45,16 +45,20 @@
             type="password"
             class="input-dark"
             placeholder="输入秘钥"
-            @keyup.enter="handleLogin"
+            @keyup.enter="handleSubmit"
           />
         </div>
 
-        <button class="btn-gold login-btn" :disabled="loading" @click="handleLogin">
+        <button class="btn-gold login-btn" :disabled="loading" @click="handleSubmit">
           <span v-if="loading" class="loading-spinner"></span>
-          <span v-else>⚔️ 进入冒险</span>
+          <span v-else>{{ isRegister ? '🛡️ 创建账号' : '⚔️ 进入冒险' }}</span>
         </button>
 
-        <p class="hint-text">默认账号：admin / admin123</p>
+        <p class="hint-text">
+          <a href="#" @click.prevent="isRegister = !isRegister">
+            {{ isRegister ? '已有账号？点此登录' : '没有账号？点此注册' }}
+          </a>
+        </p>
       </div>
 
       <!-- Feature tags -->
@@ -79,12 +83,13 @@ const router = useRouter()
 const userStore = useUserStore()
 const sound = useSound()
 
-const username = ref('admin')
-const password = ref('admin123')
+const username = ref('')
+const password = ref('')
 const loading = ref(false)
 const error = ref('')
+const isRegister = ref(false)
 
-async function handleLogin() {
+async function handleSubmit() {
   if (!username.value || !password.value) {
     error.value = '请输入用户名和密码'
     return
@@ -92,15 +97,19 @@ async function handleLogin() {
   loading.value = true
   error.value = ''
 
-  // Simulate network delay
-  await new Promise(r => setTimeout(r, 600))
+  let ok: boolean
+  if (isRegister.value) {
+    ok = await userStore.register(username.value, password.value)
+    if (!ok) error.value = '注册失败，用户名可能已被占用'
+  } else {
+    ok = await userStore.login(username.value, password.value)
+    if (!ok) error.value = '用户名或密码错误'
+  }
 
-  const ok = userStore.login(username.value, password.value)
   if (ok) {
     sound.coin()
     router.replace('/dashboard')
   } else {
-    error.value = '用户名或密码错误'
     sound.wrong()
   }
   loading.value = false

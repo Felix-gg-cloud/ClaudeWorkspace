@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useChapterStore } from '@/stores/chapter'
 import { useSrsStore } from '@/stores/srs'
@@ -99,7 +99,20 @@ const achievementStore = useAchievementStore()
 const dailyStore = useDailyGoalStore()
 const sound = useSound()
 
-const tasks = ref<TaskExt[]>(chapterStore.currentQuestTasks.map(t => ({ ...t, _done: false })))
+const tasks = ref<TaskExt[]>([])
+const currentIdx = ref(0)
+const combo = ref(0)
+const maxCombo = ref(0)
+const flashRed = ref(false)
+const dataLoading = ref(true)
+
+onMounted(async () => {
+  const code = chapterStore.currentChapterCode
+  const day = chapterStore.currentQuestDayIndex
+  await chapterStore.loadQuestTasks(code, day)
+  tasks.value = chapterStore.currentQuestTasks.map(t => ({ ...t, _done: false }))
+  dataLoading.value = false
+})
 const currentIdx = ref(0)
 const combo = ref(0)
 const maxCombo = ref(0)

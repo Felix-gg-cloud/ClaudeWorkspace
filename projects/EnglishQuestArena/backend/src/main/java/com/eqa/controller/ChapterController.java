@@ -1,11 +1,7 @@
 package com.eqa.controller;
 
-import com.eqa.entity.Chapter;
-import com.eqa.entity.ChapterProgress;
-import com.eqa.entity.User;
-import com.eqa.repository.ChapterProgressRepository;
-import com.eqa.repository.ChapterRepository;
-import com.eqa.repository.UserRepository;
+import com.eqa.entity.*;
+import com.eqa.repository.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,13 +17,22 @@ public class ChapterController {
     private final ChapterRepository chapterRepo;
     private final ChapterProgressRepository progressRepo;
     private final UserRepository userRepo;
+    private final CampDefeatedRepository campDefeatedRepo;
+    private final QuestDayProgressRepository dayProgressRepo;
+    private final LessonRepository lessonRepo;
 
     public ChapterController(ChapterRepository chapterRepo,
                              ChapterProgressRepository progressRepo,
-                             UserRepository userRepo) {
+                             UserRepository userRepo,
+                             CampDefeatedRepository campDefeatedRepo,
+                             QuestDayProgressRepository dayProgressRepo,
+                             LessonRepository lessonRepo) {
         this.chapterRepo = chapterRepo;
         this.progressRepo = progressRepo;
         this.userRepo = userRepo;
+        this.campDefeatedRepo = campDefeatedRepo;
+        this.dayProgressRepo = dayProgressRepo;
+        this.lessonRepo = lessonRepo;
     }
 
     @GetMapping
@@ -56,6 +61,25 @@ public class ChapterController {
                 item.put("phase", "locked");
                 item.put("bossDefeated", false);
             }
+
+            // campDefeated encounter IDs
+            List<String> campIds = campDefeatedRepo.findByUserIdAndChapterCode(user.getId(), ch.getCode())
+                    .stream().map(CampDefeated::getEncounterId).toList();
+            item.put("campDefeated", campIds);
+
+            // questDaysCompleted dayIndex list
+            List<Lesson> lessons = lessonRepo.findByChapterCodeOrderByDayIndexAsc(ch.getCode());
+            List<String> lessonCodes = lessons.stream().map(Lesson::getCode).toList();
+            List<Integer> completedDays = dayProgressRepo.findByUserIdAndLessonCodeIn(user.getId(), lessonCodes)
+                    .stream()
+                    .filter(QuestDayProgress::isCompleted)
+                    .map(p -> lessons.stream()
+                            .filter(l -> l.getCode().equals(p.getLessonCode()))
+                            .findFirst().map(Lesson::getDayIndex).orElse(0))
+                    .filter(d -> d > 0)
+                    .toList();
+            item.put("questDaysCompleted", completedDays);
+
             result.add(item);
         }
         return result;
