@@ -7,4 +7,5 @@ import java.util.List;
 public interface ContentItemRepository extends JpaRepository<ContentItem, String> {
     List<ContentItem> findByChapterCode(String chapterCode);
     List<ContentItem> findByChapterCodeAndType(String chapterCode, String type);
+    List<ContentItem> findByChapterCodeAndDayIndex(String chapterCode, int dayIndex);
 }
