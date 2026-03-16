@@ -123,11 +123,20 @@ import NpcPortrait from '@/components/ui/NpcPortrait.vue'
 import { createPhaserGame, destroyPhaserGame, getCampScene } from '@/game/PhaserGame'
 import type { MapEncounter } from '@/game/config/mapData'
 import { useChapterStore } from '@/stores/chapter'
+import { useUserStore } from '@/stores/user'
+import { useSrsStore } from '@/stores/srs'
+import { useDailyGoalStore } from '@/stores/dailyGoal'
+import { useAchievementStore } from '@/stores/achievements'
 import { useSound } from '@/composables/useSound'
+import { grantReward } from '@/composables/useReward'
 
 const router = useRouter()
 const sound = useSound()
 const chapterStore = useChapterStore()
+const userStore = useUserStore()
+const srsStore = useSrsStore()
+const dailyStore = useDailyGoalStore()
+const achievementStore = useAchievementStore()
 
 const gameContainer = ref<HTMLElement>()
 const currentEncounter = ref<MapEncounter | null>(null)
@@ -144,9 +153,9 @@ const campMap = computed(() => chapterStore.currentCampMap)
 const totalMonsters = computed(() => campMap.value.encounters.filter(e => e.type === 'monster').length)
 const totalChests = computed(() => campMap.value.encounters.filter(e => e.type === 'treasure').length)
 
-const defeatedCount = computed(() => collectedWords.value.length)
+const defeatedCount = computed(() => chapterStore.currentProgress?.campDefeated?.length ?? 0)
 const openedChests = computed(() =>
-  campMap.value.encounters.filter(e => e.type === 'treasure' && e.defeated).length
+  chapterStore.currentProgress?.campOpened?.length ?? 0
 )
 
 const npcCurrentLine = computed(() => {
@@ -247,6 +256,22 @@ function onEncounterResolve(result: { id: string; success: boolean }) {
     comboCount.value++
     collectedWords.value.push({ ...currentEncounter.value })
     chapterStore.defeatCampMonster(result.id)
+
+    // 奖励: XP + 金币
+    const reward = grantReward(true, comboCount.value, 'camp')
+    dailyStore.addXp(reward.xpEarned)
+    dailyStore.addTaskCompleted()
+
+    // SRS: 将打败的单词加入复习
+    const wordCode = 'W_' + (currentEncounter.value.wordEn || '').toUpperCase().replace(/\s+/g, '_')
+    if (wordCode !== 'W_') {
+      srsStore.reviewCard(wordCode, 4)
+    }
+
+    // 成就: 词汇 + 连击
+    achievementStore.updateProgress('words_learned', defeatedCount.value + 1)
+    achievementStore.updateProgress('perfect_combo', comboCount.value)
+
     sound.correct()
 
     // 连击 >= 2 时显示 combo 特效
