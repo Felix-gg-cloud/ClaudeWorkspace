@@ -92,6 +92,10 @@ const chapterStore = useChapterStore()
 onMounted(async () => {
   await chapterStore.loadChapters()
   await chapterStore.loadLessons(chapterStore.currentChapterCode)
+  // 营地未解锁时不允许进入主线
+  if (!chapterStore.isQuestUnlocked) {
+    router.replace('/dashboard')
+  }
 })
 
 const chapter = computed(() => ({
@@ -126,8 +130,8 @@ const firstUnlockedIdx = computed(() => {
 })
 
 const dayProgress = computed(() => {
-  // Mock: 30% progress on current day
-  return 30
+  // 当前天还未开始做题，进度为 0
+  return 0
 })
 
 const ringCircumference = 2 * Math.PI * 34

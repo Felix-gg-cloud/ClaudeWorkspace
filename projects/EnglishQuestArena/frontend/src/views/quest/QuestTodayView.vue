@@ -79,6 +79,7 @@
 
 <script setup lang="ts">
 import { ref, computed, watch, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useChapterStore } from '@/stores/chapter'
 import { useSrsStore } from '@/stores/srs'
@@ -93,6 +94,7 @@ import type { Task } from '@/types'
 interface TaskExt extends Task { _done: boolean }
 
 const chapterStore = useChapterStore()
+const router = useRouter()
 const srsStore = useSrsStore()
 const mistakeStore = useMistakeStore()
 const achievementStore = useAchievementStore()
@@ -107,6 +109,10 @@ const flashRed = ref(false)
 const dataLoading = ref(true)
 
 onMounted(async () => {
+  if (!chapterStore.isQuestUnlocked) {
+    router.replace('/dashboard')
+    return
+  }
   const code = chapterStore.currentChapterCode
   const day = chapterStore.currentQuestDayIndex
   await chapterStore.loadQuestTasks(code, day)
