@@ -90,6 +90,7 @@ const router = useRouter()
 const chapterStore = useChapterStore()
 
 onMounted(async () => {
+  await chapterStore.loadChapters()
   await chapterStore.loadLessons(chapterStore.currentChapterCode)
 })
 

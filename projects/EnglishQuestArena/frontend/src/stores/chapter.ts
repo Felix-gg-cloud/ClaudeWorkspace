@@ -205,25 +205,46 @@ export const useChapterStore = defineStore('chapter', () => {
   }
 
   async function defeatCampMonster(encounterId: string) {
-    const prog = progressMap.value[currentChapterCode.value]
+    const code = currentChapterCode.value
+    const prog = progressMap.value[code]
     if (!prog || prog.campDefeated.includes(encounterId)) return
 
     const map = currentCampMap.value
     const totalMonsters = map ? map.encounters.filter(e => e.type === 'monster').length : 0
 
-    prog.campDefeated.push(encounterId)
+    // 使用整体赋值确保 Vue 响应式追踪
+    progressMap.value = {
+      ...progressMap.value,
+      [code]: {
+        ...prog,
+        campDefeated: [...prog.campDefeated, encounterId],
+      },
+    }
 
     try {
-      await http.post('/progress/camp', {
-        chapterCode: currentChapterCode.value,
+      const { data } = await http.post('/progress/camp', {
+        chapterCode: code,
         encounterId,
         totalMonsters,
       })
-    } catch { /* ignore */ }
-
-    // 自动推进阶段
-    if (prog.phase === 'camp' && campCompletionRate.value >= (currentChapter.value?.campUnlockRate ?? 0.8)) {
-      prog.phase = 'quest'
+      // 根据后端返回的击败数重新判断阶段
+      const defeated = (data as Record<string, unknown>).defeated as number
+      if (defeated >= Math.ceil(totalMonsters * (currentChapter.value?.campUnlockRate ?? 0.8))) {
+        progressMap.value = {
+          ...progressMap.value,
+          [code]: { ...progressMap.value[code]!, phase: 'quest' },
+        }
+      }
+    } catch {
+      // 离线回退：本地判断阶段
+      const newProg = progressMap.value[code]!
+      const rate = totalMonsters > 0 ? newProg.campDefeated.length / totalMonsters : 0
+      if (newProg.phase === 'camp' && rate >= (currentChapter.value?.campUnlockRate ?? 0.8)) {
+        progressMap.value = {
+          ...progressMap.value,
+          [code]: { ...newProg, phase: 'quest' },
+        }
+      }
     }
   }
 
@@ -231,7 +252,10 @@ export const useChapterStore = defineStore('chapter', () => {
     const code = currentChapterCode.value
     const prog = progressMap.value[code]
     if (!prog || prog.campOpened.includes(encounterId)) return
-    prog.campOpened.push(encounterId)
+    progressMap.value = {
+      ...progressMap.value,
+      [code]: { ...prog, campOpened: [...prog.campOpened, encounterId] },
+    }
     if (!campOpened.value[code]) campOpened.value[code] = []
     campOpened.value[code].push(encounterId)
     localStorage.setItem(OPENED_KEY, JSON.stringify(campOpened.value))
@@ -241,19 +265,29 @@ export const useChapterStore = defineStore('chapter', () => {
     const code = currentChapterCode.value
     const prog = progressMap.value[code]
     if (!prog || prog.questDaysCompleted.includes(dayIndex)) return
-    prog.questDaysCompleted.push(dayIndex)
+    progressMap.value = {
+      ...progressMap.value,
+      [code]: { ...prog, questDaysCompleted: [...prog.questDaysCompleted, dayIndex] },
+    }
 
     const lessonCode = `${code}_D${String(dayIndex).padStart(2, '0')}`
     try {
       const { data } = await http.post('/progress/quest-day', { lessonCode, xpEarned: 0 })
       const d = data as Record<string, unknown>
       if (d.allDaysCompleted) {
-        prog.phase = 'boss'
+        progressMap.value = {
+          ...progressMap.value,
+          [code]: { ...progressMap.value[code]!, phase: 'boss' },
+        }
       }
     } catch {
+      const updatedProg = progressMap.value[code]!
       const lessons = currentLessons.value
-      if (prog.questDaysCompleted.length >= lessons.length) {
-        prog.phase = 'boss'
+      if (updatedProg.questDaysCompleted.length >= lessons.length) {
+        progressMap.value = {
+          ...progressMap.value,
+          [code]: { ...updatedProg, phase: 'boss' },
+        }
       }
     }
   }
@@ -262,18 +296,22 @@ export const useChapterStore = defineStore('chapter', () => {
     const code = currentChapterCode.value
     const prog = progressMap.value[code]
     if (!prog) return
-    prog.bossDefeated = true
-    prog.phase = 'completed'
+
+    const updates: Record<string, ChapterProgress> = {
+      ...progressMap.value,
+      [code]: { ...prog, bossDefeated: true, phase: 'completed' },
+    }
 
     // 解锁下一章
     const currentOrder = currentChapter.value.orderIndex
     const next = chapterConfigs.find(c => c.orderIndex === currentOrder + 1)
     if (next) {
-      const nextProg = progressMap.value[next.code]
+      const nextProg = updates[next.code]
       if (nextProg && nextProg.phase === 'locked') {
-        nextProg.phase = 'camp'
+        updates[next.code] = { ...nextProg, phase: 'camp' }
       }
     }
+    progressMap.value = updates
 
     try {
       await http.post('/progress/boss', {
@@ -289,9 +327,13 @@ export const useChapterStore = defineStore('chapter', () => {
   }
 
   function advanceToQuest() {
-    const prog = progressMap.value[currentChapterCode.value]
+    const code = currentChapterCode.value
+    const prog = progressMap.value[code]
     if (prog && prog.phase === 'camp' && isQuestUnlocked.value) {
-      prog.phase = 'quest'
+      progressMap.value = {
+        ...progressMap.value,
+        [code]: { ...prog, phase: 'quest' },
+      }
     }
   }
 

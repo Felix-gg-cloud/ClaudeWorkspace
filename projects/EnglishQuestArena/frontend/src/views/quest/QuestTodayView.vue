@@ -113,10 +113,6 @@ onMounted(async () => {
   tasks.value = chapterStore.currentQuestTasks.map(t => ({ ...t, _done: false }))
   dataLoading.value = false
 })
-const currentIdx = ref(0)
-const combo = ref(0)
-const maxCombo = ref(0)
-const flashRed = ref(false)
 
 const xpFloats = ref<{ id: number; amount: number; x: number }[]>([])
 let floatId = 0

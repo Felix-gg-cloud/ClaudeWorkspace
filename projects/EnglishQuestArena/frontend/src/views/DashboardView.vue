@@ -250,7 +250,7 @@ const journeyStages = computed(() => {
       route: '/quest',
       active: phase === 'quest',
       done: phase === 'boss' || phase === 'completed',
-      locked: phase === 'locked' || phase === 'camp',
+      locked: !chapterStore.isQuestUnlocked,
       progress: (phase === 'quest' || phase === 'boss' || phase === 'completed') ? questRate : undefined,
     },
     {
@@ -284,14 +284,22 @@ function selectChapter(code: string) {
   sound.click()
 }
 
-function enterStage(stage: { locked: boolean; route: string }) {
+function enterStage(stage: { locked: boolean; route: string; key: string }) {
   if (stage.locked) return
   sound.click()
+  // 进入 quest 时确保阶段已推进
+  if (stage.key === 'quest') {
+    chapterStore.advanceToQuest()
+  }
   router.push(stage.route)
 }
 
 function goTo(route: string) {
   sound.click()
+  // 进入 quest 时确保阶段已推进
+  if (route === '/quest') {
+    chapterStore.advanceToQuest()
+  }
   router.push(route)
 }
 </script>
