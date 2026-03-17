@@ -35,8 +35,7 @@ export function grantReward(
   const xpEarned = xp + (comboBonus ? COMBO_BONUS_XP : 0)
   const coinsEarned = coins + (comboBonus ? COMBO_BONUS_COINS : 0)
 
-  userStore.addXp(xpEarned)
-  userStore.addCoins(coinsEarned)
+  userStore.addReward(xpEarned, coinsEarned)
 
   return { xpEarned, coinsEarned, comboBonus }
 }

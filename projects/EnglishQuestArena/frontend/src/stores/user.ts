@@ -89,11 +89,13 @@ export const useUserStore = defineStore('user', () => {
   /** 加 XP（本地同步更新 + 后台同步后端） */
   function addXp(amount: number) {
     if (!user.value) return
+    const newXp = user.value.totalXp + amount
+    const levelUp = newXp >= user.value.xpToNextLevel
     user.value = {
       ...user.value,
-      totalXp: user.value.totalXp + amount,
-      currentLevel: user.value.totalXp + amount >= user.value.xpToNextLevel ? user.value.currentLevel + 1 : user.value.currentLevel,
-      skillPoints: user.value.totalXp + amount >= user.value.xpToNextLevel ? user.value.skillPoints + 1 : user.value.skillPoints,
+      totalXp: newXp,
+      currentLevel: levelUp ? user.value.currentLevel + 1 : user.value.currentLevel,
+      skillPoints: levelUp ? user.value.skillPoints + 1 : user.value.skillPoints,
     }
     http.post('/progress/xp', { xp: amount }).catch(() => {})
   }
@@ -102,6 +104,22 @@ export const useUserStore = defineStore('user', () => {
     if (!user.value) return
     user.value = { ...user.value, coins: user.value.coins + amount }
     http.post('/progress/coins', { coins: amount }).catch(() => {})
+  }
+
+  /** 同时加 XP 和金币（单次赋值，避免响应式竞争） */
+  function addReward(xp: number, coinAmount: number) {
+    if (!user.value) return
+    const newXp = user.value.totalXp + xp
+    const levelUp = newXp >= user.value.xpToNextLevel
+    user.value = {
+      ...user.value,
+      totalXp: newXp,
+      coins: user.value.coins + coinAmount,
+      currentLevel: levelUp ? user.value.currentLevel + 1 : user.value.currentLevel,
+      skillPoints: levelUp ? user.value.skillPoints + 1 : user.value.skillPoints,
+    }
+    http.post('/progress/xp', { xp }).catch(() => {})
+    http.post('/progress/coins', { coins: coinAmount }).catch(() => {})
   }
 
   /** 从后端数据同步用户状态（其他 API 返回 totalXp/coins 时调用） */
@@ -115,7 +133,7 @@ export const useUserStore = defineStore('user', () => {
     return text.replace(/\{playerName\}/g, displayName.value)
   }
 
-  return { user, isLoggedIn, displayName, totalXp, coins, streak, currentLevel, avatar, username, login, register, logout, restoreSession, updateProfile, addXp, addCoins, syncFromServer, replacePlayerName }
+  return { user, isLoggedIn, displayName, totalXp, coins, streak, currentLevel, avatar, username, login, register, logout, restoreSession, updateProfile, addXp, addCoins, addReward, syncFromServer, replacePlayerName }
 })
 
 function mapUser(data: Record<string, unknown>): User {
