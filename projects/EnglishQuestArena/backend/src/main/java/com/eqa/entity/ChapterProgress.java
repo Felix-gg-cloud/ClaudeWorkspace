@@ -1,7 +1,6 @@
 package com.eqa.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "chapter_progress", uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "chapter_code"}))

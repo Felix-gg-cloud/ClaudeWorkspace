@@ -5,6 +5,7 @@ export const mockUser: User = {
   id: 1,
   username: 'admin',
   displayName: 'Hero',
+  avatar: '',
   ttsVoice: 'en-US',
   cefrLevel: 'PRE_A1',
   currentLevel: 2,

@@ -77,7 +77,7 @@
         <transition name="page-fade" mode="out-in">
           <component
             :is="taskComponent"
-            :key="currentQuestion.code"
+            :key="currentQuestion?.code"
             :task="currentQuestion"
             @answer="onCardAnswer"
           />

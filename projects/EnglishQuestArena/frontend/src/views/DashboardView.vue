@@ -74,7 +74,7 @@
           <!-- 4-stage journey flow -->
           <div class="journey-flow">
             <div
-              v-for="(stage, idx) in journeyStages"
+              v-for="stage in journeyStages"
               :key="stage.key"
               class="journey-stage"
               :class="{

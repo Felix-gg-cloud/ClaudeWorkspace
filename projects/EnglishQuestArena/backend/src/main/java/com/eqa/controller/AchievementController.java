@@ -16,9 +16,6 @@ public class AchievementController {
     private final UserRepository userRepo;
     private final SkillUnlockRepository skillUnlockRepo;
     private final SrsRecordRepository srsRecordRepo;
-    private final CampDefeatedRepository campDefeatedRepo;
-    private final BossAttemptRepository bossAttemptRepo;
-
     // 成就定义（与前端 achievements.ts 对齐）
     private static final List<Map<String, Object>> ACHIEVEMENT_DEFS = List.of(
         achDef("first_word", "初识英语", "First Word", "学会第一个单词", "Learn your first word", "📖", "words_learned", 1, 10, 5),
@@ -38,14 +35,10 @@ public class AchievementController {
 
     public AchievementController(UserRepository userRepo,
                                   SkillUnlockRepository skillUnlockRepo,
-                                  SrsRecordRepository srsRecordRepo,
-                                  CampDefeatedRepository campDefeatedRepo,
-                                  BossAttemptRepository bossAttemptRepo) {
+                                  SrsRecordRepository srsRecordRepo) {
         this.userRepo = userRepo;
         this.skillUnlockRepo = skillUnlockRepo;
         this.srsRecordRepo = srsRecordRepo;
-        this.campDefeatedRepo = campDefeatedRepo;
-        this.bossAttemptRepo = bossAttemptRepo;
     }
 
     /**
@@ -62,7 +55,6 @@ public class AchievementController {
 
         // 收集当前统计（简化版本)
         long wordsLearned = srsRecordRepo.countByUserId(user.getId());
-        int streak = user.getStreak();
 
         List<Map<String, Object>> result = new ArrayList<>();
         for (Map<String, Object> def : ACHIEVEMENT_DEFS) {
@@ -74,7 +66,6 @@ public class AchievementController {
             String condType = (String) def.get("conditionType");
             int currentValue = switch (condType) {
                 case "words_learned" -> (int) wordsLearned;
-                case "streak_days" -> streak;
                 default -> 0;
             };
             item.put("currentValue", currentValue);

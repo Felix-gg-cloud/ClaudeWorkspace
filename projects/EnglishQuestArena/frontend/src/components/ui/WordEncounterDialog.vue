@@ -314,7 +314,6 @@ const mnemonicTip = computed(() => {
 
 // combo 显示 (当前 combo + 本次 = combo + 1)
 const comboDisplay = computed(() => (props.combo ?? 0) + 1)
-const comboBonus = computed(() => Math.min((comboDisplay.value - 1) * 20, 100))
 
 // 用法提示
 const usageTip = computed(() => {

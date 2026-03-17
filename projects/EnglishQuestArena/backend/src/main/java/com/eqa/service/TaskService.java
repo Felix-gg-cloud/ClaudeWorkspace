@@ -2,8 +2,6 @@ package com.eqa.service;
 
 import com.eqa.entity.ContentItem;
 import com.eqa.repository.ContentItemRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -13,12 +11,10 @@ import java.util.stream.Collectors;
 public class TaskService {
 
     private final ContentItemRepository contentItemRepo;
-    private final ObjectMapper objectMapper;
     private final Random random = new Random();
 
-    public TaskService(ContentItemRepository contentItemRepo, ObjectMapper objectMapper) {
+    public TaskService(ContentItemRepository contentItemRepo) {
         this.contentItemRepo = contentItemRepo;
-        this.objectMapper = objectMapper;
     }
 
     /**

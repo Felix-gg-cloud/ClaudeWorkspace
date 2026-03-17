@@ -6,7 +6,7 @@
         <div class="corridor-track">
           <div
             v-for="(task, idx) in tasks"
-            :key="task.taskId"
+            :key="task.code"
             class="corridor-node"
             :class="{
               'corridor-node--done': task._done,
@@ -137,13 +137,14 @@ const charPos = computed(() => {
 const taskComponent = computed(() => resolveTaskComponent(currentTask.value))
 
 function jumpTo(idx: number) {
-  if (idx <= currentIdx.value || tasks.value[idx]._done) {
+  if (idx <= currentIdx.value || tasks.value[idx]?._done) {
     currentIdx.value = idx
   }
 }
 
 function onAnswer(correct: boolean) {
   const task = tasks.value[currentIdx.value]
+  if (!task) return
   const wordCode = task.links?.contentItemCodes?.[0] ?? task.code
 
   if (correct) {

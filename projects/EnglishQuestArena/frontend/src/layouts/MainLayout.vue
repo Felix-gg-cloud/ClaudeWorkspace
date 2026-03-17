@@ -161,7 +161,7 @@ async function handleLogout() {
   router.replace('/login')
 }
 
-function particleStyle(i: number) {
+function particleStyle(_i: number) {
   const size = 2 + Math.random() * 3
   const x = Math.random() * 100
   const y = Math.random() * 100
