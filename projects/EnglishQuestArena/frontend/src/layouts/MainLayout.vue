@@ -58,35 +58,35 @@
       <div class="top-bar__right">
         <div class="stat-chip" :class="{ 'stat-bump': xpBump }" data-tip="经验值">
           <span class="stat-icon">✨</span>
-          <span class="stat-value">{{ totalXp }}</span>
+          <span class="stat-value">{{ userStore.totalXp }}</span>
         </div>
         <div class="stat-chip" :class="{ 'stat-bump': coinsBump }" data-tip="金币">
           <span class="stat-icon">💰</span>
-          <span class="stat-value">{{ coins }}</span>
+          <span class="stat-value">{{ userStore.coins }}</span>
         </div>
         <div class="stat-chip" data-tip="连续打卡">
           <span class="stat-icon">📅</span>
-          <span class="stat-value">{{ streak }}</span>
+          <span class="stat-value">{{ userStore.streak }}</span>
         </div>
         <!-- Avatar dropdown -->
         <div class="avatar-dropdown-wrap" ref="dropdownRef">
           <div class="avatar tooltip" data-tip="个人设置" @click="showDropdown = !showDropdown">
-            {{ avatar }}
+            {{ userStore.avatar }}
           </div>
           <Transition name="dropdown">
             <div v-if="showDropdown" class="avatar-dropdown dark-panel">
               <div class="dropdown-header">
-                <div class="dropdown-avatar">{{ userStore.user?.avatar || '⚔️' }}</div>
+                <div class="dropdown-avatar">{{ userStore.avatar }}</div>
                 <div class="dropdown-info">
-                  <div class="dropdown-name">{{ displayName }}</div>
-                  <div class="dropdown-username">@{{ username }}</div>
+                  <div class="dropdown-name">{{ userStore.displayName }}</div>
+                  <div class="dropdown-username">@{{ userStore.username }}</div>
                 </div>
               </div>
               <div class="dropdown-divider"></div>
               <div class="dropdown-stats">
-                <span>⭐ Lv.{{ currentLevel }}</span>
-                <span>✨ {{ totalXp }} XP</span>
-                <span>💰 {{ coins }}</span>
+                <span>⭐ Lv.{{ userStore.currentLevel }}</span>
+                <span>✨ {{ userStore.totalXp }} XP</span>
+                <span>💰 {{ userStore.coins }}</span>
               </div>
               <div class="dropdown-divider"></div>
               <router-link to="/profile" class="dropdown-item" @click="showDropdown = false">
@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
@@ -123,24 +123,15 @@ const collapsed = ref(false)
 const showDropdown = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 
-// 显式 computed 追踪 user 属性
-const totalXp = computed(() => userStore.user?.totalXp ?? 0)
-const coins = computed(() => userStore.user?.coins ?? 0)
-const streak = computed(() => userStore.user?.streak ?? 0)
-const avatar = computed(() => userStore.user?.avatar || userStore.user?.displayName?.charAt(0).toUpperCase() || '?')
-const displayName = computed(() => userStore.user?.displayName ?? '')
-const username = computed(() => userStore.user?.username ?? '')
-const currentLevel = computed(() => userStore.user?.currentLevel ?? 1)
-
 // 数值变化时触发弹跳动画
 const xpBump = ref(false)
 const coinsBump = ref(false)
 
-watch(totalXp, () => {
+watch(() => userStore.totalXp, () => {
   xpBump.value = true
   setTimeout(() => { xpBump.value = false }, 400)
 })
-watch(coins, () => {
+watch(() => userStore.coins, () => {
   coinsBump.value = true
   setTimeout(() => { coinsBump.value = false }, 400)
 })

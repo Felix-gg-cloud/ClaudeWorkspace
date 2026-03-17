@@ -20,6 +20,12 @@ export const useUserStore = defineStore('user', () => {
   const isLoggedIn = ref(false)
 
   const displayName = computed(() => user.value?.displayName || 'Hero')
+  const totalXp = computed(() => user.value?.totalXp ?? 0)
+  const coins = computed(() => user.value?.coins ?? 0)
+  const streak = computed(() => user.value?.streak ?? 0)
+  const currentLevel = computed(() => user.value?.currentLevel ?? 1)
+  const avatar = computed(() => user.value?.avatar || user.value?.displayName?.charAt(0).toUpperCase() || '?')
+  const username = computed(() => user.value?.username ?? '')
 
   /** 登录 */
   async function login(username: string, password: string): Promise<boolean> {
@@ -109,7 +115,7 @@ export const useUserStore = defineStore('user', () => {
     return text.replace(/\{playerName\}/g, displayName.value)
   }
 
-  return { user, isLoggedIn, displayName, login, register, logout, restoreSession, updateProfile, addXp, addCoins, syncFromServer, replacePlayerName }
+  return { user, isLoggedIn, displayName, totalXp, coins, streak, currentLevel, avatar, username, login, register, logout, restoreSession, updateProfile, addXp, addCoins, syncFromServer, replacePlayerName }
 })
 
 function mapUser(data: Record<string, unknown>): User {
