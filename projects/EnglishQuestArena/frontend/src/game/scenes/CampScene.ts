@@ -29,9 +29,7 @@ export class CampScene extends Phaser.Scene {
   private lastFogTileY = -1
 
   public onEncounter?: (encounter: MapEncounter) => void
-  public onRandomEvent?: (event: { type: string; title: string; message: string; reward?: { xp?: number; coins?: number } }) => void
   private stepCount = 0
-  private lastRandomEventStep = 0
 
   constructor() {
     super({ key: 'CampScene' })
@@ -531,10 +529,6 @@ export class CampScene extends Phaser.Scene {
     const body = this.player.body as Phaser.Physics.Arcade.Body
     if (body && (Math.abs(body.velocity.x) > 10 || Math.abs(body.velocity.y) > 10)) {
       this.stepCount++
-      // 每走约 200 步，有概率触发随机事件
-      if (this.stepCount - this.lastRandomEventStep > 200 && Math.random() < 0.02) {
-        this.triggerRandomEvent()
-      }
     }
 
     // 宠物跟随 (延迟追踪玩家位置)
@@ -565,28 +559,6 @@ export class CampScene extends Phaser.Scene {
       this.lastFogTileY = fogTileY
       this.updateFog()
     }
-  }
-
-  private triggerRandomEvent() {
-    this.lastRandomEventStep = this.stepCount
-    const events = [
-      { type: 'coin', title: '✨ 发现金币！', message: '你在草丛中发现了几枚闪闪发光的金币！', reward: { coins: 5 } },
-      { type: 'xp', title: '📚 灵感闪现！', message: '你突然回忆起之前学过的单词，感到充满力量！', reward: { xp: 8 } },
-      { type: 'tip', title: '🗺️ 旅行者的提示', message: '一位路过的旅行者告诉你：多听发音能更好地记住单词哦！', reward: {} },
-      { type: 'heal', title: '🌟 神秘泉水', message: '你发现了一处散发淡光的泉水，喝了一口感觉精力充沛！', reward: { xp: 5, coins: 3 } },
-      { type: 'pet', title: '🐾 小猫咪很开心', message: '你的宠物伴侣发现了一朵有趣的花，开心地跳来跳去！', reward: { coins: 2 } },
-      { type: 'star', title: '⭐ 幸运星', message: '天空中一颗流星划过，感觉今天运气特别好！', reward: { xp: 10 } },
-    ]
-    const event = events[Math.floor(Math.random() * events.length)]
-    if (!event || !this.onRandomEvent) return
-    this.paused = true
-    const physBody = this.player.body as Phaser.Physics.Arcade.Body
-    physBody.setVelocity(0)
-    this.onRandomEvent(event)
-  }
-
-  public resumeAfterEvent() {
-    this.paused = false
   }
 
   public getDefeatedMonsters(): MapEncounter[] {

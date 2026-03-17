@@ -79,21 +79,6 @@
         </div>
       </Teleport>
 
-      <!-- 随机事件弹窗 -->
-      <Teleport to="body">
-        <div v-if="randomEvent" class="random-event-overlay" @click="dismissRandomEvent">
-          <div class="random-event-dialog" @click.stop>
-            <h3 class="event-title">{{ randomEvent.title }}</h3>
-            <p class="event-message">{{ randomEvent.message }}</p>
-            <div class="event-rewards" v-if="randomEvent.reward?.xp || randomEvent.reward?.coins">
-              <span v-if="randomEvent.reward?.xp" class="reward-badge">✨ +{{ randomEvent.reward.xp }} XP</span>
-              <span v-if="randomEvent.reward?.coins" class="reward-badge">💰 +{{ randomEvent.reward.coins }} 金币</span>
-            </div>
-            <button ref="eventOkBtn" class="btn-event-ok" @click="dismissRandomEvent">知道了！</button>
-          </div>
-        </div>
-      </Teleport>
-
       <!-- 图鉴面板 -->
       <div v-if="showCodex" class="codex-overlay" @click="showCodex = false">
         <div class="codex-panel dark-panel" @click.stop>
@@ -166,9 +151,7 @@ const comboCount = ref(0)
 const showComboOverlay = ref(false)
 const comboOverlayText = ref('')
 const wordAttempts = ref<Map<string, number>>(new Map())
-const randomEvent = ref<{ type: string; title: string; message: string; reward?: { xp?: number; coins?: number } } | null>(null)
 const collectBtn = ref<HTMLButtonElement>()
-const eventOkBtn = ref<HTMLButtonElement>()
 
 const campMap = computed(() => chapterStore.currentCampMap)
 const totalMonsters = computed(() => campMap.value.encounters.filter(e => e.type === 'monster').length)
@@ -249,7 +232,6 @@ onMounted(async () => {
       const scene = getCampScene()
       if (scene) {
         scene.onEncounter = handleEncounter
-        scene.onRandomEvent = handleRandomEvent
         if (saved) {
           scene.restoreState(saved.playerX, saved.playerY, saved.revealedTiles)
         }
@@ -384,15 +366,9 @@ function getWordGrade(id: string): 'gold' | 'silver' | 'bronze' {
   return attempts === 1 ? 'gold' : attempts <= 2 ? 'silver' : 'bronze'
 }
 
-function handleRandomEvent(event: { type: string; title: string; message: string; reward?: { xp?: number; coins?: number } }) {
-  randomEvent.value = event
-  sound.coin()
-  nextTick(() => eventOkBtn.value?.focus())
-}
-
 function handleDialogKeydown(e: KeyboardEvent) {
   if (e.key !== 'Enter' && e.key !== ' ') return
-  if (!currentEncounter.value && !randomEvent.value) return
+  if (!currentEncounter.value) return
   // NPC 对话: Enter/Space 推进
   if (currentEncounter.value?.type === 'npc') {
     e.preventDefault()
@@ -403,17 +379,6 @@ function handleDialogKeydown(e: KeyboardEvent) {
     e.preventDefault()
     collectTreasure()
   }
-  // 随机事件: Enter/Space 关闭
-  if (randomEvent.value) {
-    e.preventDefault()
-    dismissRandomEvent()
-  }
-}
-
-function dismissRandomEvent() {
-  randomEvent.value = null
-  const scene = getCampScene()
-  if (scene) scene.resumeAfterEvent()
 }
 </script>
 
@@ -970,66 +935,4 @@ function dismissRandomEvent() {
   to { transform: scale(1) rotate(0); }
 }
 
-/* 随机事件弹窗 */
-.random-event-overlay {
-  position: fixed;
-  inset: 0;
-  background: radial-gradient(ellipse at center, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.7) 100%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1500;
-  animation: fadeIn 0.2s ease;
-  backdrop-filter: blur(3px);
-}
-.random-event-dialog {
-  text-align: center;
-  padding: 28px 32px;
-  max-width: 380px;
-  width: 88vw;
-  border: 2px solid rgba(255, 200, 80, 0.4);
-  border-radius: 18px;
-  background: linear-gradient(170deg, #1a1608 0%, #0f0d06 100%);
-  box-shadow: 0 0 40px rgba(255, 200, 80, 0.1), 0 16px 50px rgba(0,0,0,0.5);
-  animation: dialogIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.event-title {
-  font-size: 20px;
-  color: #ffd700;
-  margin: 0 0 12px;
-  font-weight: 700;
-}
-.event-message {
-  color: #ccc;
-  font-size: 14px;
-  line-height: 1.7;
-  margin: 0 0 16px;
-}
-.event-rewards {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 16px;
-}
-.event-rewards .reward-badge {
-  padding: 6px 14px;
-  border-radius: 18px;
-  font-size: 13px;
-  font-weight: 600;
-  background: rgba(255, 200, 60, 0.1);
-  border: 1px solid rgba(255, 200, 60, 0.3);
-  color: #ffd700;
-}
-.btn-event-ok {
-  padding: 10px 28px;
-  border-radius: 10px;
-  border: 1.5px solid rgba(255, 200, 80, 0.35);
-  background: rgba(255, 200, 80, 0.08);
-  color: #ffd700;
-  font-weight: 600;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.2s;
-  &:hover { background: rgba(255, 200, 80, 0.18); transform: translateY(-1px); }
-}
 </style>
