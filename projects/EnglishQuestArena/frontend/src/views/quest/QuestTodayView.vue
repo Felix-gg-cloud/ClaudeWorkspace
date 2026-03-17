@@ -85,6 +85,7 @@ import { useChapterStore } from '@/stores/chapter'
 import { useSrsStore } from '@/stores/srs'
 import { useMistakeStore } from '@/stores/mistakes'
 import { useAchievementStore } from '@/stores/achievements'
+import { useDailyStatsStore } from '@/stores/dailyStats'
 import { useSound } from '@/composables/useSound'
 import { resolveTaskComponent } from '@/composables/useTaskCard'
 import { grantReward } from '@/composables/useReward'
@@ -97,6 +98,7 @@ const router = useRouter()
 const srsStore = useSrsStore()
 const mistakeStore = useMistakeStore()
 const achievementStore = useAchievementStore()
+const dailyStatsStore = useDailyStatsStore()
 const sound = useSound()
 
 const tasks = ref<TaskExt[]>([])
@@ -166,6 +168,8 @@ function onAnswer(correct: boolean) {
     // 成就：连击 & 任务数
     achievementStore.updateProgress('perfect_combo', maxCombo.value)
     achievementStore.updateProgress('tasks_completed', doneCount.value + 1)
+    // 每日统计
+    dailyStatsStore.recordCorrect(reward.xpEarned, reward.coinsEarned)
 
     // Mark done & advance
     task._done = true
@@ -183,6 +187,8 @@ function onAnswer(correct: boolean) {
 
     // SRS: 答错质量为 1
     srsStore.reviewCard(wordCode, 1)
+    // 每日统计
+    dailyStatsStore.recordWrong()
     // 错题收集
     mistakeStore.addMistake({
       taskCode: task.code,

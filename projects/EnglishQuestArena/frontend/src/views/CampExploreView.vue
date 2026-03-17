@@ -111,7 +111,9 @@ import type { MapEncounter } from '@/game/config/mapData'
 import { useChapterStore } from '@/stores/chapter'
 import { useUserStore } from '@/stores/user'
 import { useSrsStore } from '@/stores/srs'
+import { useMistakeStore } from '@/stores/mistakes'
 import { useAchievementStore } from '@/stores/achievements'
+import { useDailyStatsStore } from '@/stores/dailyStats'
 import { useSound } from '@/composables/useSound'
 import { grantReward } from '@/composables/useReward'
 
@@ -140,7 +142,9 @@ const sound = useSound()
 const chapterStore = useChapterStore()
 const userStore = useUserStore()
 const srsStore = useSrsStore()
+const mistakeStore = useMistakeStore()
 const achievementStore = useAchievementStore()
+const dailyStatsStore = useDailyStatsStore()
 
 const gameContainer = ref<HTMLElement>()
 const currentEncounter = ref<MapEncounter | null>(null)
@@ -299,6 +303,10 @@ function onEncounterResolve(result: { id: string; success: boolean }) {
     achievementStore.updateProgress('words_learned', defeatedCount.value + 1)
     achievementStore.updateProgress('perfect_combo', comboCount.value)
 
+    // 每日统计
+    dailyStatsStore.recordCorrect(encReward?.xp ?? 5, encReward?.coins ?? 2)
+    dailyStatsStore.recordWordLearned()
+
     sound.correct()
 
     // 连击 >= 2 时显示 combo 特效
@@ -308,6 +316,23 @@ function onEncounterResolve(result: { id: string; success: boolean }) {
       sound.combo()
       setTimeout(() => { showComboOverlay.value = false }, 1200)
     }
+  } else if (!result.success && currentEncounter.value?.type === 'monster') {
+    comboCount.value = 0
+    sound.wrong()
+    // 错题记录
+    const wordCode = 'W_' + (currentEncounter.value.wordEn || '').toUpperCase().replace(/\s+/g, '_')
+    mistakeStore.addMistake({
+      taskCode: currentEncounter.value.id,
+      taskType: 'CAMP_ENCOUNTER',
+      wordCode,
+      promptEn: currentEncounter.value.wordEn || '',
+      promptZhHint: currentEncounter.value.wordZh || '',
+      userAnswer: '',
+      correctAnswer: currentEncounter.value.wordEn || '',
+    })
+    // SRS: 答错质量为 1
+    if (wordCode !== 'W_') srsStore.reviewCard(wordCode, 1)
+    dailyStatsStore.recordWrong()
   } else {
     comboCount.value = 0
     sound.wrong()

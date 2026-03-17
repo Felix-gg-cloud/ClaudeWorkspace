@@ -22,6 +22,8 @@ const router = createRouter({
     { path: '/boss', name: 'Boss', component: () => import('@/views/boss/BossView.vue') },
     { path: '/cefr-exam', name: 'CefrExam', component: () => import('@/views/CefrExamView.vue') },
     { path: '/stats', name: 'Stats', component: () => import('@/views/StatsView.vue') },
+    { path: '/srs-detail', name: 'SrsDetail', component: () => import('@/views/SrsDetailView.vue') },
+    { path: '/mistakes', name: 'Mistakes', component: () => import('@/views/MistakeDetailView.vue') },
     {
       path: '/first-login',
       name: 'FirstLogin',
