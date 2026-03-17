@@ -127,25 +127,10 @@
         </div>
       </section>
 
-      <!-- Daily goal mini -->
-      <section class="daily-goal-section">
-        <h3 class="section-title">🎯 今日进度</h3>
+      <!-- 错题提醒 -->
+      <section v-if="mistakeStore.unreviewedCount > 0" class="daily-goal-section">
         <div class="daily-mini dark-panel">
-          <div class="daily-mini-row">
-            <span>XP</span>
-            <div class="hp-bar hp-bar--gold" style="flex: 1; height: 6px; margin: 0 10px;">
-              <div class="hp-bar__fill" :style="{ width: dailyStore.todayXpProgress * 100 + '%' }"></div>
-            </div>
-            <span class="daily-num">{{ dailyStore.todayRecord.xpEarned }}/{{ dailyStore.config.targetXp }}</span>
-          </div>
-          <div class="daily-mini-row">
-            <span>任务</span>
-            <div class="hp-bar hp-bar--gold" style="flex: 1; height: 6px; margin: 0 10px;">
-              <div class="hp-bar__fill" :style="{ width: dailyStore.todayTaskProgress * 100 + '%' }"></div>
-            </div>
-            <span class="daily-num">{{ dailyStore.todayRecord.tasksCompleted }}/{{ dailyStore.config.targetTasks }}</span>
-          </div>
-          <div v-if="mistakeStore.unreviewedCount > 0" class="daily-alert">
+          <div class="daily-alert">
             ❌ {{ mistakeStore.unreviewedCount }} 道错题待复习
           </div>
         </div>
@@ -162,14 +147,12 @@ import { useRouter } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import { useUserStore } from '@/stores/user'
 import { useChapterStore } from '@/stores/chapter'
-import { useDailyGoalStore } from '@/stores/dailyGoal'
 import { useMistakeStore } from '@/stores/mistakes'
 import { useSound } from '@/composables/useSound'
 
 const router = useRouter()
 const userStore = useUserStore()
 const chapterStore = useChapterStore()
-const dailyStore = useDailyGoalStore()
 const mistakeStore = useMistakeStore()
 const sound = useSound()
 
@@ -714,7 +697,6 @@ function goTo(route: string) {
 .cefr-a2 { background: #4a4a2a; color: #dfdf7d; border: 1px solid #8a8a4a; }
 .cefr-b1 { background: #2a3a4a; color: #7dc8df; border: 1px solid #4a7a8a; }
 
-// Daily goal mini
 .daily-goal-section {
   margin-bottom: 24px;
 }
@@ -723,28 +705,7 @@ function goTo(route: string) {
   padding: 16px;
 }
 
-.daily-mini-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 600;
-  color: $text-secondary;
-
-  &:last-child { margin-bottom: 0; }
-}
-
-.daily-num {
-  font-size: 12px;
-  color: $gold;
-  font-weight: 700;
-  min-width: 50px;
-  text-align: right;
-}
-
 .daily-alert {
-  margin-top: 10px;
   font-size: 12px;
   color: $fire-orange;
   font-weight: 600;

@@ -3,49 +3,7 @@
     <div class="stats-page">
       <h2 class="page-title">📊 学习统计</h2>
 
-      <!-- 今日概览 -->
-      <section class="stats-section">
-        <h3 class="section-title">🎯 今日目标</h3>
-        <div class="today-card dark-panel">
-          <div class="goal-row">
-            <span class="goal-label">经验值</span>
-            <div class="goal-bar-wrap">
-              <div class="goal-bar">
-                <div class="goal-bar__fill" :style="{ width: dailyStore.todayXpProgress * 100 + '%' }"></div>
-              </div>
-              <span class="goal-text">{{ dailyStore.todayRecord.xpEarned }} / {{ dailyStore.config.targetXp }} XP</span>
-            </div>
-          </div>
-          <div class="goal-row">
-            <span class="goal-label">任务</span>
-            <div class="goal-bar-wrap">
-              <div class="goal-bar">
-                <div class="goal-bar__fill goal-bar__fill--blue" :style="{ width: dailyStore.todayTaskProgress * 100 + '%' }"></div>
-              </div>
-              <span class="goal-text">{{ dailyStore.todayRecord.tasksCompleted }} / {{ dailyStore.config.targetTasks }}</span>
-            </div>
-          </div>
-          <div class="goal-status" :class="{ 'goal-met': dailyStore.isGoalMet }">
-            {{ dailyStore.isGoalMet ? '✅ 今日目标已达成！' : '💪 继续加油！' }}
-          </div>
-        </div>
-      </section>
 
-      <!-- 7天趋势 -->
-      <section class="stats-section">
-        <h3 class="section-title">📈 最近7天</h3>
-        <div class="week-chart dark-panel">
-          <div class="bar-chart">
-            <div v-for="rec in weekRecords" :key="rec.date" class="bar-col">
-              <div class="bar-value">{{ rec.xpEarned }}</div>
-              <div class="bar-fill-wrap">
-                <div class="bar-fill" :style="{ height: barHeight(rec.xpEarned) + '%' }"></div>
-              </div>
-              <div class="bar-label">{{ formatDay(rec.date) }}</div>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <!-- 统计汇总 -->
       <section class="stats-section">
@@ -53,23 +11,13 @@
         <div class="summary-grid">
           <div class="summary-card dark-panel">
             <div class="summary-icon">⭐</div>
-            <div class="summary-value">{{ dailyStore.totalStats.totalXp }}</div>
+            <div class="summary-value">{{ userStore.totalXp }}</div>
             <div class="summary-label">总经验值</div>
           </div>
           <div class="summary-card dark-panel">
-            <div class="summary-icon">✅</div>
-            <div class="summary-value">{{ dailyStore.totalStats.totalTasks }}</div>
-            <div class="summary-label">完成任务</div>
-          </div>
-          <div class="summary-card dark-panel">
-            <div class="summary-icon">📖</div>
-            <div class="summary-value">{{ dailyStore.totalStats.totalWords }}</div>
-            <div class="summary-label">学习单词</div>
-          </div>
-          <div class="summary-card dark-panel">
-            <div class="summary-icon">🔥</div>
-            <div class="summary-value">{{ dailyStore.bestStreak }}</div>
-            <div class="summary-label">最佳连续</div>
+            <div class="summary-icon">💰</div>
+            <div class="summary-value">{{ userStore.coins }}</div>
+            <div class="summary-label">金币</div>
           </div>
         </div>
       </section>
@@ -147,12 +95,12 @@ import MainLayout from '@/layouts/MainLayout.vue'
 import { useSrsStore } from '@/stores/srs'
 import { useMistakeStore } from '@/stores/mistakes'
 import { useAchievementStore } from '@/stores/achievements'
-import { useDailyGoalStore } from '@/stores/dailyGoal'
+import { useUserStore } from '@/stores/user'
 
 const srsStore = useSrsStore()
 const mistakeStore = useMistakeStore()
 const achievementStore = useAchievementStore()
-const dailyStore = useDailyGoalStore()
+const userStore = useUserStore()
 
 onMounted(async () => {
   await Promise.all([
@@ -161,21 +109,10 @@ onMounted(async () => {
   ])
 })
 
-const weekRecords = computed(() => dailyStore.getRecentRecords(7).reverse())
+
 
 const topMistakes = computed(() => mistakeStore.getTopMistakes(5))
 const achievements = computed(() => achievementStore.getAllAchievements())
-
-function barHeight(xp: number): number {
-  const max = Math.max(...weekRecords.value.map(r => r.xpEarned), 1)
-  return Math.round((xp / max) * 100)
-}
-
-function formatDay(date: string): string {
-  const d = new Date(date + 'T00:00:00')
-  const days = ['日', '一', '二', '三', '四', '五', '六']
-  return days[d.getDay()]
-}
 
 function achProgress(ach: ReturnType<typeof achievementStore.getAllAchievements>[0]): number {
   return Math.min(100, Math.round((ach.progress.currentValue / ach.condition.threshold) * 100))
@@ -207,118 +144,6 @@ function achProgress(ach: ReturnType<typeof achievementStore.getAllAchievements>
   font-weight: 700;
   color: $text-secondary;
   margin-bottom: 12px;
-}
-
-// Today goal
-.today-card {
-  padding: 20px;
-}
-
-.goal-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 12px;
-}
-
-.goal-label {
-  width: 50px;
-  font-size: 13px;
-  color: $text-secondary;
-  flex-shrink: 0;
-}
-
-.goal-bar-wrap {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.goal-bar {
-  flex: 1;
-  height: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  border-radius: 4px;
-  overflow: hidden;
-}
-
-.goal-bar__fill {
-  height: 100%;
-  background: linear-gradient(90deg, $gold, $gold-dark);
-  border-radius: 4px;
-  transition: width 0.4s ease;
-
-  &--blue {
-    background: linear-gradient(90deg, $magic-purple, #7c3aed);
-  }
-}
-
-.goal-text {
-  font-size: 12px;
-  color: $text-muted;
-  white-space: nowrap;
-}
-
-.goal-status {
-  text-align: center;
-  font-size: 14px;
-  color: $text-secondary;
-  padding-top: 4px;
-
-  &.goal-met {
-    color: $life-green;
-    font-weight: 700;
-  }
-}
-
-// Week chart
-.week-chart {
-  padding: 20px;
-}
-
-.bar-chart {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  height: 120px;
-  gap: 8px;
-}
-
-.bar-col {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-}
-
-.bar-value {
-  font-size: 11px;
-  color: $text-muted;
-}
-
-.bar-fill-wrap {
-  width: 24px;
-  height: 80px;
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-  overflow: hidden;
-  display: flex;
-  align-items: flex-end;
-}
-
-.bar-fill {
-  width: 100%;
-  background: linear-gradient(180deg, $gold, $gold-dark);
-  border-radius: 4px;
-  transition: height 0.4s ease;
-  min-height: 2px;
-}
-
-.bar-label {
-  font-size: 11px;
-  color: $text-muted;
 }
 
 // Summary grid

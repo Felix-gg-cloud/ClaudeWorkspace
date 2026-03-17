@@ -126,7 +126,6 @@ import type { MapEncounter } from '@/game/config/mapData'
 import { useChapterStore } from '@/stores/chapter'
 import { useUserStore } from '@/stores/user'
 import { useSrsStore } from '@/stores/srs'
-import { useDailyGoalStore } from '@/stores/dailyGoal'
 import { useAchievementStore } from '@/stores/achievements'
 import { useSound } from '@/composables/useSound'
 import { grantReward } from '@/composables/useReward'
@@ -156,7 +155,6 @@ const sound = useSound()
 const chapterStore = useChapterStore()
 const userStore = useUserStore()
 const srsStore = useSrsStore()
-const dailyStore = useDailyGoalStore()
 const achievementStore = useAchievementStore()
 
 const gameContainer = ref<HTMLElement>()
@@ -309,9 +307,6 @@ function onEncounterResolve(result: { id: string; success: boolean }) {
       baseXp: encReward?.xp,
       baseCoins: encReward?.coins,
     })
-    dailyStore.addXp(reward.xpEarned)
-    dailyStore.addTaskCompleted()
-
     // SRS: 将打败的单词加入复习
     const wordCode = 'W_' + (currentEncounter.value.wordEn || '').toUpperCase().replace(/\s+/g, '_')
     if (wordCode !== 'W_') {

@@ -2,14 +2,12 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User } from '@/types'
 import http from '@/api/http'
-import { useDailyGoalStore } from '@/stores/dailyGoal'
 import { useMistakeStore } from '@/stores/mistakes'
 import { useAchievementStore } from '@/stores/achievements'
 import { useChapterStore } from '@/stores/chapter'
 
 /** 登录/注册/恢复会话后，通知各 store 加载该用户的本地数据 */
 function reloadLocalStores(userId: number) {
-  useDailyGoalStore().reload(userId)
   useMistakeStore().reload(userId)
   useAchievementStore().reload(userId)
   useChapterStore().reload(userId)
