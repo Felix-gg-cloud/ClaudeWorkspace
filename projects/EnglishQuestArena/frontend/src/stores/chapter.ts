@@ -5,11 +5,16 @@ import { chapterConfigs, chapterCampMaps } from '@/mock/chapters'
 import type { CampMapData } from '@/game/config/mapData'
 import http from '@/api/http'
 
-const OPENED_KEY = 'eqa_camp_opened'
+const OPENED_KEY_PREFIX = 'eqa_camp_opened_'
+let currentUserId = 0
+
+function openedKey() {
+  return OPENED_KEY_PREFIX + currentUserId
+}
 
 function loadOpened(): Record<string, string[]> {
   try {
-    const raw = localStorage.getItem(OPENED_KEY)
+    const raw = localStorage.getItem(openedKey())
     if (raw) return JSON.parse(raw)
   } catch { /* ignore */ }
   return {}
@@ -258,7 +263,7 @@ export const useChapterStore = defineStore('chapter', () => {
     }
     if (!campOpened.value[code]) campOpened.value[code] = []
     campOpened.value[code].push(encounterId)
-    localStorage.setItem(OPENED_KEY, JSON.stringify(campOpened.value))
+    localStorage.setItem(openedKey(), JSON.stringify(campOpened.value))
   }
 
   async function completeQuestDay(dayIndex: number) {
@@ -351,6 +356,20 @@ export const useChapterStore = defineStore('chapter', () => {
     }
     progressMap.value = map
     currentChapterCode.value = 'PRE_A1_CH1'
+    campOpened.value = {}
+    localStorage.removeItem(openedKey())
+  }
+
+  function reload(userId: number) {
+    currentUserId = userId
+    campOpened.value = loadOpened()
+    // 同步到已加载的 progressMap
+    for (const [code, prog] of Object.entries(progressMap.value)) {
+      progressMap.value[code] = {
+        ...prog,
+        campOpened: campOpened.value[code] || [],
+      }
+    }
   }
 
   return {
@@ -382,6 +401,7 @@ export const useChapterStore = defineStore('chapter', () => {
     defeatBoss,
     advanceToQuest,
     resetProgress,
+    reload,
   }
 })
 
