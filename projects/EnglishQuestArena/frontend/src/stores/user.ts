@@ -74,8 +74,10 @@ export const useUserStore = defineStore('user', () => {
     try { await http.post('/progress/xp', { xp: amount }) } catch { /* ignore */ }
   }
 
-  function addCoins(amount: number) {
-    if (user.value) user.value.coins += amount
+  async function addCoins(amount: number) {
+    if (!user.value) return
+    user.value.coins += amount
+    try { await http.post('/progress/coins', { coins: amount }) } catch { /* ignore */ }
   }
 
   /** 从后端数据同步用户状态（其他 API 返回 totalXp/coins 时调用） */

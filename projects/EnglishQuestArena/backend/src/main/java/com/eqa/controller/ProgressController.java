@@ -193,10 +193,23 @@ public class ProgressController {
         return ResponseEntity.ok(Map.of("totalXp", user.getTotalXp()));
     }
 
+    /**
+     * 加金币（通用）
+     */
+    @PostMapping("/coins")
+    public ResponseEntity<?> addCoins(@RequestBody CoinsRequest req, Authentication auth) {
+        User user = userRepo.findByUsername(auth.getName()).orElseThrow();
+        user.setCoins(user.getCoins() + req.coins());
+        user.setUpdatedAt(LocalDateTime.now());
+        userRepo.save(user);
+        return ResponseEntity.ok(Map.of("coins", user.getCoins()));
+    }
+
     // DTO Records
     public record CampDefeatRequest(String chapterCode, String encounterId, int totalMonsters) {}
     public record QuestDayRequest(String lessonCode, int xpEarned) {}
     public record BossResultRequest(String bossCode, String chapterCode, boolean victory,
                                      int bossHpRemaining, int playerHpRemaining, int maxCombo, int xpEarned) {}
     public record XpRequest(int xp) {}
+    public record CoinsRequest(int coins) {}
 }
