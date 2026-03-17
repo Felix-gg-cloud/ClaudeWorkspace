@@ -141,7 +141,7 @@ async function saveProfile() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: $bg-darker;
+  background: $bg-abyss;
   position: relative;
   overflow: hidden;
 }
