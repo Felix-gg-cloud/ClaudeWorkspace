@@ -19,8 +19,6 @@ export interface DailyGoalConfig {
   targetMinutes: number
 }
 
-const STORAGE_KEY = 'eqa_daily_goal'
-
 interface StoredData {
   config: DailyGoalConfig
   records: Record<string, DailyRecord>
@@ -28,11 +26,19 @@ interface StoredData {
   bestStreak: number
 }
 
-function loadData(): StoredData {
+function storageKey(userId: number): string {
+  return `eqa_daily_goal_${userId}`
+}
+
+function loadData(userId: number): StoredData {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = localStorage.getItem(storageKey(userId))
     if (raw) return JSON.parse(raw)
   } catch { /* ignore */ }
+  return emptyData()
+}
+
+function emptyData(): StoredData {
   return {
     config: { targetXp: 50, targetTasks: 10, targetMinutes: 15 },
     records: {},
@@ -46,20 +52,31 @@ function todayKey(): string {
 }
 
 export const useDailyGoalStore = defineStore('dailyGoal', () => {
-  const stored = loadData()
-  const config = ref<DailyGoalConfig>(stored.config)
-  const records = ref<Record<string, DailyRecord>>(stored.records)
-  const currentStreak = ref(stored.currentStreak)
-  const bestStreak = ref(stored.bestStreak)
+  let currentUserId = 0
+  const config = ref<DailyGoalConfig>({ targetXp: 50, targetTasks: 10, targetMinutes: 15 })
+  const records = ref<Record<string, DailyRecord>>({})
+  const currentStreak = ref(0)
+  const bestStreak = ref(0)
+
+  /** 登录后调用，加载该用户的数据 */
+  function reload(userId: number) {
+    currentUserId = userId
+    const stored = loadData(userId)
+    config.value = stored.config
+    records.value = stored.records
+    currentStreak.value = stored.currentStreak
+    bestStreak.value = stored.bestStreak
+  }
 
   function persist() {
+    if (!currentUserId) return
     const data: StoredData = {
       config: config.value,
       records: records.value,
       currentStreak: currentStreak.value,
       bestStreak: bestStreak.value,
     }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data))
+    localStorage.setItem(storageKey(currentUserId), JSON.stringify(data))
   }
 
   function ensureToday(): DailyRecord {
@@ -205,5 +222,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     getRecentRecords,
     checkin,
     loadCheckinHistory,
+    reload,
   }
 })

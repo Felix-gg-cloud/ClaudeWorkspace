@@ -2,6 +2,16 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import type { User } from '@/types'
 import http from '@/api/http'
+import { useDailyGoalStore } from '@/stores/dailyGoal'
+import { useMistakeStore } from '@/stores/mistakes'
+import { useAchievementStore } from '@/stores/achievements'
+
+/** 登录/注册/恢复会话后，通知各 store 加载该用户的本地数据 */
+function reloadLocalStores(userId: number) {
+  useDailyGoalStore().reload(userId)
+  useMistakeStore().reload(userId)
+  useAchievementStore().reload(userId)
+}
 
 export const useUserStore = defineStore('user', () => {
   const user = ref<User | null>(null)
@@ -15,6 +25,7 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await http.post('/auth/login', { username, password })
       user.value = mapUser(data)
       isLoggedIn.value = true
+      reloadLocalStores(user.value.id)
       return true
     } catch {
       return false
@@ -27,6 +38,7 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await http.post('/auth/register', { username, password, displayName: displayName || 'Hero' })
       user.value = mapUser(data)
       isLoggedIn.value = true
+      reloadLocalStores(user.value.id)
       return true
     } catch {
       return false
@@ -46,6 +58,7 @@ export const useUserStore = defineStore('user', () => {
       const { data } = await http.get('/auth/me')
       user.value = mapUser(data)
       isLoggedIn.value = true
+      reloadLocalStores(user.value.id)
       return true
     } catch {
       user.value = null

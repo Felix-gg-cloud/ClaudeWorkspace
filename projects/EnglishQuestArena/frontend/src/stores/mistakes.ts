@@ -16,21 +16,31 @@ export interface MistakeRecord {
   reviewCount: number
 }
 
-const STORAGE_KEY = 'eqa_mistakes'
+function storageKey(userId: number): string {
+  return `eqa_mistakes_${userId}`
+}
 
-function loadMistakes(): MistakeRecord[] {
+function loadMistakes(userId: number): MistakeRecord[] {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY)
+    const raw = localStorage.getItem(storageKey(userId))
     if (raw) return JSON.parse(raw)
   } catch { /* ignore */ }
   return []
 }
 
 export const useMistakeStore = defineStore('mistakes', () => {
-  const mistakes = ref<MistakeRecord[]>(loadMistakes())
+  let currentUserId = 0
+  const mistakes = ref<MistakeRecord[]>([])
+
+  /** 登录后调用，加载该用户的数据 */
+  function reload(userId: number) {
+    currentUserId = userId
+    mistakes.value = loadMistakes(userId)
+  }
 
   function persist() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(mistakes.value))
+    if (!currentUserId) return
+    localStorage.setItem(storageKey(currentUserId), JSON.stringify(mistakes.value))
   }
 
   const unreviewedCount = computed(() =>
@@ -92,5 +102,6 @@ export const useMistakeStore = defineStore('mistakes', () => {
     addMistake,
     markReviewed,
     getUnreviewedMistakes,
+    reload,
   }
 })

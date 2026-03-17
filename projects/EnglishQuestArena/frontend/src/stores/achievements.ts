@@ -46,19 +46,28 @@ export const ACHIEVEMENT_DEFS: AchievementDef[] = [
   { code: 'review_10', nameZh: '错题克星', nameEn: 'Mistake Buster', descZh: '复习10道错题', descEn: 'Review 10 mistakes', icon: '🔄', category: 'mastery', condition: { type: 'mistakes_reviewed', threshold: 10 }, xpReward: 30, coinReward: 15 },
 ]
 
-// notified 状态存 localStorage（纯展示用）
-const NOTIFIED_KEY = 'eqa_achievement_notified'
-function loadNotified(): Set<string> {
+// notified 状态存 localStorage（纯展示用），按用户隔离
+function notifiedKey(userId: number): string {
+  return `eqa_achievement_notified_${userId}`
+}
+function loadNotified(userId: number): Set<string> {
   try {
-    const raw = localStorage.getItem(NOTIFIED_KEY)
+    const raw = localStorage.getItem(notifiedKey(userId))
     if (raw) return new Set(JSON.parse(raw))
   } catch { /* ignore */ }
   return new Set()
 }
 
 export const useAchievementStore = defineStore('achievements', () => {
+  let currentUserId = 0
   const progress = ref<Record<string, AchievementProgress>>({})
-  const notifiedSet = ref(loadNotified())
+  const notifiedSet = ref<Set<string>>(new Set())
+
+  /** 登录后调用，加载该用户的 notified 状态 */
+  function reload(userId: number) {
+    currentUserId = userId
+    notifiedSet.value = loadNotified(userId)
+  }
 
   const unlockedCount = computed(() =>
     Object.values(progress.value).filter(p => p.unlocked).length
@@ -126,7 +135,7 @@ export const useAchievementStore = defineStore('achievements', () => {
     notifiedSet.value.add(code)
     const p = progress.value[code]
     if (p) p.notified = true
-    localStorage.setItem(NOTIFIED_KEY, JSON.stringify([...notifiedSet.value]))
+    if (currentUserId) localStorage.setItem(notifiedKey(currentUserId), JSON.stringify([...notifiedSet.value]))
   }
 
   function getAllAchievements(): Array<AchievementDef & { progress: AchievementProgress }> {
@@ -145,5 +154,6 @@ export const useAchievementStore = defineStore('achievements', () => {
     updateProgress,
     markNotified,
     getAllAchievements,
+    reload,
   }
 })
