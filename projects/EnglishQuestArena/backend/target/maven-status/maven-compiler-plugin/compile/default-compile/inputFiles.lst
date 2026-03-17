@@ -5,7 +5,6 @@
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/AuthController.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/BossController.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/ChapterController.java
-/Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/CheckinController.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/HealthController.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/ProgressController.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/controller/QuestController.java
@@ -16,7 +15,6 @@
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/CampDefeated.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/Chapter.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/ChapterProgress.java
-/Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/CheckinRecord.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/ContentItem.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/Lesson.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/entity/QuestDayProgress.java
@@ -30,7 +28,6 @@
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/CampDefeatedRepository.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/ChapterProgressRepository.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/ChapterRepository.java
-/Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/CheckinRecordRepository.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/ContentItemRepository.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/LessonRepository.java
 /Users/guozhenggang/ClaudeWorkspace/projects/EnglishQuestArena/backend/src/main/java/com/eqa/repository/QuestDayProgressRepository.java

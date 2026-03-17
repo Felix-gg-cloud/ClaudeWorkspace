@@ -360,6 +360,20 @@ export const useChapterStore = defineStore('chapter', () => {
     localStorage.removeItem(openedKey())
   }
 
+  /** 清除当前用户的所有营地 localStorage 数据（位置/迷雾/宝箱） */
+  function clearCampLocalData() {
+    localStorage.removeItem(openedKey())
+    // 清除 eqa_camp_state_{userId}_{chapterCode} 条目
+    const prefix = 'eqa_camp_state_' + currentUserId + '_'
+    const toRemove: string[] = []
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i)
+      if (key && key.startsWith(prefix)) toRemove.push(key)
+    }
+    for (const key of toRemove) localStorage.removeItem(key)
+    resetProgress()
+  }
+
   function reload(userId: number) {
     currentUserId = userId
     campOpened.value = loadOpened()
@@ -401,6 +415,7 @@ export const useChapterStore = defineStore('chapter', () => {
     defeatBoss,
     advanceToQuest,
     resetProgress,
+    clearCampLocalData,
     reload,
   }
 })

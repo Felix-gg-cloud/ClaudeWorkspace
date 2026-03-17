@@ -44,6 +44,8 @@ export const useUserStore = defineStore('user', () => {
       user.value = mapUser(data)
       isLoggedIn.value = true
       reloadLocalStores(user.value.id)
+      // 新用户注册：清除该 userId 可能残留的旧营地数据
+      useChapterStore().clearCampLocalData()
       return true
     } catch {
       return false
