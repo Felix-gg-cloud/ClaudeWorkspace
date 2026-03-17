@@ -80,11 +80,38 @@ public class AuthController {
         return ResponseEntity.ok(toUserInfo(user));
     }
 
+    @PutMapping("/profile")
+    public ResponseEntity<?> updateProfile(@RequestBody ProfileRequest req, Authentication auth) {
+        User user = authService.findByUsername(auth.getName());
+        if (user == null) {
+            return ResponseEntity.status(401).body(Map.of("error", "未登录"));
+        }
+        if (req.displayName() != null && !req.displayName().isBlank()) {
+            user.setDisplayName(req.displayName().trim());
+        }
+        if (req.avatar() != null && !req.avatar().isBlank()) {
+            user.setAvatar(req.avatar().trim());
+        }
+        if (req.cefrLevel() != null) {
+            user.setCefrLevel(req.cefrLevel());
+        }
+        if (req.ttsVoice() != null) {
+            user.setTtsVoice(req.ttsVoice());
+        }
+        if (user.isFirstLogin()) {
+            user.setFirstLogin(false);
+        }
+        user.setUpdatedAt(java.time.LocalDateTime.now());
+        authService.saveUser(user);
+        return ResponseEntity.ok(toUserInfo(user));
+    }
+
     private Map<String, Object> toUserInfo(User user) {
         return Map.ofEntries(
                 Map.entry("id", user.getId()),
                 Map.entry("username", user.getUsername()),
                 Map.entry("displayName", user.getDisplayName()),
+                Map.entry("avatar", user.getAvatar()),
                 Map.entry("cefrLevel", user.getCefrLevel()),
                 Map.entry("currentLevel", user.getCurrentLevel()),
                 Map.entry("totalXp", user.getTotalXp()),
@@ -92,6 +119,7 @@ public class AuthController {
                 Map.entry("coins", user.getCoins()),
                 Map.entry("skillPoints", user.getSkillPoints()),
                 Map.entry("streak", user.getStreak()),
+                Map.entry("totalCheckins", user.getTotalCheckins()),
                 Map.entry("firstLogin", user.isFirstLogin())
         );
     }
@@ -105,5 +133,12 @@ public class AuthController {
     public record LoginRequest(
             @NotBlank String username,
             @NotBlank String password
+    ) {}
+
+    public record ProfileRequest(
+            String displayName,
+            String avatar,
+            String cefrLevel,
+            String ttsVoice
     ) {}
 }

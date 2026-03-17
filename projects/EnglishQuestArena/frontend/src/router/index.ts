@@ -22,6 +22,17 @@ const router = createRouter({
     { path: '/boss', name: 'Boss', component: () => import('@/views/boss/BossView.vue') },
     { path: '/cefr-exam', name: 'CefrExam', component: () => import('@/views/CefrExamView.vue') },
     { path: '/stats', name: 'Stats', component: () => import('@/views/StatsView.vue') },
+    {
+      path: '/first-login',
+      name: 'FirstLogin',
+      component: () => import('@/views/FirstLoginView.vue'),
+      meta: { firstLogin: true }
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: () => import('@/views/ProfileView.vue')
+    },
   ]
 })
 
@@ -36,6 +47,11 @@ router.beforeEach(async (to) => {
 
   if (!to.meta.guest && !userStore.isLoggedIn) {
     return '/login'
+  }
+
+  // 首次登录引导：未完成首次设置的用户强制跳转
+  if (userStore.isLoggedIn && userStore.user?.firstLogin && !to.meta.firstLogin && !to.meta.guest) {
+    return '/first-login'
   }
 })
 

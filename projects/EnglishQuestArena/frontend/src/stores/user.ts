@@ -67,11 +67,14 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  function updateProfile(name: string, voice: 'en-US' | 'en-GB') {
-    if (user.value) {
-      user.value.displayName = name
-      user.value.ttsVoice = voice
-      if (user.value.firstLogin) user.value.firstLogin = false
+  /** 更新个人资料（同步到后端） */
+  async function updateProfile(profile: { displayName?: string; avatar?: string; cefrLevel?: string; ttsVoice?: string }): Promise<boolean> {
+    try {
+      const { data } = await http.put('/auth/profile', profile)
+      user.value = mapUser(data)
+      return true
+    } catch {
+      return false
     }
   }
 
@@ -112,6 +115,7 @@ function mapUser(data: Record<string, unknown>): User {
     id: data.id as number,
     username: data.username as string,
     displayName: (data.displayName as string) || 'Hero',
+    avatar: (data.avatar as string) || '⚔️',
     ttsVoice: (data.ttsVoice as 'en-US' | 'en-GB') || 'en-US',
     cefrLevel: (data.cefrLevel as User['cefrLevel']) || 'PRE_A1',
     currentLevel: (data.currentLevel as number) || 1,

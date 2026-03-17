@@ -20,6 +20,9 @@ public class User {
     @Column(name = "display_name", length = 100)
     private String displayName = "Hero";
 
+    @Column(length = 20)
+    private String avatar = "⚔️";
+
     @Column(name = "tts_voice", length = 10)
     private String ttsVoice = "en-US";
 
@@ -63,6 +66,8 @@ public class User {
     public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
     public String getDisplayName() { return displayName; }
     public void setDisplayName(String displayName) { this.displayName = displayName; }
+    public String getAvatar() { return avatar; }
+    public void setAvatar(String avatar) { this.avatar = avatar; }
     public String getTtsVoice() { return ttsVoice; }
     public void setTtsVoice(String ttsVoice) { this.ttsVoice = ttsVoice; }
     public String getCefrLevel() { return cefrLevel; }

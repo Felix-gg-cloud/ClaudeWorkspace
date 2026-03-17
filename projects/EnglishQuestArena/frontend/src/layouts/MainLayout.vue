@@ -68,8 +68,39 @@
           <span class="stat-icon">🔥</span>
           <span class="stat-value">{{ user?.streak || 0 }}</span>
         </div>
-        <div class="avatar tooltip" data-tip="个人设置">
-          {{ user?.displayName?.charAt(0).toUpperCase() || '?' }}
+        <!-- Avatar dropdown -->
+        <div class="avatar-dropdown-wrap" ref="dropdownRef">
+          <div class="avatar tooltip" data-tip="个人设置" @click="showDropdown = !showDropdown">
+            {{ user?.avatar || user?.displayName?.charAt(0).toUpperCase() || '?' }}
+          </div>
+          <Transition name="dropdown">
+            <div v-if="showDropdown" class="avatar-dropdown dark-panel">
+              <div class="dropdown-header">
+                <div class="dropdown-avatar">{{ user?.avatar || '⚔️' }}</div>
+                <div class="dropdown-info">
+                  <div class="dropdown-name">{{ user?.displayName }}</div>
+                  <div class="dropdown-username">@{{ user?.username }}</div>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+              <div class="dropdown-stats">
+                <span>⭐ Lv.{{ user?.currentLevel }}</span>
+                <span>✨ {{ user?.totalXp }} XP</span>
+                <span>🪙 {{ user?.coins }}</span>
+              </div>
+              <div class="dropdown-divider"></div>
+              <router-link to="/profile" class="dropdown-item" @click="showDropdown = false">
+                <span>👤</span> 个人资料
+              </router-link>
+              <router-link to="/stats" class="dropdown-item" @click="showDropdown = false">
+                <span>📊</span> 学习统计
+              </router-link>
+              <div class="dropdown-divider"></div>
+              <button class="dropdown-item dropdown-item--danger" @click="handleLogout">
+                <span>🚪</span> 退出登录
+              </button>
+            </div>
+          </Transition>
         </div>
       </div>
     </header>
@@ -82,12 +113,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
+const router = useRouter()
 const userStore = useUserStore()
 const user = computed(() => userStore.user)
 const collapsed = ref(false)
+const showDropdown = ref(false)
+const dropdownRef = ref<HTMLElement | null>(null)
+
+function handleClickOutside(e: MouseEvent) {
+  if (dropdownRef.value && !dropdownRef.value.contains(e.target as Node)) {
+    showDropdown.value = false
+  }
+}
+
+onMounted(() => document.addEventListener('click', handleClickOutside))
+onUnmounted(() => document.removeEventListener('click', handleClickOutside))
+
+async function handleLogout() {
+  showDropdown.value = false
+  await userStore.logout()
+  router.replace('/login')
+}
 
 function particleStyle(i: number) {
   const size = 2 + Math.random() * 3
@@ -314,6 +364,102 @@ $topbar-height: 48px;
     border-color: $gold;
     box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
   }
+}
+
+// Avatar dropdown
+.avatar-dropdown-wrap {
+  position: relative;
+}
+
+.avatar-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 260px;
+  padding: 12px 0;
+  border-radius: $radius-lg;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  z-index: 200;
+}
+
+.dropdown-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px 12px;
+}
+.dropdown-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2), rgba(139, 92, 246, 0.2));
+  border: 2px solid rgba(245, 158, 11, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+.dropdown-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: $text-primary;
+}
+.dropdown-username {
+  font-size: 12px;
+  color: $text-muted;
+}
+
+.dropdown-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 600;
+  color: $text-secondary;
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: $border-dim;
+  margin: 4px 0;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-secondary;
+  cursor: pointer;
+  transition: all 0.15s;
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: $text-primary;
+  }
+
+  &--danger {
+    color: #ef4444;
+    &:hover { background: rgba(239, 68, 68, 0.08); color: #f87171; }
+  }
+}
+
+// Dropdown transition
+.dropdown-enter-active,
+.dropdown-leave-active {
+  transition: all 0.2s ease;
+}
+.dropdown-enter-from,
+.dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.95);
 }
 
 // ─── Main content ───

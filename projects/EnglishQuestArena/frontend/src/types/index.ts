@@ -6,6 +6,7 @@ export interface User {
   id: number
   username: string
   displayName: string
+  avatar: string
   ttsVoice: 'en-US' | 'en-GB'
   cefrLevel: CefrLevel
   currentLevel: number
