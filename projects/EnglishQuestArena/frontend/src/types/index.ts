@@ -14,8 +14,6 @@ export interface User {
   xpToNextLevel: number
   coins: number
   skillPoints: number
-  streak: number
-  totalCheckins: number
   firstLogin: boolean
 }
 
@@ -88,13 +86,6 @@ export interface TodayData {
   lesson: Lesson
   tasks: Task[]
   progress: TaskProgress[]
-}
-
-export interface CheckinRecord {
-  date: string
-  streak: number
-  xpEarned: number
-  coinsEarned: number
 }
 
 export interface BossConfig {

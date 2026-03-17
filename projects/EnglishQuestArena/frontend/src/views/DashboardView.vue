@@ -32,7 +32,6 @@
             <!-- Stats row -->
             <div class="stat-chips">
               <span class="chip chip-gold">💰 {{ userStore.user?.coins }}</span>
-              <span class="chip chip-fire">🔥 {{ userStore.user?.streak }}天</span>
               <span class="chip chip-purple">✨ {{ userStore.user?.skillPoints }}点</span>
             </div>
           </div>
@@ -152,24 +151,7 @@
         </div>
       </section>
 
-      <!-- Checkin streak -->
-      <section class="checkin-section">
-        <h3 class="section-title">📅 签到记录</h3>
-        <div class="checkin-row dark-panel">
-          <div
-            v-for="d in 7"
-            :key="d"
-            class="checkin-day"
-            :class="{ 'checkin-day--done': d <= (userStore.user?.streak ?? 0) }"
-          >
-            <div class="checkin-circle">
-              <span v-if="d <= (userStore.user?.streak ?? 0)">✓</span>
-              <span v-else>{{ d }}</span>
-            </div>
-            <span class="checkin-label">Day {{ d }}</span>
-          </div>
-        </div>
-      </section>
+
     </div>
   </MainLayout>
 </template>
@@ -731,48 +713,6 @@ function goTo(route: string) {
 .cefr-a1 { background: #2a4a2a; color: #7ddf7d; border: 1px solid #4a8a4a; }
 .cefr-a2 { background: #4a4a2a; color: #dfdf7d; border: 1px solid #8a8a4a; }
 .cefr-b1 { background: #2a3a4a; color: #7dc8df; border: 1px solid #4a7a8a; }
-
-// Checkin
-.checkin-row {
-  display: flex;
-  gap: 0;
-  padding: 16px;
-}
-
-.checkin-day {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-}
-
-.checkin-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 600;
-  background: $bg-dark;
-  border: 1px solid $border-dim;
-  color: $text-muted;
-  transition: all $transition-normal;
-}
-
-.checkin-label {
-  font-size: 10px;
-  color: $text-muted;
-}
-
-.checkin-day--done .checkin-circle {
-  background: linear-gradient(135deg, $gold, $gold-dark);
-  border-color: $gold;
-  color: $bg-abyss;
-  font-weight: 800;
-}
 
 // Daily goal mini
 .daily-goal-section {

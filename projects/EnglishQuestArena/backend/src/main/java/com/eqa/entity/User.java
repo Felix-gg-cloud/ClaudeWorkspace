@@ -43,11 +43,6 @@ public class User {
     @Column(name = "skill_points")
     private int skillPoints = 0;
 
-    private int streak = 0;
-
-    @Column(name = "total_checkins")
-    private int totalCheckins = 0;
-
     @Column(name = "first_login")
     private boolean firstLogin = true;
 
@@ -82,10 +77,6 @@ public class User {
     public void setCoins(int coins) { this.coins = coins; }
     public int getSkillPoints() { return skillPoints; }
     public void setSkillPoints(int skillPoints) { this.skillPoints = skillPoints; }
-    public int getStreak() { return streak; }
-    public void setStreak(int streak) { this.streak = streak; }
-    public int getTotalCheckins() { return totalCheckins; }
-    public void setTotalCheckins(int totalCheckins) { this.totalCheckins = totalCheckins; }
     public boolean isFirstLogin() { return firstLogin; }
     public void setFirstLogin(boolean firstLogin) { this.firstLogin = firstLogin; }
     public LocalDateTime getCreatedAt() { return createdAt; }

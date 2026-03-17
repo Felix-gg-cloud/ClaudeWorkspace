@@ -64,10 +64,6 @@
           <span class="stat-icon">💰</span>
           <span class="stat-value">{{ userStore.coins }}</span>
         </div>
-        <div class="stat-chip" data-tip="连续打卡">
-          <span class="stat-icon">📅</span>
-          <span class="stat-value">{{ userStore.streak }}</span>
-        </div>
         <!-- Avatar dropdown -->
         <div class="avatar-dropdown-wrap" ref="dropdownRef">
           <div class="avatar tooltip" data-tip="个人设置" @click="showDropdown = !showDropdown">

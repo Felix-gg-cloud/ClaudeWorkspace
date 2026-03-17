@@ -118,8 +118,6 @@ public class AuthController {
                 Map.entry("xpToNextLevel", user.getXpToNextLevel()),
                 Map.entry("coins", user.getCoins()),
                 Map.entry("skillPoints", user.getSkillPoints()),
-                Map.entry("streak", user.getStreak()),
-                Map.entry("totalCheckins", user.getTotalCheckins()),
                 Map.entry("firstLogin", user.isFirstLogin())
         );
     }

@@ -14,21 +14,9 @@ CREATE TABLE users (
     xp_to_next_level INT DEFAULT 200,
     coins INT DEFAULT 0,
     skill_points INT DEFAULT 0,
-    streak INT DEFAULT 0,
-    total_checkins INT DEFAULT 0,
     first_login BOOLEAN DEFAULT TRUE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-CREATE TABLE checkin_records (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id BIGINT NOT NULL REFERENCES users(id),
-    checkin_date DATE NOT NULL,
-    streak INT NOT NULL,
-    xp_earned INT DEFAULT 0,
-    coins_earned INT DEFAULT 0,
-    UNIQUE(user_id, checkin_date)
 );
 
 -- ===================== 内容相关 =====================

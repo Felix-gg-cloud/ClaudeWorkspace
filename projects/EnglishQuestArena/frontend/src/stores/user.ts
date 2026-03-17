@@ -22,7 +22,6 @@ export const useUserStore = defineStore('user', () => {
   const displayName = computed(() => user.value?.displayName || 'Hero')
   const totalXp = computed(() => user.value?.totalXp ?? 0)
   const coins = computed(() => user.value?.coins ?? 0)
-  const streak = computed(() => user.value?.streak ?? 0)
   const currentLevel = computed(() => user.value?.currentLevel ?? 1)
   const avatar = computed(() => user.value?.avatar || user.value?.displayName?.charAt(0).toUpperCase() || '?')
   const username = computed(() => user.value?.username ?? '')
@@ -137,7 +136,7 @@ export const useUserStore = defineStore('user', () => {
     return text.replace(/\{playerName\}/g, displayName.value)
   }
 
-  return { user, isLoggedIn, displayName, totalXp, coins, streak, currentLevel, avatar, username, login, register, logout, restoreSession, updateProfile, addXp, addCoins, addReward, syncFromServer, replacePlayerName }
+  return { user, isLoggedIn, displayName, totalXp, coins, currentLevel, avatar, username, login, register, logout, restoreSession, updateProfile, addXp, addCoins, addReward, syncFromServer, replacePlayerName }
 })
 
 function mapUser(data: Record<string, unknown>): User {
@@ -153,8 +152,6 @@ function mapUser(data: Record<string, unknown>): User {
     xpToNextLevel: (data.xpToNextLevel as number) || 200,
     coins: (data.coins as number) || 0,
     skillPoints: (data.skillPoints as number) || 0,
-    streak: (data.streak as number) || 0,
-    totalCheckins: (data.totalCheckins as number) || 0,
     firstLogin: (data.firstLogin as boolean) ?? true,
   }
 }

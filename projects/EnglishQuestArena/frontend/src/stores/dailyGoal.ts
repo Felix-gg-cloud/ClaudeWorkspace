@@ -1,9 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import http from '@/api/http'
-import { useUserStore } from '@/stores/user'
 
-// 每日目标 & 打卡系统
+// 每日目标系统
 export interface DailyRecord {
   date: string          // YYYY-MM-DD
   xpEarned: number
@@ -22,8 +20,6 @@ export interface DailyGoalConfig {
 interface StoredData {
   config: DailyGoalConfig
   records: Record<string, DailyRecord>
-  currentStreak: number
-  bestStreak: number
 }
 
 function storageKey(userId: number): string {
@@ -42,8 +38,6 @@ function emptyData(): StoredData {
   return {
     config: { targetXp: 50, targetTasks: 10, targetMinutes: 15 },
     records: {},
-    currentStreak: 0,
-    bestStreak: 0,
   }
 }
 
@@ -55,8 +49,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
   let currentUserId = 0
   const config = ref<DailyGoalConfig>({ targetXp: 50, targetTasks: 10, targetMinutes: 15 })
   const records = ref<Record<string, DailyRecord>>({})
-  const currentStreak = ref(0)
-  const bestStreak = ref(0)
 
   /** 登录后调用，加载该用户的数据 */
   function reload(userId: number) {
@@ -64,8 +56,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     const stored = loadData(userId)
     config.value = stored.config
     records.value = stored.records
-    currentStreak.value = stored.currentStreak
-    bestStreak.value = stored.bestStreak
   }
 
   function persist() {
@@ -73,8 +63,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     const data: StoredData = {
       config: config.value,
       records: records.value,
-      currentStreak: currentStreak.value,
-      bestStreak: bestStreak.value,
     }
     localStorage.setItem(storageKey(currentUserId), JSON.stringify(data))
   }
@@ -139,38 +127,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
   function checkGoal(rec: DailyRecord) {
     if (!rec.goalMet && rec.xpEarned >= config.value.targetXp) {
       rec.goalMet = true
-      currentStreak.value++
-      if (currentStreak.value > bestStreak.value) {
-        bestStreak.value = currentStreak.value
-      }
-    }
-  }
-
-  /** 签到（调用后端） */
-  async function checkin() {
-    try {
-      const { data } = await http.post('/checkin')
-      const d = data as Record<string, unknown>
-      currentStreak.value = (d.streak as number) || 0
-      const userStore = useUserStore()
-      userStore.syncFromServer({ totalXp: d.totalXp as number, coins: d.coins as number })
-      return d
-    } catch {
-      return null
-    }
-  }
-
-  /** 获取签到历史 */
-  async function loadCheckinHistory() {
-    try {
-      const { data } = await http.get('/checkin/history')
-      const list = data as Record<string, unknown>[]
-      if (list.length > 0) {
-        currentStreak.value = (list[0].streak as number) || 0
-      }
-      return list
-    } catch {
-      return []
     }
   }
 
@@ -207,8 +163,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
   return {
     config,
     records,
-    currentStreak,
-    bestStreak,
     todayRecord,
     todayXpProgress,
     todayTaskProgress,
@@ -220,8 +174,6 @@ export const useDailyGoalStore = defineStore('dailyGoal', () => {
     addTimeSpent,
     updateConfig,
     getRecentRecords,
-    checkin,
-    loadCheckinHistory,
     reload,
   }
 })

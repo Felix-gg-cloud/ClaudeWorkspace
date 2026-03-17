@@ -12,8 +12,6 @@ export const mockUser: User = {
   xpToNextLevel: 500,
   coins: 120,
   skillPoints: 3,
-  streak: 5,
-  totalCheckins: 12,
   firstLogin: false
 }
 
