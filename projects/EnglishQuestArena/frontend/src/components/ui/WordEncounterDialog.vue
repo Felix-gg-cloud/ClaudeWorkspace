@@ -168,7 +168,7 @@
             <div class="combo-bonus" v-if="comboDisplay > 1">
               <span class="combo-fire">🔥</span>
               <span class="combo-label">COMBO ×{{ comboDisplay }}</span>
-              <span class="combo-detail">+{{ comboBonus }}% 经验加成</span>
+              <span class="combo-detail" v-if="comboDisplay >= 5">额外 +5 XP / +2 💰</span>
             </div>
 
             <!-- 强化信息 -->
