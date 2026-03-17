@@ -18,18 +18,22 @@ const COMBO_BONUS_COINS = 2
  * @param correct 是否答对
  * @param combo 当前连击数 (答对后已+1)
  * @param context 场景标识，预留给后端统计
+ * @param options 可选的自定义基础奖励值
  */
 export function grantReward(
   correct: boolean,
   combo: number,
   _context: 'quest' | 'arena' | 'camp' | 'boss' = 'quest',
+  options?: { baseXp?: number; baseCoins?: number },
 ): RewardResult {
   if (!correct) return { xpEarned: 0, coinsEarned: 0, comboBonus: false }
 
   const userStore = useUserStore()
   const comboBonus = combo >= COMBO_THRESHOLD
-  const xpEarned = BASE_XP + (comboBonus ? COMBO_BONUS_XP : 0)
-  const coinsEarned = 1 + (comboBonus ? COMBO_BONUS_COINS : 0)
+  const xp = options?.baseXp ?? BASE_XP
+  const coins = options?.baseCoins ?? 1
+  const xpEarned = xp + (comboBonus ? COMBO_BONUS_XP : 0)
+  const coinsEarned = coins + (comboBonus ? COMBO_BONUS_COINS : 0)
 
   userStore.addXp(xpEarned)
   userStore.addCoins(coinsEarned)

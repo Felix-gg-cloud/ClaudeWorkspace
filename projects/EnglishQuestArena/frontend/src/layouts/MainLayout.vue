@@ -61,7 +61,7 @@
           <span class="stat-value">{{ user?.totalXp || 0 }}</span>
         </div>
         <div class="stat-chip" data-tip="金币">
-          <span class="stat-icon">🪙</span>
+          <span class="stat-icon">💰</span>
           <span class="stat-value">{{ user?.coins || 0 }}</span>
         </div>
         <div class="stat-chip" data-tip="连续打卡">
@@ -86,7 +86,7 @@
               <div class="dropdown-stats">
                 <span>⭐ Lv.{{ user?.currentLevel }}</span>
                 <span>✨ {{ user?.totalXp }} XP</span>
-                <span>🪙 {{ user?.coins }}</span>
+                <span>💰 {{ user?.coins }}</span>
               </div>
               <div class="dropdown-divider"></div>
               <router-link to="/profile" class="dropdown-item" @click="showDropdown = false">

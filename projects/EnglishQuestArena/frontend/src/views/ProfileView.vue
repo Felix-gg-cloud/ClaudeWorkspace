@@ -20,7 +20,7 @@
         <div class="stats-strip">
           <div class="strip-item"><span class="strip-icon">⭐</span><span class="strip-val">Lv.{{ user?.currentLevel }}</span></div>
           <div class="strip-item"><span class="strip-icon">✨</span><span class="strip-val">{{ user?.totalXp }} XP</span></div>
-          <div class="strip-item"><span class="strip-icon">🪙</span><span class="strip-val">{{ user?.coins }}</span></div>
+          <div class="strip-item"><span class="strip-icon">💰</span><span class="strip-val">{{ user?.coins }}</span></div>
           <div class="strip-item"><span class="strip-icon">🔥</span><span class="strip-val">{{ user?.streak }} 天</span></div>
           <div class="strip-item"><span class="strip-icon">📅</span><span class="strip-val">{{ user?.totalCheckins }} 签</span></div>
         </div>

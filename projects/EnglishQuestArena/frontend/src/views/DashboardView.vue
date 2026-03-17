@@ -31,7 +31,7 @@
 
             <!-- Stats row -->
             <div class="stat-chips">
-              <span class="chip chip-gold">🪙 {{ userStore.user?.coins }}</span>
+              <span class="chip chip-gold">💰 {{ userStore.user?.coins }}</span>
               <span class="chip chip-fire">🔥 {{ userStore.user?.streak }}天</span>
               <span class="chip chip-purple">✨ {{ userStore.user?.skillPoints }}点</span>
             </div>

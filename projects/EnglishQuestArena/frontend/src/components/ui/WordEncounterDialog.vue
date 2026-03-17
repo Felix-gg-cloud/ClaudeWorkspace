@@ -163,7 +163,7 @@
             <p class="result-word">「{{ encounter.wordEn }}」= {{ encounter.wordZh }}</p>
             <div class="reward-line" v-if="encounter.reward">
               <div class="reward-badge reward-xp">✨ +{{ encounter.reward.xp }} XP</div>
-              <div class="reward-badge reward-coin">🪙 +{{ encounter.reward.coins }} 金币</div>
+              <div class="reward-badge reward-coin">💰 +{{ encounter.reward.coins }} 金币</div>
             </div>
             <div class="combo-bonus" v-if="comboDisplay > 1">
               <span class="combo-fire">🔥</span>

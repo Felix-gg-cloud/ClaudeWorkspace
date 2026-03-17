@@ -91,7 +91,7 @@
           <h2 class="text-gold">Boss 被击败了！</h2>
           <p>{{ bossName }} 倒下了</p>
           <div class="vic-rewards">
-            <span class="text-gold">🪙 +50 金币</span>
+            <span class="text-gold">💰 +50 金币</span>
             <span class="text-fire">⭐ +100 XP</span>
           </div>
           <button class="btn-gold" @click="$router.push('/dashboard')">返回大厅</button>

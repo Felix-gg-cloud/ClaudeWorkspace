@@ -7,6 +7,7 @@
         <div class="camp-stats">
           <span class="stat">🐺 击败: {{ defeatedCount }}/{{ totalMonsters }}</span>
           <span class="stat">💎 宝箱: {{ openedChests }}/{{ totalChests }}</span>
+          <span class="stat combo-stat" v-if="comboCount >= 2">🔥 连击: ×{{ comboCount }}</span>
         </div>
         <button class="btn-skip" @click="skipToCombat">跳过探索 →</button>
       </div>
@@ -59,7 +60,7 @@
             <h3>发现宝箱！</h3>
             <div class="treasure-rewards">
               <div class="reward-badge">✨ +{{ currentEncounter.reward?.xp ?? 0 }} XP</div>
-              <div class="reward-badge">🪙 +{{ currentEncounter.reward?.coins ?? 0 }} 金币</div>
+              <div class="reward-badge">💰 +{{ currentEncounter.reward?.coins ?? 0 }} 金币</div>
             </div>
             <button ref="collectBtn" class="btn-collect" @click="collectTreasure">🎁 收取奖励</button>
           </div>
@@ -86,7 +87,7 @@
             <p class="event-message">{{ randomEvent.message }}</p>
             <div class="event-rewards" v-if="randomEvent.reward?.xp || randomEvent.reward?.coins">
               <span v-if="randomEvent.reward?.xp" class="reward-badge">✨ +{{ randomEvent.reward.xp }} XP</span>
-              <span v-if="randomEvent.reward?.coins" class="reward-badge">🪙 +{{ randomEvent.reward.coins }} 金币</span>
+              <span v-if="randomEvent.reward?.coins" class="reward-badge">💰 +{{ randomEvent.reward.coins }} 金币</span>
             </div>
             <button ref="eventOkBtn" class="btn-event-ok" @click="dismissRandomEvent">知道了！</button>
           </div>
@@ -265,8 +266,12 @@ function onEncounterResolve(result: { id: string; success: boolean }) {
     collectedWords.value.push({ ...currentEncounter.value })
     chapterStore.defeatCampMonster(result.id)
 
-    // 奖励: XP + 金币
-    const reward = grantReward(true, comboCount.value, 'camp')
+    // 奖励: XP + 金币（使用怪物配置的奖励值）
+    const encReward = currentEncounter.value.reward
+    const reward = grantReward(true, comboCount.value, 'camp', {
+      baseXp: encReward?.xp,
+      baseCoins: encReward?.coins,
+    })
     dailyStore.addXp(reward.xpEarned)
     dailyStore.addTaskCompleted()
 
@@ -433,7 +438,17 @@ function dismissRandomEvent() {
       font-size: 13px;
       color: #ccc;
     }
+    .combo-stat {
+      color: #f59e0b;
+      font-weight: bold;
+      animation: comboPulse 0.6s ease infinite alternate;
+    }
   }
+}
+
+@keyframes comboPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.08); }
 }
 
 .game-container {
