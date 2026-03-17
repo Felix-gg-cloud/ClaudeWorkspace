@@ -56,11 +56,11 @@
     <!-- Top Bar (stats only) -->
     <header class="top-bar">
       <div class="top-bar__right">
-        <div class="stat-chip" data-tip="经验值">
+        <div class="stat-chip" :class="{ 'stat-bump': xpBump }" data-tip="经验值">
           <span class="stat-icon">✨</span>
           <span class="stat-value">{{ user?.totalXp || 0 }}</span>
         </div>
-        <div class="stat-chip" data-tip="金币">
+        <div class="stat-chip" :class="{ 'stat-bump': coinsBump }" data-tip="金币">
           <span class="stat-icon">💰</span>
           <span class="stat-value">{{ user?.coins || 0 }}</span>
         </div>
@@ -113,7 +113,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
@@ -124,6 +124,19 @@ const { user } = storeToRefs(userStore)
 const collapsed = ref(false)
 const showDropdown = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
+
+// 数值变化时触发弹跳动画
+const xpBump = ref(false)
+const coinsBump = ref(false)
+
+watch(() => user.value?.totalXp, () => {
+  xpBump.value = true
+  setTimeout(() => { xpBump.value = false }, 400)
+})
+watch(() => user.value?.coins, () => {
+  coinsBump.value = true
+  setTimeout(() => { coinsBump.value = false }, 400)
+})
 
 function handleClickOutside(e: MouseEvent) {
   if (dropdownRef.value && !dropdownRef.value.contains(e.target as Node)) {
@@ -342,6 +355,19 @@ $topbar-height: 48px;
   font-weight: 600;
   color: $text-secondary;
   cursor: default;
+  transition: transform 0.15s, color 0.15s;
+
+  &.stat-bump {
+    animation: statBump 0.4s ease;
+    color: $gold-light;
+  }
+}
+
+@keyframes statBump {
+  0% { transform: scale(1); }
+  30% { transform: scale(1.25); }
+  60% { transform: scale(0.95); }
+  100% { transform: scale(1); }
 }
 
 .stat-icon { font-size: 14px; }

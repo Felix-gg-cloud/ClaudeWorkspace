@@ -80,22 +80,22 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
-  /** 加 XP（同步到后端 + 本地） */
-  async function addXp(amount: number) {
+  /** 加 XP（本地同步更新 + 后台同步后端） */
+  function addXp(amount: number) {
     if (!user.value) return
-    user.value.totalXp += amount
-    // 检查升级
-    if (user.value.totalXp >= user.value.xpToNextLevel) {
-      user.value.currentLevel++
-      user.value.skillPoints++
+    user.value = {
+      ...user.value,
+      totalXp: user.value.totalXp + amount,
+      currentLevel: user.value.totalXp + amount >= user.value.xpToNextLevel ? user.value.currentLevel + 1 : user.value.currentLevel,
+      skillPoints: user.value.totalXp + amount >= user.value.xpToNextLevel ? user.value.skillPoints + 1 : user.value.skillPoints,
     }
-    try { await http.post('/progress/xp', { xp: amount }) } catch { /* ignore */ }
+    http.post('/progress/xp', { xp: amount }).catch(() => {})
   }
 
-  async function addCoins(amount: number) {
+  function addCoins(amount: number) {
     if (!user.value) return
-    user.value.coins += amount
-    try { await http.post('/progress/coins', { coins: amount }) } catch { /* ignore */ }
+    user.value = { ...user.value, coins: user.value.coins + amount }
+    http.post('/progress/coins', { coins: amount }).catch(() => {})
   }
 
   /** 从后端数据同步用户状态（其他 API 返回 totalXp/coins 时调用） */
