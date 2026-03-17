@@ -65,7 +65,7 @@
           <span class="stat-value">{{ user?.coins || 0 }}</span>
         </div>
         <div class="stat-chip" data-tip="连续打卡">
-          <span class="stat-icon">🔥</span>
+          <span class="stat-icon">📅</span>
           <span class="stat-value">{{ user?.streak || 0 }}</span>
         </div>
         <!-- Avatar dropdown -->
@@ -113,13 +113,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
 const userStore = useUserStore()
-const user = computed(() => userStore.user)
+const { user } = storeToRefs(userStore)
 const collapsed = ref(false)
 const showDropdown = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
