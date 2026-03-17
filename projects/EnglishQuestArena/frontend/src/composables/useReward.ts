@@ -35,6 +35,7 @@ export function grantReward(
   const xpEarned = xp + (comboBonus ? COMBO_BONUS_XP : 0)
   const coinsEarned = coins + (comboBonus ? COMBO_BONUS_COINS : 0)
 
+  import('@/utils/debugLog').then(m => m.debugLogs.push(`grantReward: base=${xp}/${coins} combo=${combo} bonus=${comboBonus} → +${xpEarned}xp +${coinsEarned}💰`))
   userStore.addReward(xpEarned, coinsEarned)
 
   return { xpEarned, coinsEarned, comboBonus }

@@ -124,9 +124,13 @@ export const useAchievementStore = defineStore('achievements', () => {
           progress.value[code].unlockedAt = new Date().toISOString()
         }
       }
-      // 同步 XP/coins
-      const userStore = useUserStore()
-      userStore.syncFromServer({ totalXp: d.totalXp as number, coins: d.coins as number })
+      // 成就解锁奖励：如果后端发放了额外 XP/coins，本地追加
+      const bonusXp = (d.bonusXp as number) || 0
+      const bonusCoins = (d.bonusCoins as number) || 0
+      if (bonusXp > 0 || bonusCoins > 0) {
+        const userStore = useUserStore()
+        userStore.addReward(bonusXp, bonusCoins)
+      }
     } catch { /* ignore */ }
     return newlyUnlocked
   }

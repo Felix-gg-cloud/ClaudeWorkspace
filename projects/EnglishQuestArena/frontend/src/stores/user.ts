@@ -109,12 +109,16 @@ export const useUserStore = defineStore('user', () => {
   /** 同时加 XP 和金币（单次赋值，避免响应式竞争） */
   function addReward(xp: number, coinAmount: number) {
     if (!user.value) return
-    const newXp = user.value.totalXp + xp
+    const oldXp = user.value.totalXp
+    const oldCoins = user.value.coins
+    const newXp = oldXp + xp
+    const newCoins = oldCoins + coinAmount
     const levelUp = newXp >= user.value.xpToNextLevel
+    import('@/utils/debugLog').then(m => m.debugLogs.push(`addReward(+${xp}xp,+${coinAmount}💰) ${oldXp}→${newXp} / ${oldCoins}→${newCoins}`))
     user.value = {
       ...user.value,
       totalXp: newXp,
-      coins: user.value.coins + coinAmount,
+      coins: newCoins,
       currentLevel: levelUp ? user.value.currentLevel + 1 : user.value.currentLevel,
       skillPoints: levelUp ? user.value.skillPoints + 1 : user.value.skillPoints,
     }

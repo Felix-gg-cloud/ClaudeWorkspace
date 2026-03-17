@@ -109,6 +109,12 @@
     <main class="main-content">
       <slot />
     </main>
+
+    <!-- Debug Panel (Ctrl+D 切换) -->
+    <div v-if="showDebug && debugLogs.length" class="debug-panel">
+      <div class="debug-title">🐛 Debug (Ctrl+D 隐藏) <button class="debug-clear" @click="debugLogs.length = 0">✕ 清除</button></div>
+      <div v-for="(log, i) in debugLogs" :key="i" class="debug-line">{{ log }}</div>
+    </div>
   </div>
 </template>
 
@@ -116,22 +122,26 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
+import { debugLogs } from '@/utils/debugLog'
 
 const router = useRouter()
 const userStore = useUserStore()
 const collapsed = ref(false)
 const showDropdown = ref(false)
+const showDebug = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
 
 // 数值变化时触发弹跳动画
 const xpBump = ref(false)
 const coinsBump = ref(false)
 
-watch(() => userStore.totalXp, () => {
+watch(() => userStore.totalXp, (newVal, oldVal) => {
+  debugLogs.push(`XP: ${oldVal} → ${newVal}`)
   xpBump.value = true
   setTimeout(() => { xpBump.value = false }, 400)
 })
-watch(() => userStore.coins, () => {
+watch(() => userStore.coins, (newVal, oldVal) => {
+  debugLogs.push(`💰: ${oldVal} → ${newVal}`)
   coinsBump.value = true
   setTimeout(() => { coinsBump.value = false }, 400)
 })
@@ -142,8 +152,12 @@ function handleClickOutside(e: MouseEvent) {
   }
 }
 
-onMounted(() => document.addEventListener('click', handleClickOutside))
-onUnmounted(() => document.removeEventListener('click', handleClickOutside))
+function handleDebugToggle(e: KeyboardEvent) {
+  if (e.ctrlKey && e.key === 'd') { e.preventDefault(); showDebug.value = !showDebug.value }
+}
+
+onMounted(() => { document.addEventListener('click', handleClickOutside); document.addEventListener('keydown', handleDebugToggle) })
+onUnmounted(() => { document.removeEventListener('click', handleClickOutside); document.removeEventListener('keydown', handleDebugToggle) })
 
 async function handleLogout() {
   showDropdown.value = false
@@ -172,6 +186,26 @@ function particleStyle(i: number) {
 
 <style scoped lang="scss">
 @use '@/styles/variables' as *;
+
+.debug-panel {
+  position: fixed;
+  bottom: 8px;
+  right: 8px;
+  z-index: 9999;
+  background: rgba(0,0,0,0.85);
+  color: #0f0;
+  font-family: monospace;
+  font-size: 11px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  max-width: 420px;
+  max-height: 200px;
+  overflow-y: auto;
+  cursor: pointer;
+  .debug-title { color: #ff0; margin-bottom: 2px; display: flex; justify-content: space-between; align-items: center; }
+  .debug-clear { background: #c00; color: #fff; border: none; border-radius: 3px; padding: 1px 6px; cursor: pointer; font-size: 10px; }
+  .debug-line { white-space: pre-wrap; line-height: 1.4; border-bottom: 1px solid #333; padding: 1px 0; user-select: text; }
+}
 
 $sidebar-width: 200px;
 $sidebar-collapsed: 60px;

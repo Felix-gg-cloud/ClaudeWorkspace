@@ -304,6 +304,7 @@ function onEncounterResolve(result: { id: string; success: boolean }) {
 
     // 奖励: XP + 金币（使用怪物配置的奖励值）
     const encReward = currentEncounter.value.reward
+    import('@/utils/debugLog').then(m => m.debugLogs.push(`encounter[${result.id}] reward=${JSON.stringify(encReward)} diff=${currentEncounter.value?.difficulty}`))
     const reward = grantReward(true, comboCount.value, 'camp', {
       baseXp: encReward?.xp,
       baseCoins: encReward?.coins,
