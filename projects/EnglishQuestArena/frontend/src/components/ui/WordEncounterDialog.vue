@@ -43,7 +43,7 @@
           </div>
 
           <!-- 下一步 -->
-          <button class="btn-learned" @click="goToPractice">✨ 我记住了！开始挑战 →</button>
+          <button ref="learnedBtn" class="btn-learned" @click="goToPractice">✨ 我记住了！开始挑战 →</button>
         </template>
 
         <!-- ========== 阶段 2: 练习 ========== -->
@@ -80,13 +80,14 @@
                 class="option-btn"
                 :class="{ 'option-selected': selectedKey === opt.key }"
                 @click="selectOption(opt.key)"
+                @keydown.enter.prevent="selectOption(opt.key)"
               >
                 <span class="option-key">{{ ['A','B','C','D'][idx] }}</span>
                 <span class="option-text">{{ opt.textZh }}</span>
                 <span class="option-check" v-if="selectedKey === opt.key">✓</span>
               </button>
             </div>
-            <button class="btn-confirm" :disabled="!selectedKey" @click="confirmMcq">
+            <button ref="confirmBtn" class="btn-confirm" :disabled="!selectedKey" @click="confirmMcq">
               ⚔️ 确认攻击
             </button>
           </template>
@@ -106,13 +107,14 @@
                 :key="idx"
                 class="option-btn"
                 :class="{ 'option-selected': selectedListenIdx === idx }"
-                @click="selectedListenIdx = idx"
+                @click="selectListenOption(idx)"
+                @keydown.enter.prevent="selectListenOption(idx)"
               >
                 <span class="option-key">{{ ['A','B','C'][idx] }}</span>
                 <span class="option-text">{{ opt.en }}</span>
               </button>
             </div>
-            <button class="btn-confirm" :disabled="selectedListenIdx === null" @click="confirmListen">
+            <button ref="confirmBtn" class="btn-confirm" :disabled="selectedListenIdx === null" @click="confirmListen">
               ⚔️ 确认攻击
             </button>
           </template>
@@ -132,7 +134,7 @@
               />
               <button class="btn-tts-mini" @click="playTts" title="再听一次">🔊</button>
             </div>
-            <button class="btn-confirm" :disabled="!spellText.trim()" @click="confirmSpell">
+            <button ref="confirmBtn" class="btn-confirm" :disabled="!spellText.trim()" @click="confirmSpell">
               ⚔️ 确认攻击
             </button>
           </template>
@@ -203,7 +205,7 @@
             <p class="hint-text">下次再遇到它，你一定能记住！</p>
           </div>
 
-          <button class="btn-continue" @click="emitResolve">
+          <button ref="continueBtn" class="btn-continue" @click="emitResolve">
             🏕️ 继续探索
           </button>
         </template>
@@ -214,7 +216,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, nextTick } from 'vue'
+import { ref, computed, nextTick, onMounted, watch } from 'vue'
 import type { MapEncounter } from '@/game/config/mapData'
 
 const props = defineProps<{
@@ -240,6 +242,9 @@ const selectedKey = ref<string | null>(null)
 const selectedListenIdx = ref<number | null>(null)
 const spellText = ref('')
 const spellInput = ref<HTMLInputElement>()
+const learnedBtn = ref<HTMLButtonElement>()
+const confirmBtn = ref<HTMLButtonElement>()
+const continueBtn = ref<HTMLButtonElement>()
 
 // ---- Computed ----
 const monsterEmoji = computed(() => {
@@ -366,6 +371,12 @@ function goToPractice() {
 
 function selectOption(key: string) {
   selectedKey.value = key
+  nextTick(() => confirmBtn.value?.focus())
+}
+
+function selectListenOption(idx: number) {
+  selectedListenIdx.value = idx
+  nextTick(() => confirmBtn.value?.focus())
 }
 
 function confirmMcq() {
@@ -394,6 +405,17 @@ function emitResolve() {
     success: correct.value,
   })
 }
+
+// 自动聚焦主操作按钮
+onMounted(() => {
+  nextTick(() => learnedBtn.value?.focus())
+})
+
+watch(phase, (p) => {
+  nextTick(() => {
+    if (p === 'result') continueBtn.value?.focus()
+  })
+})
 </script>
 
 <style scoped lang="scss">

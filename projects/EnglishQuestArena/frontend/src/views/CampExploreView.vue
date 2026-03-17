@@ -61,7 +61,7 @@
               <div class="reward-badge">✨ +{{ currentEncounter.reward?.xp ?? 0 }} XP</div>
               <div class="reward-badge">🪙 +{{ currentEncounter.reward?.coins ?? 0 }} 金币</div>
             </div>
-            <button class="btn-collect" @click="collectTreasure">🎁 收取奖励</button>
+            <button ref="collectBtn" class="btn-collect" @click="collectTreasure">🎁 收取奖励</button>
           </div>
         </div>
       </Teleport>
@@ -88,7 +88,7 @@
               <span v-if="randomEvent.reward?.xp" class="reward-badge">✨ +{{ randomEvent.reward.xp }} XP</span>
               <span v-if="randomEvent.reward?.coins" class="reward-badge">🪙 +{{ randomEvent.reward.coins }} 金币</span>
             </div>
-            <button class="btn-event-ok" @click="dismissRandomEvent">知道了！</button>
+            <button ref="eventOkBtn" class="btn-event-ok" @click="dismissRandomEvent">知道了！</button>
           </div>
         </div>
       </Teleport>
@@ -115,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount, watch, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import MainLayout from '@/layouts/MainLayout.vue'
 import WordEncounterDialog from '@/components/ui/WordEncounterDialog.vue'
@@ -148,6 +148,8 @@ const showComboOverlay = ref(false)
 const comboOverlayText = ref('')
 const wordAttempts = ref<Map<string, number>>(new Map())
 const randomEvent = ref<{ type: string; title: string; message: string; reward?: { xp?: number; coins?: number } } | null>(null)
+const collectBtn = ref<HTMLButtonElement>()
+const eventOkBtn = ref<HTMLButtonElement>()
 
 const campMap = computed(() => chapterStore.currentCampMap)
 const totalMonsters = computed(() => campMap.value.encounters.filter(e => e.type === 'monster').length)
@@ -199,6 +201,7 @@ watch(npcCurrentLine, (text) => {
 })
 
 onMounted(() => {
+  window.addEventListener('keydown', handleDialogKeydown)
   if (gameContainer.value) {
     // 从进度中恢复已击败/已开启状态
     const prog = chapterStore.currentProgress
@@ -228,6 +231,7 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  window.removeEventListener('keydown', handleDialogKeydown)
   destroyPhaserGame()
   if (vnTimer) { clearInterval(vnTimer); vnTimer = null }
 })
@@ -238,6 +242,10 @@ function handleEncounter(encounter: MapEncounter) {
   // 如果是NPC，启动打字机
   if (encounter.type === 'npc' && encounter.npcLines?.[0]) {
     startTypewriter(encounter.npcLines[0])
+  }
+  // 宝箱弹窗自动聚焦收取按钮
+  if (encounter.type === 'treasure') {
+    nextTick(() => collectBtn.value?.focus())
   }
   sound.click()
 }
@@ -342,6 +350,27 @@ function getWordGrade(id: string): 'gold' | 'silver' | 'bronze' {
 function handleRandomEvent(event: { type: string; title: string; message: string; reward?: { xp?: number; coins?: number } }) {
   randomEvent.value = event
   sound.coin()
+  nextTick(() => eventOkBtn.value?.focus())
+}
+
+function handleDialogKeydown(e: KeyboardEvent) {
+  if (e.key !== 'Enter' && e.key !== ' ') return
+  if (!currentEncounter.value && !randomEvent.value) return
+  // NPC 对话: Enter/Space 推进
+  if (currentEncounter.value?.type === 'npc') {
+    e.preventDefault()
+    advanceNpc()
+  }
+  // 宝箱: Enter/Space 收取
+  if (currentEncounter.value?.type === 'treasure') {
+    e.preventDefault()
+    collectTreasure()
+  }
+  // 随机事件: Enter/Space 关闭
+  if (randomEvent.value) {
+    e.preventDefault()
+    dismissRandomEvent()
+  }
 }
 
 function dismissRandomEvent() {
