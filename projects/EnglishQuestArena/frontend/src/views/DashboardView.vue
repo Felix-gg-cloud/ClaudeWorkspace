@@ -19,21 +19,6 @@
               </span>
             </div>
             <p class="char-title">{{ titleText }}</p>
-
-            <!-- XP bar -->
-            <div class="stat-row">
-              <span class="stat-label">经验</span>
-              <div class="hp-bar hp-bar--gold">
-                <div class="hp-bar__fill" :style="{ width: xpPercent + '%' }"></div>
-                <span class="hp-bar__text">{{ userStore.user?.totalXp }} / {{ xpMax }} XP</span>
-              </div>
-            </div>
-
-            <!-- Stats row -->
-            <div class="stat-chips">
-              <span class="chip chip-gold">💰 {{ userStore.user?.coins }}</span>
-              <span class="chip chip-purple">✨ {{ userStore.user?.skillPoints }}点</span>
-            </div>
           </div>
         </div>
       </section>
@@ -159,13 +144,6 @@ const sound = useSound()
 onMounted(async () => {
   await chapterStore.loadChapters()
   await chapterStore.loadLessons(chapterStore.currentChapterCode)
-})
-
-const xpMax = computed(() => userStore.user?.xpToNextLevel ?? 200)
-const xpPercent = computed(() => {
-  const u = userStore.user
-  if (!u) return 0
-  return Math.min(100, (u.totalXp / u.xpToNextLevel) * 100)
 })
 
 const titleText = computed(() => {
@@ -355,42 +333,6 @@ function goTo(route: string) {
   font-size: 13px;
   color: $magic-purple;
   margin: 2px 0 12px;
-}
-
-.stat-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 12px;
-
-  .stat-label {
-    font-size: 12px;
-    color: $text-muted;
-    width: 32px;
-    flex-shrink: 0;
-  }
-
-  .hp-bar {
-    flex: 1;
-  }
-}
-
-.stat-chips {
-  display: flex;
-  gap: 12px;
-}
-
-.chip {
-  font-size: 13px;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 16px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid $border-dim;
-
-  &-gold { color: $gold; }
-  &-fire { color: $fire-orange; }
-  &-purple { color: $magic-purple; }
 }
 
 // Chapter journey
