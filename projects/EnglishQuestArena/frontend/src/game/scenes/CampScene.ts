@@ -592,4 +592,24 @@ export class CampScene extends Phaser.Scene {
   public getDefeatedMonsters(): MapEncounter[] {
     return this.mapData.encounters.filter(e => e.type === 'monster' && e.defeated)
   }
+
+  /** 获取当前状态用于持久化 */
+  public getState(): { playerX: number; playerY: number; revealedTiles: string[] } {
+    return {
+      playerX: this.player.x,
+      playerY: this.player.y,
+      revealedTiles: Array.from(this.revealedTiles),
+    }
+  }
+
+  /** 恢复玩家位置和迷雾状态 */
+  public restoreState(playerX: number, playerY: number, revealedTiles: string[]) {
+    this.player.setPosition(playerX, playerY)
+    this.pet.setPosition(playerX + 20, playerY + 16)
+    this.petHistory = Array.from({ length: this.petDelay }, () => ({ x: playerX, y: playerY }))
+    for (const key of revealedTiles) {
+      this.revealedTiles.add(key)
+    }
+    this.updateFog()
+  }
 }

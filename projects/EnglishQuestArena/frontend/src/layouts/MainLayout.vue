@@ -58,35 +58,35 @@
       <div class="top-bar__right">
         <div class="stat-chip" :class="{ 'stat-bump': xpBump }" data-tip="经验值">
           <span class="stat-icon">✨</span>
-          <span class="stat-value">{{ user?.totalXp || 0 }}</span>
+          <span class="stat-value">{{ userStore.user?.totalXp || 0 }}</span>
         </div>
         <div class="stat-chip" :class="{ 'stat-bump': coinsBump }" data-tip="金币">
           <span class="stat-icon">💰</span>
-          <span class="stat-value">{{ user?.coins || 0 }}</span>
+          <span class="stat-value">{{ userStore.user?.coins || 0 }}</span>
         </div>
         <div class="stat-chip" data-tip="连续打卡">
           <span class="stat-icon">📅</span>
-          <span class="stat-value">{{ user?.streak || 0 }}</span>
+          <span class="stat-value">{{ userStore.user?.streak || 0 }}</span>
         </div>
         <!-- Avatar dropdown -->
         <div class="avatar-dropdown-wrap" ref="dropdownRef">
           <div class="avatar tooltip" data-tip="个人设置" @click="showDropdown = !showDropdown">
-            {{ user?.avatar || user?.displayName?.charAt(0).toUpperCase() || '?' }}
+            {{ userStore.user?.avatar || userStore.user?.displayName?.charAt(0).toUpperCase() || '?' }}
           </div>
           <Transition name="dropdown">
             <div v-if="showDropdown" class="avatar-dropdown dark-panel">
               <div class="dropdown-header">
-                <div class="dropdown-avatar">{{ user?.avatar || '⚔️' }}</div>
+                <div class="dropdown-avatar">{{ userStore.user?.avatar || '⚔️' }}</div>
                 <div class="dropdown-info">
-                  <div class="dropdown-name">{{ user?.displayName }}</div>
-                  <div class="dropdown-username">@{{ user?.username }}</div>
+                  <div class="dropdown-name">{{ userStore.user?.displayName }}</div>
+                  <div class="dropdown-username">@{{ userStore.user?.username }}</div>
                 </div>
               </div>
               <div class="dropdown-divider"></div>
               <div class="dropdown-stats">
-                <span>⭐ Lv.{{ user?.currentLevel }}</span>
-                <span>✨ {{ user?.totalXp }} XP</span>
-                <span>💰 {{ user?.coins }}</span>
+                <span>⭐ Lv.{{ userStore.user?.currentLevel }}</span>
+                <span>✨ {{ userStore.user?.totalXp }} XP</span>
+                <span>💰 {{ userStore.user?.coins }}</span>
               </div>
               <div class="dropdown-divider"></div>
               <router-link to="/profile" class="dropdown-item" @click="showDropdown = false">
@@ -114,13 +114,11 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue'
-import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 
 const router = useRouter()
 const userStore = useUserStore()
-const { user } = storeToRefs(userStore)
 const collapsed = ref(false)
 const showDropdown = ref(false)
 const dropdownRef = ref<HTMLElement | null>(null)
@@ -129,11 +127,11 @@ const dropdownRef = ref<HTMLElement | null>(null)
 const xpBump = ref(false)
 const coinsBump = ref(false)
 
-watch(() => user.value?.totalXp, () => {
+watch(() => userStore.user?.totalXp, () => {
   xpBump.value = true
   setTimeout(() => { xpBump.value = false }, 400)
 })
-watch(() => user.value?.coins, () => {
+watch(() => userStore.user?.coins, () => {
   coinsBump.value = true
   setTimeout(() => { coinsBump.value = false }, 400)
 })

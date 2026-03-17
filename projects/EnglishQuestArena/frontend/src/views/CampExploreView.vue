@@ -131,6 +131,26 @@ import { useAchievementStore } from '@/stores/achievements'
 import { useSound } from '@/composables/useSound'
 import { grantReward } from '@/composables/useReward'
 
+const CAMP_STATE_KEY = 'eqa_camp_state'
+
+function saveCampState(playerX: number, playerY: number, revealedTiles: string[]) {
+  const chapterCode = chapterStore.currentChapterCode
+  const userId = userStore.user?.id ?? 0
+  const key = `${CAMP_STATE_KEY}_${userId}_${chapterCode}`
+  localStorage.setItem(key, JSON.stringify({ playerX, playerY, revealedTiles }))
+}
+
+function loadCampState(): { playerX: number; playerY: number; revealedTiles: string[] } | null {
+  const chapterCode = chapterStore.currentChapterCode
+  const userId = userStore.user?.id ?? 0
+  const key = `${CAMP_STATE_KEY}_${userId}_${chapterCode}`
+  try {
+    const raw = localStorage.getItem(key)
+    if (raw) return JSON.parse(raw)
+  } catch { /* ignore */ }
+  return null
+}
+
 const router = useRouter()
 const sound = useSound()
 const chapterStore = useChapterStore()
@@ -201,8 +221,12 @@ watch(npcCurrentLine, (text) => {
   if (text) startTypewriter(text)
 })
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener('keydown', handleDialogKeydown)
+
+  // 确保章节进度已加载（刷新页面时需要从后端拉取）
+  await chapterStore.loadChapters()
+
   if (gameContainer.value) {
     // 从进度中恢复已击败/已开启状态
     const prog = chapterStore.currentProgress
@@ -217,14 +241,20 @@ onMounted(() => {
       }
     }
 
+    // 恢复玩家位置和迷雾
+    const saved = loadCampState()
+
     createPhaserGame(gameContainer.value, campMap.value)
 
-    // 等待场景就绪后绑定回调
+    // 等待场景就绪后绑定回调 + 恢复状态
     const checkScene = setInterval(() => {
       const scene = getCampScene()
       if (scene) {
         scene.onEncounter = handleEncounter
         scene.onRandomEvent = handleRandomEvent
+        if (saved) {
+          scene.restoreState(saved.playerX, saved.playerY, saved.revealedTiles)
+        }
         clearInterval(checkScene)
       }
     }, 200)
@@ -232,6 +262,12 @@ onMounted(() => {
 })
 
 onBeforeUnmount(() => {
+  // 保存玩家位置和迷雾状态
+  const scene = getCampScene()
+  if (scene) {
+    const state = scene.getState()
+    saveCampState(state.playerX, state.playerY, state.revealedTiles)
+  }
   window.removeEventListener('keydown', handleDialogKeydown)
   destroyPhaserGame()
   if (vnTimer) { clearInterval(vnTimer); vnTimer = null }
