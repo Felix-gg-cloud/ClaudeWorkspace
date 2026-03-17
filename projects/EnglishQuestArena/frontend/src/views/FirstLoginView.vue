@@ -104,10 +104,10 @@ const avatarOptions = [
 ]
 
 const levelOptions = [
-  { value: 'PRE_A1', badge: '🌱', label: 'Pre-A1 零基础', desc: '刚开始学英语，从字母和简单单词起步' },
-  { value: 'A1', badge: '📗', label: 'A1 入门级', desc: '认识一些基础单词和简单句子' },
-  { value: 'A2', badge: '📘', label: 'A2 初级', desc: '能进行简单日常对话' },
-  { value: 'B1', badge: '📙', label: 'B1 中级', desc: '能理解主要内容和表达观点' },
+  { value: 'PRE_A1' as const, badge: '🌱', label: 'Pre-A1 零基础', desc: '刚开始学英语，从字母和简单单词起步' },
+  { value: 'A1' as const, badge: '📗', label: 'A1 入门级', desc: '认识一些基础单词和简单句子' },
+  { value: 'A2' as const, badge: '📘', label: 'A2 初级', desc: '能进行简单日常对话' },
+  { value: 'B1' as const, badge: '📙', label: 'B1 中级', desc: '能理解主要内容和表达观点' },
 ]
 
 const canNext = computed(() => {

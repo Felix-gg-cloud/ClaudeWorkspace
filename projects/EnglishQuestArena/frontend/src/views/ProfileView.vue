@@ -112,10 +112,10 @@ const avatarOptions = [
 ]
 
 const levelOptions = [
-  { value: 'PRE_A1', badge: '🌱', label: 'Pre-A1' },
-  { value: 'A1', badge: '📗', label: 'A1' },
-  { value: 'A2', badge: '📘', label: 'A2' },
-  { value: 'B1', badge: '📙', label: 'B1' },
+  { value: 'PRE_A1' as const, badge: '🌱', label: 'Pre-A1 零基础' },
+  { value: 'A1' as const, badge: '📗', label: 'A1 入门级' },
+  { value: 'A2' as const, badge: '📘', label: 'A2 初级' },
+  { value: 'B1' as const, badge: '📙', label: 'B1 中级' },
 ]
 
 const levelLabel = computed(() => {
