@@ -1,0 +1,105 @@
+{
+  "_comment": "AI-Only Validator — 样例期望输出（对应 sample-payload.json）",
+  "issues": [
+    {
+      "Severity": "Error",
+      "RuleId": "R-WS-ALL-001",
+      "RowKey": "RowIndex=2|YearMonth=202601|CCN=CC002|Function=GBS |Team=EA",
+      "Column": "Function",
+      "RawValue": "GBS ",
+      "Message": "\"Function\" 列的值 \"GBS \" 包含前后多余空格，不允许。",
+      "FixSuggestion": "去掉 \"Function\" 列值的前后空格，应为 \"GBS\"。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-WS-ALL-001",
+      "RowKey": "RowIndex=3|YearMonth= 202601|CCN=CC003|Function=IT|Team=BA",
+      "Column": "YearMonth",
+      "RawValue": " 202601",
+      "Message": "\"YearMonth\" 列的值 \" 202601\" 包含前后多余空格，不允许。",
+      "FixSuggestion": "去掉 \"YearMonth\" 列值的前后空格，应为 \"202601\"。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-YM-001",
+      "RowKey": "RowIndex=4|YearMonth=2026-01|CCN=CC004|Function=Finance|Team=EA",
+      "Column": "YearMonth",
+      "RawValue": "2026-01",
+      "Message": "\"YearMonth\" 列的值 \"2026-01\" 格式不正确，必须为 YYYYMM（6位数字且月份 01-12）。",
+      "FixSuggestion": "将 \"YearMonth\" 改为合法的 YYYYMM 格式，例如 202601。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-NUM-001",
+      "RowKey": "RowIndex=4|YearMonth=2026-01|CCN=CC004|Function=Finance|Team=EA",
+      "Column": "Actual_Jan",
+      "RawValue": "-50",
+      "Message": "\"Actual_Jan\" 列的值 \"-50\" 不是有效的非负数字。",
+      "FixSuggestion": "\"Actual_Jan\" 必须填写数字且 ≥ 0，或留空。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-NUM-001",
+      "RowKey": "RowIndex=4|YearMonth=2026-01|CCN=CC004|Function=Finance|Team=EA",
+      "Column": "Actual_Feb",
+      "RawValue": "abc",
+      "Message": "\"Actual_Feb\" 列的值 \"abc\" 不是有效的非负数字。",
+      "FixSuggestion": "\"Actual_Feb\" 必须填写数字且 ≥ 0，或留空。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-SR-001",
+      "RowKey": "RowIndex=4|YearMonth=2026-01|CCN=CC004|Function=Finance|Team=EA",
+      "Column": "ShoringRatio",
+      "RawValue": "110%",
+      "Message": "\"ShoringRatio\" 列的值 \"110%\" 格式不正确，必须为百分比格式（如 25% 或 25.5%）且在 0-100 之间。",
+      "FixSuggestion": "将 \"ShoringRatio\" 改为合法百分比，例如 25% 或 25.50%，去掉多余空格。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-REQ-CCN-001",
+      "RowKey": "RowIndex=5|YearMonth=202601|CCN=|Function=HR|Team=Total",
+      "Column": "Cost Center Number",
+      "RawValue": "",
+      "Message": "\"Cost Center Number\" 列不能为空。",
+      "FixSuggestion": "填写对应的成本中心编号。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-REQ-OWN-001",
+      "RowKey": "RowIndex=5|YearMonth=202601|CCN=|Function=HR|Team=Total",
+      "Column": "Owner",
+      "RawValue": "",
+      "Message": "Total 行的 \"Owner\" 列不能为空。",
+      "FixSuggestion": "填写负责人姓名。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-REQ-YM-001",
+      "RowKey": "RowIndex=6|YearMonth=|CCN=CC006|Function=HR|Team=TA",
+      "Column": "YearMonth",
+      "RawValue": "",
+      "Message": "\"YearMonth\" 列不能为空，所有行均须填写。",
+      "FixSuggestion": "填写格式为 YYYYMM 的年月值，例如 202601。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-WS-ALL-001",
+      "RowKey": "RowIndex=6|YearMonth=|CCN=CC006|Function=HR|Team=TA",
+      "Column": "Actual_Feb",
+      "RawValue": " 60 ",
+      "Message": "\"Actual_Feb\" 列的值 \" 60 \" 包含前后多余空格，不允许。",
+      "FixSuggestion": "去掉 \"Actual_Feb\" 列值的前后空格，应为 \"60\"。"
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-WS-ALL-001",
+      "RowKey": "RowIndex=6|YearMonth=|CCN=CC006|Function=HR|Team=TA",
+      "Column": "ShoringRatio",
+      "RawValue": " 15% ",
+      "Message": "\"ShoringRatio\" 列的值 \" 15% \" 包含前后多余空格，不允许。",
+      "FixSuggestion": "去掉 \"ShoringRatio\" 列值的前后空格，应为 \"15%\"。"
+    }
+  ],
+  "markdown_report": "## tblOffshoring 数据质量报告\n\n**校验时间：** 2026-03-20 03:00 UTC  \n**总行数：** 6  \n**发现问题：** 11 个 Error，0 个 Warning\n\n### 问题汇总\n\n| RuleId | 说明 | 数量 |\n|---|---|---|\n| R-WS-ALL-001 | 前后空格 | 4 |\n| R-NUM-001 | 数值列非法 | 2 |\n| R-REQ-* | 必填缺失 | 3 |\n| R-YM-001 | YearMonth 格式错误 | 1 |\n| R-SR-001 | ShoringRatio 超范围 | 1 |\n\n### Top 3 高频问题\n\n1. **前后空格（R-WS-ALL-001）**：共 4 处，涉及 Function、YearMonth、Actual_Feb、ShoringRatio 列。请通知数据填写人员检查 Excel 输入习惯。\n2. **必填字段缺失（R-REQ-*）**：共 3 处，包括 Cost Center Number、Owner（Total 行）、YearMonth。\n3. **数值列非法（R-NUM-001）**：共 2 处，包含负数和非数字值，需核实数据来源。\n\n### 总结\n\n本次校验共 6 行，发现 11 个 Error。主要问题集中在前后空格（4 处）和必填字段缺失（3 处），建议优先修复。第 4 行存在多个问题（YearMonth 格式、负数、非法 ShoringRatio），需重点核查。第 6 行 YearMonth 为空，且多列有空格问题，请核实是否为测试数据。"
+}
