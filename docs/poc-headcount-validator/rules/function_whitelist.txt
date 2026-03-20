@@ -1,0 +1,15 @@
+# Function Whitelist
+# Each line is one allowed value for the "Function" column.
+# Values are case-sensitive as they appear in the Excel sheet.
+# Last updated: 2026-03-20
+
+Finance
+Actuarial
+IT
+Operations
+Claims
+Underwriting
+Risk Management
+HR
+Legal & Compliance
+Customer Service

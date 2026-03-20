@@ -1,0 +1,23 @@
+# Team Whitelist
+# Each line is one allowed value for the "Team" column.
+# Values are case-sensitive as they appear in the Excel sheet.
+# Last updated: 2026-03-20
+
+Finance Reporting
+Finance Analytics
+Actuarial Modeling
+Actuarial Pricing
+IT Development
+IT Infrastructure
+IT Testing
+Operations Processing
+Operations Quality
+Claims Assessment
+Claims Settlement
+Underwriting Support
+Risk Analytics
+HR Business Partner
+HR Shared Services
+Legal Support
+Compliance Monitoring
+Customer Contact
