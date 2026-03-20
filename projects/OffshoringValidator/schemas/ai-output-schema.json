@@ -1,0 +1,217 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "OffshoringValidatorOutput",
+  "description": "Structured JSON output from AI validator for tblOffshoring. No Markdown, only this JSON object.",
+  "type": "object",
+  "required": ["issues", "report_model"],
+  "additionalProperties": false,
+  "properties": {
+    "issues": {
+      "type": "array",
+      "description": "List of validation issues found. Empty array means no issues.",
+      "items": {
+        "type": "object",
+        "required": ["Severity", "RuleId", "RowKey", "Column", "RawValue", "Message", "FixSuggestion"],
+        "additionalProperties": false,
+        "properties": {
+          "Severity": {
+            "type": "string",
+            "enum": ["Error", "Warning"],
+            "description": "Error = must fix; Warning = recommended fix"
+          },
+          "RuleId": {
+            "type": "string",
+            "description": "Rule identifier, e.g. R-WS-ALL-001, R-YM-001, R-REQ-001",
+            "examples": [
+              "R-WS-ALL-001",
+              "R-YM-001",
+              "R-YM-FMT-001",
+              "R-REQ-CCN-001",
+              "R-REQ-FUNC-001",
+              "R-REQ-TEAM-001",
+              "R-REQ-OWNER-001",
+              "R-MAP-FT-001",
+              "R-NUM-001",
+              "R-SR-001",
+              "R-SR-REQ-001"
+            ]
+          },
+          "RowKey": {
+            "type": "string",
+            "description": "Composite key to locate the row. Format: RowIndex=<n>|YearMonth=<raw>|CCN=<raw>|Function=<raw>|Team=<raw>",
+            "examples": [
+              "RowIndex=2|YearMonth=202501|CCN=CC001|Function=GBS|Team=EA",
+              "RowIndex=5|YearMonth=202501|CCN=CC002|Function=Total|Team="
+            ]
+          },
+          "Column": {
+            "type": "string",
+            "description": "Column name where the issue was found",
+            "examples": [
+              "YearMonth", "Cost Center Number", "Function", "Team",
+              "Owner", "ShoringRatio", "Actual Headcount Onshore",
+              "Actual Headcount Offshore", "Planned Headcount Onshore",
+              "Planned Headcount Offshore", "Target Headcount Onshore",
+              "Target Headcount Offshore"
+            ]
+          },
+          "RawValue": {
+            "type": "string",
+            "description": "The exact raw value from Excel cell (including any spaces). Use empty string for blank cells."
+          },
+          "Message": {
+            "type": "string",
+            "description": "Human-readable description of the issue"
+          },
+          "FixSuggestion": {
+            "type": "string",
+            "description": "Concrete action the user should take to fix this issue"
+          }
+        }
+      }
+    },
+    "report_model": {
+      "type": "object",
+      "description": "Summary data for generating the Excel Summary sheet and PDF report header",
+      "required": [
+        "generated_at",
+        "source_table",
+        "period",
+        "summary",
+        "issues_by_rule",
+        "issues_by_severity"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "generated_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "ISO 8601 timestamp when validation was run, e.g. 2025-01-15T09:30:00Z"
+        },
+        "source_table": {
+          "type": "string",
+          "description": "Name of the source Excel table",
+          "default": "tblOffshoring"
+        },
+        "period": {
+          "type": "string",
+          "description": "YearMonth value(s) found in the validated data, e.g. '202501' or '202501, 202502'",
+          "examples": ["202501", "202501, 202502"]
+        },
+        "summary": {
+          "type": "object",
+          "required": [
+            "total_rows_checked",
+            "rows_with_issues",
+            "rows_clean",
+            "total_issues",
+            "error_count",
+            "warning_count",
+            "validation_passed"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "total_rows_checked": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rows_with_issues": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "rows_clean": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "total_issues": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "error_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "warning_count": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "validation_passed": {
+              "type": "boolean",
+              "description": "true only when error_count == 0 (warnings allowed)"
+            }
+          }
+        },
+        "issues_by_rule": {
+          "type": "array",
+          "description": "Aggregated issue count per rule, sorted by count descending",
+          "items": {
+            "type": "object",
+            "required": ["rule_id", "severity", "count"],
+            "additionalProperties": false,
+            "properties": {
+              "rule_id": { "type": "string" },
+              "severity": { "type": "string", "enum": ["Error", "Warning"] },
+              "count": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "issues_by_severity": {
+          "type": "object",
+          "description": "Issue counts broken down by severity",
+          "required": ["Error", "Warning"],
+          "additionalProperties": false,
+          "properties": {
+            "Error": { "type": "integer", "minimum": 0 },
+            "Warning": { "type": "integer", "minimum": 0 }
+          }
+        }
+      }
+    }
+  },
+  "examples": [
+    {
+      "issues": [
+        {
+          "Severity": "Error",
+          "RuleId": "R-WS-ALL-001",
+          "RowKey": "RowIndex=3|YearMonth=202501|CCN=CC001|Function=GBS |Team=EA",
+          "Column": "Function",
+          "RawValue": "GBS ",
+          "Message": "列「Function」的值含有尾部空格，不允许。",
+          "FixSuggestion": "删除「GBS 」末尾的空格，改为「GBS」后重新提交。"
+        },
+        {
+          "Severity": "Error",
+          "RuleId": "R-MAP-FT-001",
+          "RowKey": "RowIndex=3|YearMonth=202501|CCN=CC001|Function=GBS |Team=EA",
+          "Column": "Function+Team",
+          "RawValue": "Function=GBS  / Team=EA (注：RawValue 以「Function=raw / Team=raw」格式展示跨列信息)",
+          "Message": "Function 与 Team 的组合「GBS （含尾部空格）+ EA」不在允许的映射表中。",
+          "FixSuggestion": "修正 Function 中的空格后重新验证 Function-Team 映射。"
+        }
+      ],
+      "report_model": {
+        "generated_at": "2025-01-15T09:30:00Z",
+        "source_table": "tblOffshoring",
+        "period": "202501",
+        "summary": {
+          "total_rows_checked": 50,
+          "rows_with_issues": 2,
+          "rows_clean": 48,
+          "total_issues": 2,
+          "error_count": 2,
+          "warning_count": 0,
+          "validation_passed": false
+        },
+        "issues_by_rule": [
+          { "rule_id": "R-WS-ALL-001", "severity": "Error", "count": 1 },
+          { "rule_id": "R-MAP-FT-001", "severity": "Error", "count": 1 }
+        ],
+        "issues_by_severity": {
+          "Error": 2,
+          "Warning": 0
+        }
+      }
+    }
+  ]
+}
