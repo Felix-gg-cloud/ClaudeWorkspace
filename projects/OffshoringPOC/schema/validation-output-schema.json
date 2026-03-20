@@ -1,0 +1,172 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "validation-output-schema",
+  "title": "AI 校验输出 JSON Schema",
+  "description": "Copilot Studio / Azure OpenAI 返回的校验结果 JSON 格式定义。Power Automate 使用 Parse JSON 动作解析此格式。",
+  "version": "1.0",
+
+  "type": "object",
+  "required": ["issues"],
+  "additionalProperties": false,
+  "properties": {
+    "issues": {
+      "type": "array",
+      "description": "所有发现的校验问题列表；若无问题则为空数组 []",
+      "items": {
+        "type": "object",
+        "required": ["Severity", "RuleId", "RowKey", "Column", "RawValue", "Message", "FixSuggestion"],
+        "additionalProperties": false,
+        "properties": {
+          "Severity": {
+            "type": "string",
+            "enum": ["Error", "Warning"],
+            "description": "问题严重程度。POC 阶段主要为 Error；保留 Warning 供扩展。"
+          },
+          "RuleId": {
+            "type": "string",
+            "description": "规则编号，格式为 R-{分类}-{序号}",
+            "enum": [
+              "R-WS-ALL-001",
+              "R-YM-001",
+              "R-REQ-CCN-001",
+              "R-REQ-FUNC-001",
+              "R-REQ-TEAM-001",
+              "R-REQ-OWNER-001",
+              "R-WL-FUNC-001",
+              "R-WL-TEAM-001",
+              "R-MAP-FT-001",
+              "R-NUM-001",
+              "R-SR-001"
+            ]
+          },
+          "RowKey": {
+            "type": "string",
+            "description": "行定位键，格式：RowIndex={n}|YearMonth={raw}|CCN={raw}|Function={raw}|Team={raw}",
+            "examples": [
+              "RowIndex=1|YearMonth=202501|CCN=CC001|Function=GBS|Team=EA",
+              "RowIndex=5|YearMonth=202501|CCN=CC002|Function=Total|Team=",
+              "RowIndex=3|YearMonth=202501|CCN=CC003|Function=GBS |Team=EA"
+            ]
+          },
+          "Column": {
+            "type": "string",
+            "description": "发生问题的列名（使用 tblOffshoring 中的原始列名）",
+            "examples": [
+              "YearMonth",
+              "Cost Center Number",
+              "Function",
+              "Team",
+              "Owner",
+              "ShoringRatio",
+              "Actual Headcount",
+              "Planned Headcount",
+              "Target Headcount",
+              "Actual Cost",
+              "Planned Cost",
+              "Target Cost"
+            ]
+          },
+          "RawValue": {
+            "type": "string",
+            "description": "该列单元格的原始值（从 Excel 直接读取，未经任何处理，包含可能存在的空格）",
+            "examples": [
+              "GBS ",
+              " 202501",
+              "",
+              "-5",
+              "120%",
+              "abc"
+            ]
+          },
+          "Message": {
+            "type": "string",
+            "description": "问题描述（中文，面向业务用户）",
+            "examples": [
+              "\"Function\" 列的值含有前导或尾随空白字符，不允许。",
+              "YearMonth 为必填字段，不得为空。",
+              "\"Actual Headcount\" 列的值 \"-5\" 不得为负数，应 >= 0。",
+              "ShoringRatio 格式错误，应为「数字%」格式，例如 12%、33.5%。"
+            ]
+          },
+          "FixSuggestion": {
+            "type": "string",
+            "description": "修复建议（中文，具体可操作）",
+            "examples": [
+              "删除 \"Function\" 列值的首尾空白字符后重新提交。",
+              "将 YearMonth 修改为有效的 YYYYMM 格式，例如 202501。",
+              "将 \"Actual Headcount\" 填写为 0 或正整数/正小数，或留空（留空表示该项不适用）。",
+              "将 ShoringRatio 修改为 0%-100% 范围内的有效百分比，例如 25%。"
+            ]
+          }
+        }
+      }
+    }
+  },
+
+  "examples": [
+    {
+      "description": "无问题时的输出（通过）",
+      "value": {
+        "issues": []
+      }
+    },
+    {
+      "description": "发现 3 个问题的输出示例",
+      "value": {
+        "issues": [
+          {
+            "Severity": "Error",
+            "RuleId": "R-WS-ALL-001",
+            "RowKey": "RowIndex=1|YearMonth=202501|CCN=CC001|Function=GBS |Team=EA",
+            "Column": "Function",
+            "RawValue": "GBS ",
+            "Message": "\"Function\" 列的值含有前导或尾随空白字符，不允许。",
+            "FixSuggestion": "删除 \"Function\" 列值的首尾空白字符后重新提交。"
+          },
+          {
+            "Severity": "Error",
+            "RuleId": "R-REQ-OWNER-001",
+            "RowKey": "RowIndex=2|YearMonth=202501|CCN=CC002|Function=IT|Team=HRIT",
+            "Column": "Owner",
+            "RawValue": "",
+            "Message": "Owner 为必填字段，不得为空。",
+            "FixSuggestion": "填写有效的 Owner 姓名或邮箱。"
+          },
+          {
+            "Severity": "Error",
+            "RuleId": "R-NUM-001",
+            "RowKey": "RowIndex=2|YearMonth=202501|CCN=CC002|Function=IT|Team=HRIT",
+            "Column": "Actual Headcount",
+            "RawValue": "-5",
+            "Message": "\"Actual Headcount\" 列的值 \"-5\" 不得为负数，应 >= 0。",
+            "FixSuggestion": "将 \"Actual Headcount\" 填写为 0 或正整数/正小数，或留空（留空表示该项不适用）。"
+          }
+        ]
+      }
+    }
+  ],
+
+  "powerAutomateParseJsonSchema": {
+    "description": "此 JSON Schema 可直接粘贴到 Power Automate 的 Parse JSON 动作中。注意：Power Automate 的 Parse JSON 动作不执行 'required' 校验，此处省略 required 约束以避免运行时错误；AI 提示词已强制 AI 在所有字段上输出完整值。",
+    "schema": {
+      "type": "object",
+      "properties": {
+        "issues": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "Severity":       { "type": "string" },
+              "RuleId":         { "type": "string" },
+              "RowKey":         { "type": "string" },
+              "Column":         { "type": "string" },
+              "RawValue":       { "type": "string" },
+              "Message":        { "type": "string" },
+              "FixSuggestion":  { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}
