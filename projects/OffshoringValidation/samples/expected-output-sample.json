@@ -1,0 +1,78 @@
+{
+  "_note": "The 'report' field below is the exact JSON string returned by the LLM (\\n-escaped). For the rendered Markdown version, see expected-report-sample.md in this directory.",
+  "issues": [
+    {
+      "Severity": "Error",
+      "RuleId": "R-SR-001",
+      "RowIdentifier": "YearMonth=202501|Function=HR|Team=Talent Acquisition",
+      "Column": "ShoringRatio",
+      "Value": "125%",
+      "Message": "ShoringRatio must be a percentage format (e.g. 25%, 12.5%) with value 0-100.",
+      "FixSuggestion": "Change 125% to a value between 0% and 100%, e.g. '25%'."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-REQ-NT-TGT1",
+      "RowIdentifier": "YearMonth=202501|Function=IT|Team=Infrastructure",
+      "Column": "Target_YearEnd",
+      "Value": "(empty)",
+      "Message": "Target_YearEnd is required for Non-Total rows.",
+      "FixSuggestion": "Provide a non-negative numeric value for Target_YearEnd."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-NUM-002",
+      "RowIdentifier": "YearMonth=202501|Function=IT|Team=Infrastructure",
+      "Column": "Actual_GBS_TeamMember",
+      "Value": "-3",
+      "Message": "Actual_GBS_TeamMember must be greater than or equal to 0 when provided.",
+      "FixSuggestion": "Replace -3 with a non-negative number such as 0 or a positive integer."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-REQ-YM-001",
+      "RowIdentifier": "YearMonth=(empty)|Function=Marketing|Team=UnknownTeam",
+      "Column": "YearMonth",
+      "Value": "(empty)",
+      "Message": "YearMonth is required for all rows.",
+      "FixSuggestion": "Fill in YearMonth using YYYYMM format, e.g. '202501'."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-CCN-001",
+      "RowIdentifier": "YearMonth=(empty)|Function=Marketing|Team=UnknownTeam",
+      "Column": "Cost Center Number",
+      "Value": "12345",
+      "Message": "Cost Center Number must be exactly 7 digits when provided.",
+      "FixSuggestion": "Correct the Cost Center Number to exactly 7 digits, e.g. '1234567'."
+    },
+    {
+      "Severity": "Warning",
+      "RuleId": "R-TEAM-001",
+      "RowIdentifier": "YearMonth=(empty)|Function=Marketing|Team=UnknownTeam",
+      "Column": "Team",
+      "Value": "UnknownTeam",
+      "Message": "Team value is not in the allowed list.",
+      "FixSuggestion": "Check spelling or update Team to a value from the approved team list."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-NUM-001",
+      "RowIdentifier": "YearMonth=(empty)|Function=Marketing|Team=UnknownTeam",
+      "Column": "Actual_GBS_TeamMember",
+      "Value": "abc",
+      "Message": "Actual_GBS_TeamMember must be a valid number when provided.",
+      "FixSuggestion": "Replace 'abc' with a valid non-negative number, e.g. '5'."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-SR-001",
+      "RowIdentifier": "YearMonth=(empty)|Function=Marketing|Team=UnknownTeam",
+      "Column": "ShoringRatio",
+      "Value": "30 %",
+      "Message": "ShoringRatio must be a percentage format (e.g. 25%, 12.5%) with value 0-100.",
+      "FixSuggestion": "Remove the space before '%', e.g. change '30 %' to '30%'."
+    }
+  ],
+  "report": "## Validation Report\n\n**Batch**: 1 / Source: Offshoring_Data.xlsx  \n**Rows Checked**: 5  \n**Issues Found**: 7 Error(s), 1 Warning(s)\n\n### Summary by Rule\n\n| RuleId | Severity | Count | Affected Column(s) |\n|--------|----------|-------|---------------------|\n| R-SR-001 | Error | 2 | ShoringRatio |\n| R-REQ-NT-TGT1 | Error | 1 | Target_YearEnd |\n| R-NUM-002 | Error | 1 | Actual_GBS_TeamMember |\n| R-REQ-YM-001 | Error | 1 | YearMonth |\n| R-CCN-001 | Error | 1 | Cost Center Number |\n| R-NUM-001 | Error | 1 | Actual_GBS_TeamMember |\n| R-TEAM-001 | Warning | 1 | Team |\n\n### Issue Details\n\n| # | Row | Column | Value | Message |\n|---|-----|--------|-------|---------|\n| 1 | YearMonth=202501\\|Function=HR\\|Team=Talent Acquisition | ShoringRatio | 125% | ShoringRatio must be a percentage with value 0-100. |\n| 2 | YearMonth=202501\\|Function=IT\\|Team=Infrastructure | Target_YearEnd | (empty) | Target_YearEnd is required for Non-Total rows. |\n| 3 | YearMonth=202501\\|Function=IT\\|Team=Infrastructure | Actual_GBS_TeamMember | -3 | Must be >= 0. |\n| 4 | YearMonth=(empty)\\|Function=Marketing\\|Team=UnknownTeam | YearMonth | (empty) | YearMonth is required for all rows. |\n| 5 | YearMonth=(empty)\\|Function=Marketing\\|Team=UnknownTeam | Cost Center Number | 12345 | Must be exactly 7 digits. |\n| 6 | YearMonth=(empty)\\|Function=Marketing\\|Team=UnknownTeam | Team | UnknownTeam | Not in allowed team list. |\n| 7 | YearMonth=(empty)\\|Function=Marketing\\|Team=UnknownTeam | Actual_GBS_TeamMember | abc | Must be a valid number. |\n| 8 | YearMonth=(empty)\\|Function=Marketing\\|Team=UnknownTeam | ShoringRatio | 30 % | Invalid format (space before %). |\n\n### Fix Recommendations\n\n1. **ShoringRatio (R-SR-001, 2 rows)**: Ensure all ShoringRatio values are in format `\\d+(\\.\\d+)?%` with value 0-100, e.g. `25%`, `12.5%`.\n2. **Target_YearEnd (R-REQ-NT-TGT1, 1 row)**: Fill in Target_YearEnd for all Non-Total rows.\n3. **Actual_GBS_TeamMember (R-NUM-001 / R-NUM-002, 2 rows)**: Correct invalid or negative numeric values.\n4. **YearMonth (R-REQ-YM-001, 1 row)**: Fill in YearMonth (YYYYMM format) — required for all rows.\n5. **Cost Center Number (R-CCN-001, 1 row)**: Correct to exactly 7 digits.\n6. **Team (R-TEAM-001, 1 row, Warning)**: Verify team name spelling against the approved list.\n\n### Rows Passed\n\n- `YearMonth=202501|Function=Finance|Team=Finance Operations` — ✅ All checks passed.\n- `YearMonth=202501|Function=Total (All)|Team=` — ✅ All checks passed (Total row, optional fields skipped)."
+}
