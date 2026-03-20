@@ -14,7 +14,8 @@ ClaudeWorkspace/
 ├── prompts/
 │   └── *.prompt.md               # 可复用的提示词模板
 ├── docs/
-│   └── learning-notes.md         # 学习笔记
+│   ├── learning-notes.md         # 学习笔记
+│   └── copilot-studio-guide.md   # Copilot Studio 新版 UI/UX 使用指南
 ├── projects/
 │   └── <project-name>/           # 每个独立项目一个子目录
 └── README.md
@@ -26,3 +27,8 @@ ClaudeWorkspace/
 2. `.github/copilot-instructions.md` 会自动被 Copilot 读取
 3. 每个新项目在 `projects/` 下创建子目录
 4. 可复用的提示词放 `prompts/`，方便跨项目引用
+
+## 参考文档
+
+- [Copilot Studio 新版 UI/UX 使用指南](docs/copilot-studio-guide.md)：触发短语、生成式回答、Power Automate 接入、JSON 输出排障
+- [学习笔记](docs/learning-notes.md)：Claude Code、MCP、Hook、Agent、Plugin 等核心概念
