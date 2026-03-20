@@ -16,9 +16,16 @@ ClaudeWorkspace/
 ├── docs/
 │   └── learning-notes.md         # 学习笔记
 ├── projects/
+│   ├── POC-Validator/            # Power Automate + Copilot Studio 数据验证 POC
 │   └── <project-name>/           # 每个独立项目一个子目录
 └── README.md
 ```
+
+## 项目索引
+
+| 项目 | 说明 |
+|---|---|
+| [POC-Validator](projects/POC-Validator/README.md) | Power Automate 读 Excel → Copilot Studio AI 验证 → 生成 PDF 报告的完整 POC，含新手搭建指南 |
 
 ## 使用方式
 
