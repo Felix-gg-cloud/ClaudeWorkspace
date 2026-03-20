@@ -1,0 +1,77 @@
+{
+  "_comment": "每个 Function 允许出现的 Team 列表。规则 R-MAP-001 使用此映射进行校验。",
+  "Chief Medical Office": [
+    "Chief Medical Office"
+  ],
+  "Chief Operating Office": [
+    "Chief Operating Office"
+  ],
+  "Claims Technical Excellence": [
+    "Claims Technical Excellence",
+    "Life Claims"
+  ],
+  "Customer Contact Centre": [
+    "Customer Contact Centre",
+    "Customer Retention",
+    "GI Contact Centre",
+    "Health Contact Centre",
+    "Life Contact Centre"
+  ],
+  "Customer Relations and Operations Compliance": [
+    "Customer Relations",
+    "Customer Relations and Operations Compliance",
+    "Operations Compliance"
+  ],
+  "EB & Individual Health Claims": [
+    "EB & Individual Health Claims",
+    "EB Claims - In/Outpatient",
+    "EB Claims - Macau",
+    "Individual Health Claims"
+  ],
+  "HNW Operations": [
+    "HNW Ops & Servicing"
+  ],
+  "Life & Individual Health Operations": [
+    "Imaging",
+    "Individual Health Operations",
+    "Life & Individual Health Operations",
+    "Policy Administration",
+    "Wealth Management Administration"
+  ],
+  "Life Claims": [
+    "Life Claims",
+    "Life Claims & Life Claims (High End Medical)",
+    "Life Claims (High End Medical)"
+  ],
+  "Life Underwriting": [
+    "HNW Underwriting",
+    "Macau Operations",
+    "Underwriting"
+  ],
+  "Operations Excellence & Innovation": [
+    "Operations Excellence & Innovation",
+    "Operations Excellence Business Solution",
+    "Operations Platform CoE",
+    "Operations Production Partner and Incident Management",
+    "Operations Strategic & Regulatory Projects and PMO",
+    "Ops Performance Analytics & Integration Partner",
+    "Ops Performance Analytics, Enhancement & Integration Partner",
+    "Vendor Management"
+  ],
+  "P&C Claims": [
+    "P&C Claims"
+  ],
+  "Service Centre, Distributor Services & CPM": [
+    "Customer Payment Management",
+    "Customer Payment Management P&C",
+    "Customer Service Centre",
+    "Distributor Contact Centre",
+    "Distributor Service Centre",
+    "Service Centre, Distributor Services & CPM"
+  ],
+  "Service Excellence": [
+    "Service Excellence"
+  ],
+  "Total (All)": [],
+  "Total (Core Operations)": []
+}
