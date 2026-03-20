@@ -14,7 +14,8 @@ ClaudeWorkspace/
 ├── prompts/
 │   └── *.prompt.md               # 可复用的提示词模板
 ├── docs/
-│   └── learning-notes.md         # 学习笔记
+│   ├── learning-notes.md                  # 学习笔记
+│   └── copilot-studio-blank-agent.md      # Copilot Studio 空白代理完整配置指南
 ├── projects/
 │   └── <project-name>/           # 每个独立项目一个子目录
 └── README.md
