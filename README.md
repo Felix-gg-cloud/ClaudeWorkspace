@@ -16,9 +16,18 @@ ClaudeWorkspace/
 ├── docs/
 │   └── learning-notes.md         # 学习笔记
 ├── projects/
+│   ├── POC-Validator/            # Power Automate Offshoring 校验 Flow
+│   │   └── docs/
+│   │       └── power-automate-runbook.md  # 完整新手搭建手册（含排障与验证清单）
 │   └── <project-name>/           # 每个独立项目一个子目录
 └── README.md
 ```
+
+## 项目索引
+
+| 项目 | 说明 | 文档 |
+|------|------|------|
+| [POC-Validator](projects/POC-Validator/) | Power Automate Flow：读取 SharePoint Excel → Copilot Studio 校验 → 输出 PDF + Teams 通知 | [Runbook](projects/POC-Validator/docs/power-automate-runbook.md) |
 
 ## 使用方式
 
