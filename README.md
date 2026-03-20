@@ -16,7 +16,12 @@ ClaudeWorkspace/
 ├── docs/
 │   └── learning-notes.md         # 学习笔记
 ├── projects/
-│   └── <project-name>/           # 每个独立项目一个子目录
+│   ├── OffshoringValidator/      # Offshoring 数据质量验证 POC
+│   │   └── docs/
+│   │       ├── poc-runbook.md           # POC 运行手册（触发、输入、输出、迁移路径）
+│   │       ├── flow-steps.md            # Power Automate 流程步骤详细配置
+│   │       └── copilot-studio-prompts.md # AI 提示词模板（验证规则 + 输出格式）
+│   └── <project-name>/           # 其他独立项目
 └── README.md
 ```
 
