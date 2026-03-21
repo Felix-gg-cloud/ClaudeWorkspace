@@ -1,0 +1,7 @@
+[
+  { "levelId": 1, "name": "日常基础", "sortOrder": 1 },
+  { "levelId": 1, "name": "问候与自我介绍", "sortOrder": 2 },
+  { "levelId": 2, "name": "购物与餐饮", "sortOrder": 3 },
+  { "levelId": 2, "name": "交通与出行", "sortOrder": 4 },
+  { "levelId": 3, "name": "职场英语", "sortOrder": 5 }
+]

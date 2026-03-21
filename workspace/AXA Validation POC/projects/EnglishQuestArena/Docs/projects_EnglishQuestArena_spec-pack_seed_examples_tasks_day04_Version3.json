@@ -1,0 +1,25 @@
+[
+  { "code": "PRE_A1_CH1_D04_WU01", "lessonCode": "PRE_A1_CH1_D04", "orderIndex": 1, "type": "MCQ",
+    "promptEn": "Listen and choose.",
+    "promptZhHint": "提示：听音选词",
+    "options": [
+      { "key": "A", "textEn": "six", "textZh": "六" },
+      { "key": "B", "textEn": "seven", "textZh": "七" },
+      { "key": "C", "textEn": "eight", "textZh": "八" }
+    ],
+    "answer": { "correctOptionKey": "C" },
+    "xpReward": 6, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "eight" },
+    "links": { "contentItemCodes": ["W_EIGHT"] }
+  },
+  { "code": "PRE_A1_CH1_D04_END01", "lessonCode": "PRE_A1_CH1_D04", "orderIndex": 2, "type": "FLASHCARD",
+    "promptEn": "Quest Complete!",
+    "promptZhHint": "主线完成！",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "You finished Day 4.",
+    "explanationZh": "你完成了第4天主线任务。",
+    "xpReward": 1, "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": [] }
+  }
+]
