@@ -1,0 +1,58 @@
+// ========================================
+// EnglishQuestArena — Dark Fantasy Theme
+// ========================================
+
+// Core palette
+$bg-abyss:      #0a0e1a;
+$bg-dark:       #111827;
+$bg-panel:      #1a1f35;
+$bg-card:       #1e2540;
+
+// Accent colors
+$gold:          #f59e0b;
+$gold-dark:     #d4a017;
+$gold-light:    #fbbf24;
+$hp-red:        #dc2626;
+$hp-red-glow:   #ef4444;
+$mana-blue:     #3b82f6;
+$life-green:    #10b981;
+$magic-purple:  #7c3aed;
+$fire-orange:   #f97316;
+$ice-blue:      #06b6d4;
+$shadow-dark:   #2d1b69;
+
+// Text
+$text-primary:  #e5e7eb;
+$text-secondary:#9ca3af;
+$text-muted:    #6b7280;
+$text-gold:     #fbbf24;
+
+// Borders
+$border-dim:    rgba(255, 255, 255, 0.06);
+$border-subtle: rgba(255, 255, 255, 0.1);
+$border-gold:   rgba(245, 158, 11, 0.3);
+
+// Glass
+$glass-bg:      rgba(26, 31, 53, 0.8);
+$glass-border:  rgba(255, 255, 255, 0.08);
+
+// Shadows
+$shadow-sm:     0 2px 8px rgba(0, 0, 0, 0.3);
+$shadow-md:     0 4px 16px rgba(0, 0, 0, 0.4);
+$shadow-lg:     0 8px 32px rgba(0, 0, 0, 0.5);
+$shadow-glow-gold: 0 0 20px rgba(245, 158, 11, 0.3);
+$shadow-glow-red:  0 0 20px rgba(220, 38, 38, 0.4);
+$shadow-glow-purple: 0 0 20px rgba(124, 58, 237, 0.3);
+
+// Sizing
+$radius-sm:     8px;
+$radius-md:     12px;
+$radius-lg:     16px;
+$radius-xl:     20px;
+
+// Transitions
+$ease-bounce:   cubic-bezier(0.34, 1.56, 0.64, 1);
+$ease-smooth:   cubic-bezier(0.4, 0, 0.2, 1);
+$transition-fast:   0.15s ease;
+$transition-normal: 0.25s ease;
+$transition-slow:   0.4s ease;

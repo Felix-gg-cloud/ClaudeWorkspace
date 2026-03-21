@@ -1,0 +1,5 @@
+[
+  { "code": "PRE_A1_CH1", "cefrLevel": "PRE_A1", "titleEn": "Chapter 1 — First Contact", "titleZh": "第一章 — 初次接触", "orderIndex": 1, "days": 5, "campUnlockRate": 0.80 },
+  { "code": "PRE_A1_CH2", "cefrLevel": "PRE_A1", "titleEn": "Chapter 2 — Numbers & Colors", "titleZh": "第二章 — 数字与颜色", "orderIndex": 2, "days": 5, "campUnlockRate": 0.80 },
+  { "code": "PRE_A1_CH3", "cefrLevel": "PRE_A1", "titleEn": "Chapter 3 — Family & Animals", "titleZh": "第三章 — 家庭与动物", "orderIndex": 3, "days": 5, "campUnlockRate": 0.80 }
+]
