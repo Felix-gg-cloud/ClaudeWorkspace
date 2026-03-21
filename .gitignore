@@ -13,3 +13,6 @@ __pycache__/
 *.pyc
 .venv/
 .vite/
+
+# Java build artifacts
+target/
