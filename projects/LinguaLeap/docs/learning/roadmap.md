@@ -46,7 +46,7 @@ mindmap
       Flyway
         版本化迁移
         回滚策略
-      MinIO
+      MinIO → 本地文件存储
         S3 协议
         对象存储
         Bucket 策略
@@ -127,19 +127,19 @@ graph LR
         P0G["SCSS + 响应式布局"]
     end
 
-    subgraph P1["Phase 1 ⬜ 题库+练习"]
+    subgraph P1["Phase 1 ✅ 题库+练习"]
         P1A["JPA 复杂查询<br/>分页/筛选"]
         P1B["REST API 设计<br/>CRUD 最佳实践"]
         P1C["业务逻辑设计<br/>出题引擎/SRS算法"]
-        P1D["MinIO 文件存储"]
+        P1D["本地文件存储"]
         P1E["PDFBox 文档解析"]
         P1F["Vue 组件化<br/>题型组件"]
         P1G["Chart.js 图表"]
         P1H["复杂状态管理<br/>练习流程"]
     end
 
-    subgraph P2["Phase 2 ⬜ AI 智能"]
-        P2A["Spring AI + Groq"]
+    subgraph P2["Phase 2 ✅ AI 智能"]
+        P2A["Spring AI + GitHub Models GPT-4o"]
         P2B["Prompt 模板系统"]
         P2C["PDF AI 分析<br/>RAG 模式"]
         P2D["AI 出题 + 质量校验"]
@@ -148,19 +148,27 @@ graph LR
         P2G["多轮对话"]
     end
 
-    subgraph P3["Phase 3 ⬜ 语音"]
-        P3A["Web Speech API"]
-        P3B["TTS 朗读"]
-        P3C["STT 识别"]
-        P3D["AI 口语对话"]
+    subgraph P3["Phase 3a ✅ 知识库"]
+        P3A["分级知识库 L1-L9"]
+        P3B["单元学习 + 闪卡"]
+        P3C["预制内容生成"]
+        P3D["AI Lily 对话"]
     end
 
-    P0 --> P1 --> P2 --> P3
+    subgraph P4["Phase 4 ✅ 用户内容"]
+        P4A["学习集上传"]
+        P4B["AI 内容提取"]
+        P4C["入学评估"]
+        P4D["Dashboard 教练改版"]
+    end
+
+    P0 --> P1 --> P2 --> P3 --> P4
 
     style P0 fill:#ECFDF5,stroke:#10B981
-    style P1 fill:#EFF6FF,stroke:#3B82F6
-    style P2 fill:#FDF2F8,stroke:#EC4899
-    style P3 fill:#FEF3C7,stroke:#F59E0B
+    style P1 fill:#ECFDF5,stroke:#10B981
+    style P2 fill:#ECFDF5,stroke:#10B981
+    style P3 fill:#ECFDF5,stroke:#10B981
+    style P4 fill:#ECFDF5,stroke:#10B981
 ```
 
 ---

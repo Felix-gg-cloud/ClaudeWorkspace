@@ -241,9 +241,9 @@
 
 ---
 
-## 1.6 PDF 上传 + MinIO
+## 1.6 PDF 上传 + 本地存储
 
-**目标**：用户上传 PDF 文件，存储到 MinIO（S3 兼容），记录文件路径。
+**目标**：用户上传 PDF 文件，存储到本地文件系统，记录文件路径。
 
 **API 设计**：
 | 方法 | Path | 说明 |
@@ -251,18 +251,18 @@
 | POST | `/api/content/upload/pdf` | 上传 PDF（multipart） |
 
 **实现要点**：
-- MinIO bucket: `ll-files`
+- 本地存储目录: `uploads/`
 - 文件名规则: `pdf/{userId}/{timestamp}_{originalName}`
 - 上传后在 `question_bank.source_file_url` 记录路径
 - 文件大小限制: 10MB
 - 仅接受 `.pdf` 格式
 
 **依赖**：
-- `io.minio:minio:8.5.x`（pom.xml）
-- Docker Compose 中已配置 MinIO
+- `FileStorageService.java`（本地文件存储封装）
+- 无需外部存储服务
 
 **验收标准**：
-- [ ] PDF 上传成功存入 MinIO
+- [ ] PDF 上传成功存入本地文件系统
 - [ ] 返回文件 URL
 - [ ] 限制文件大小和格式
 - [ ] 关联到题库记录
@@ -280,12 +280,12 @@
 
 **实现要点**：
 - 依赖: `org.apache.pdfbox:pdfbox:3.x`
-- 从 MinIO 下载 PDF → PDFBox 提取文本 → 存储提取结果
+- 从本地文件系统读取 PDF → PDFBox 提取文本 → 存储提取结果
 - 题库状态变更: `active` → `processing` → `active`/`error`
 - 提取的原始文本存到新字段或关联表，为 Phase 2 AI 分析做准备
 
 **验收标准**：
-- [ ] 可从 MinIO 读取 PDF
+- [ ] 可从本地文件系统读取 PDF
 - [ ] PDFBox 正确提取文本
 - [ ] 题库状态流转正确
 - [ ] 错误处理（PDF 损坏/无文本内容）
@@ -546,11 +546,7 @@ Phase 1 需要新增的 Flyway 迁移文件：
 
 **service-content/pom.xml**：
 ```xml
-<dependency>
-    <groupId>io.minio</groupId>
-    <artifactId>minio</artifactId>
-    <version>8.5.14</version>
-</dependency>
+<!-- MinIO 已移除，改用本地文件存储 -->
 <dependency>
     <groupId>org.apache.pdfbox</groupId>
     <artifactId>pdfbox</artifactId>

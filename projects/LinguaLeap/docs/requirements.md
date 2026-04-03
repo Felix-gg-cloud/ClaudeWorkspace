@@ -83,12 +83,7 @@ AI 评估与建议（Phase 2 后期，Agent）
 ┌───▼───┐  ┌──▼────┐   ┌───▼─────┐
 │  PG   │  │  PG   │   │ GitHub  │
 │ll_user│  │ll_cont│   │ Models  │
-└───────┘  └──┬────┘   └─────────┘
-              │
-          ┌───▼───┐
-          │ MinIO │
-          │(PDF)  │
-          └───────┘
+└───────┘  └───────┘   └─────────┘
 ```
 
 ### 2.2 技术栈
@@ -101,9 +96,9 @@ AI 评估与建议（Phase 2 后期，Agent）
 | **数据库** | PostgreSQL 16 | Docker 部署，1 实例多库 |
 | **AI 框架** | Spring AI | 统一抽象，支持 API 调用 → Agent 演进 |
 | **AI 主力** | GitHub Models (GPT-4o) | 出题/分析/知识生成/对话 |
-| **文件存储** | MinIO (S3 兼容) | Docker 部署，存储 PDF（尚未使用） |
+| **文件存储** | 本地文件系统 | uploads/ 目录，存储 PDF |
 | **语音** | Web Speech API | 语音识别 + 合成（Phase 3） |
-| **容器化** | Docker Compose | PG + MinIO（开发阶段） |
+| **容器化** | Docker Compose | PG（开发阶段） |
 | **服务通信** | OpenFeign | 同步 HTTP |
 
 ### 2.3 已确认的技术决策
@@ -112,7 +107,7 @@ AI 评估与建议（Phase 2 后期，Agent）
 |--------|------|------|
 | 服务注册发现 | 暂不引入 Nacos/Eureka | Gateway 写死端口，后续部署再加 |
 | 数据库部署 | 1 个 PG 实例，多库 | ll_user / ll_content / ll_ai |
-| 开发阶段容器化 | 只 Docker 化 PG + MinIO | Java 服务本地运行，便于调试 |
+| 开发阶段容器化 | 只 Docker 化 PG | Java 服务本地运行，便于调试 |
 | AI 演进路线 | 先 API 调用 → 后 Agent | Phase 2 初期=API，后期=Agent |
 | AI 提供商 | GitHub Models GPT-4o | 100次/天, 10RPM, 40k tokens/min |
 | 前端风格 | 全新简约 UI | 去掉所有游戏化元素，重写 |
@@ -131,7 +126,7 @@ AI 评估与建议（Phase 2 后期，Agent）
 #### service-content（题库服务 :8082）
 - 预制题库管理（小学/初中/高中）
 - 用户自建题库（命名 + PDF 上传 / 词表导入）
-- PDF 上传 + MinIO 存储 + 文本提取
+- PDF 上传 + 本地文件存储 + 文本提取
 - 知识点管理（单词/短语/语法）
 - **知识库体系**（9个等级 L1-L9，单元管理，学习进度跟踪）
 - 题目 CRUD + 模板出题
@@ -204,7 +199,7 @@ CREATE TABLE question_bank (
     grade           VARCHAR(20) NOT NULL,              -- primary/junior/senior
     type            VARCHAR(20) NOT NULL,              -- preset/user_upload
     user_id         BIGINT,                            -- NULL = 预制题库
-    source_file_url VARCHAR(500),                      -- 原始 PDF MinIO 路径
+    source_file_url VARCHAR(500),                      -- 本地文件路径
     status          VARCHAR(20) DEFAULT 'active',      -- active/processing/error
     kp_count        INT DEFAULT 0,
     question_count  INT DEFAULT 0,
@@ -433,7 +428,7 @@ PC 端 (≥768px):
 | # | 任务 | 产出 |
 |---|------|------|
 | 0.1 | Maven 多模块骨架 | 父 POM + common + gateway + 3 个 service |
-| 0.2 | Docker Compose (PG + MinIO) | 一键启动基础设施 |
+| 0.2 | Docker Compose (PG) | 一键启动基础设施 |
 | 0.3 | common 模块 | JWT 工具 / 统一响应 / 异常处理 |
 | 0.4 | Gateway 路由 + JWT 过滤器 | 网关可运行 |
 | 0.5 | service-user 核心 | 注册/登录/用户信息/JWT 鉴权 |
@@ -455,7 +450,7 @@ PC 端 (≥768px):
 | 1.3 | 知识点 CRUD API | service-content |
 | 1.4 | 模板出题引擎 | 4 种题型（选择/填空/翻译/拼写） |
 | 1.5 | 练习会话 API | 开始/答题/提交/结果 |
-| 1.6 | PDF 上传 + MinIO | service-content |
+| 1.6 | PDF 上传 + 本地存储 | service-content |
 | 1.7 | PDF 文本提取 | Apache PDFBox，存原始文本 |
 | 1.8 | SRS 记忆系统 API | service-content |
 | 1.9 | 错题本 API | service-content |
@@ -611,7 +606,20 @@ List<Question> findQuestions(String topic, int difficulty) { ... }
 | 3.7 | 发音纠错提示 | 音标 + 示范 + 常见错误 |
 | 3.8 | 录音回放 | 对比标准发音 |
 
-### Phase 4：AI 智能体（未来愿景）
+### Phase 4a：用户内容引擎 + AI 学习集 ✅
+
+**目标**：用户可上传自己的学习材料，AI 自动提取知识点并生成练习。
+
+| # | 功能 | 说明 |
+|---|------|------|
+| 4a.1 | 学习集上传 | 支持 PDF/文本/词表，本地文件存储 |
+| 4a.2 | AI 内容提取 | GPT-4o 提取知识点，分类: 词汇/语法/句型/篇章 |
+| 4a.3 | AI 策略生成 | 根据内容+年级生成出题策略 |
+| 4a.4 | 学习集详情 | 管理提取的知识点，开始练习 |
+| 4a.5 | AI 老师 Lily | 入学评估 + 英语对话练习 |
+| 4a.6 | Dashboard 改版 | 每日学习教练，三步任务引导 |
+
+### Phase 4b：AI 智能体（未来愿景）
 
 **目标**：打造 AI 智能体系统，超越预制知识库的限制，实现真正智能化学习。
 
@@ -633,7 +641,7 @@ List<Question> findQuestions(String topic, int difficulty) { ... }
 |------|------|---------|---------|
 | AI 出题/分析 | GitHub Models (GPT-4o) | 100 次/天, 10 RPM | 拒绝请求，不扣费 |
 | 数据库 | PostgreSQL Docker | 无限 | 本地运行 |
-| 文件存储 | MinIO Docker | 无限 | 本地运行（尚未使用） |
+| 文件存储 | 本地文件系统 | 无限 | 本地存储 |
 | 语音识别 | Web Speech API | 无限 | 浏览器原生 |
 | 语音合成 | SpeechSynthesis | 无限 | 浏览器原生 |
 
@@ -644,7 +652,7 @@ List<Question> findQuestions(String topic, int difficulty) { ... }
 ```
 Phase 0 (微服务 + UI 框架) ✅
     │  ├─ Maven 多模块骨架
-    │  ├─ Docker Compose (PG + MinIO)
+    │  ├─ Docker Compose (PG)
     │  ├─ Gateway + JWT
     │  ├─ service-user (注册/登录)
     │  ├─ service-content / service-ai 骨架
@@ -686,10 +694,16 @@ Phase 3a+ (预制内容 + 混合出题) ✅  ← 已完成
     │  ├─ AI 练习分析（Lily老师点评）
     │  └─ 导航简化 + 前端AI按钮移除
     ▼
-Phase 4 (AI 智能体) ← 未来方向
+Phase 4a (用户内容引擎 + AI 学习集) ✅  ← 已完成
+    │  ├─ 学习集上传 (PDF/文本/词表)
+    │  ├─ AI 内容提取 + 分类
+    │  ├─ AI Lily 老师对话 + 入学评估
+    │  ├─ Dashboard 每日学习教练改版
+    │  └─ 本地文件存储 (uploads/)
+    ▼
+Phase 4b (AI 智能体) ← 未来方向
     │  ├─ AI 老师（深度个性化辅导，Agent模式）
-    │  ├─ AI 自由训练（上传任意内容→AI生成学习+练习）
-    │  ├─ AI 内容分析（粘贴英语→解析知识点/翻译→生成训练）
+    │  ├─ 自适应练习 + 学习链连接
     │  └─ 语音练习 / 阅读理解 / 作文批改
 ```
 
@@ -710,7 +724,7 @@ Phase 4 (AI 智能体) ← 未来方向
 | 9 | 章节系统 | 改为题库系统，章节概念后续可能移除 |
 | 10 | ChapterProgress | 暂放 service-user |
 | 11 | 旧数据 | 不迁移，新项目从零开始 |
-| 12 | 开发容器化 | 只 Docker 化 PG+MinIO，Java 服务本地跑 |
+| 12 | 开发容器化 | 只 Docker 化 PG，Java 服务本地跑 |
 | 13 | 预制词库 | 先每级 100-200 词，跑通后扩充 |
 | 14 | Phase 1 题型 | 4 种（选择/填空/翻译/拼写），语音放 Phase 3 |
 | 15 | Phase 1 PDF | 只做存储+文本提取，AI 分析等 Phase 2 |

@@ -56,12 +56,12 @@ graph TB
         PG_USER[("PostgreSQL<br/>ll_user")]
         PG_CONTENT[("PostgreSQL<br/>ll_content")]
         PG_AI[("PostgreSQL<br/>ll_ai")]
-        MINIO[("MinIO<br/>ll-files<br/>PDF 存储")]
+        LOCAL_FS[("本地文件存储<br/>uploads/<br/>PDF 存储")]
     end
 
     SVC_USER_REPO --> PG_USER
     SVC_CONTENT_REPO --> PG_CONTENT
-    SVC_CONTENT_SVC -->|"上传/下载 PDF"| MINIO
+    SVC_CONTENT_SVC -->|"上传/下载 PDF"| LOCAL_FS
     SVC_AI_CACHE --> PG_AI
 
     subgraph 外部服务["☁️ 外部 AI 服务"]
@@ -201,9 +201,15 @@ gantt
     section Phase 3a+ ✅
     预制内容 + 混合出题          :done, p3ap, 2026-03-30, 2026-04-01
 
-    section Phase 4 (未来)
-    AI 智能体 + 自由训练         :p4a, after p3ap, 14d
-    语音练习 + 高级功能          :p4b, after p4a, 14d
+    section Phase 4 ✅
+    用户内容引擎 + AI 学习集    :done, p4, 2026-04-01, 2026-04-03
+
+    section 教学增强 ✅
+    Dashboard 每日学习教练      :done, p4e, 2026-04-03, 2026-04-03
+
+    section 未来规划
+    自适应练习 + 学习链        :p5a, after p4e, 14d
+    语音练习 + 高级功能          :p5b, after p5a, 14d
 ```
 
 ---
@@ -228,6 +234,9 @@ erDiagram
     knowledge_point ||--o{ learning_progress : tracks
 
     practice_session ||--o{ mistake_record : produces
+
+    users ||--o{ study_set : owns
+    study_set ||--o{ learning_item : contains
 
     users {
         bigint id PK
@@ -358,5 +367,33 @@ erDiagram
         int correct_count
         int words_learned
         int study_minutes
+    }
+
+    study_set {
+        bigint id PK
+        bigint user_id FK
+        varchar title
+        text description
+        varchar source_type
+        text source_text
+        varchar source_file_url
+        varchar grade
+        varchar status
+        text ai_summary
+        jsonb ai_strategy
+        int item_count
+    }
+
+    learning_item {
+        bigint id PK
+        bigint study_set_id FK
+        bigint user_id FK
+        varchar category
+        varchar content
+        varchar meaning_zh
+        varchar phonetic
+        text example_sentence
+        int difficulty
+        text ai_note
     }
 ```

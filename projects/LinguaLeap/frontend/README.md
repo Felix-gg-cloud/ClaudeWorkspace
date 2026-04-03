@@ -1,33 +1,35 @@
-# EnglishQuestArena — 英语 RPG 学习系统
+# LinguaLeap — AI 智能英语学习平台
 
-零基础英语 RPG 养成系统。通过营地探索→每日主线→Boss 闯关的游戏流程，让英语学习像打游戏一样有趣。
+AI 驱动的英语学习网站。支持分级知识库、间隔复习、AI 出题、入学评估、Lily 老师对话等功能，覆盖小学至高中英语。
 
 ## 项目状态
 
 | 阶段 | 状态 | 说明 |
 |------|------|------|
-| 阶段一：前端框架与交互 | ✅ 完成 | 10 页面 / 11 题型 / Phaser 营地 / 6 Store |
-| 阶段 1.5：内容扩展 & 体验打磨 | ✅ 完成 | CH1 词表扩充至 40 词 / NPC VN 对话 / 怪物多样化 / 迷雾系统 |
-| 阶段二：内容知识图谱 & Seed 数据 | ⬜ 未开始 | — |
-| 阶段三：后端开发 | ⬜ 未开始 | — |
-| 阶段四：交叉验证 & 质量保证 | ⬜ 未开始 | — |
-
-详细任务文档见 `Tasks/` 目录。
+| Phase 0：微服务架构 + UI 框架 | ✅ 完成 | 4 个 Spring Boot 服务 + Vue 3 前端 |
+| Phase 1：题库系统 + 练习核心 | ✅ 完成 | 知识点/题目 CRUD、练习系统、SRS 复习、错题本 |
+| Phase 2：AI 智能功能 | ✅ 完成 | GPT-4o 出题、知识点分析、AI 翻译判定 |
+| Phase 2b：题型改造 + 年级自适应 | ✅ 完成 | 4 种题型 × 3 个年级段，全 AI 出题 |
+| Phase 3a：知识库体系 + 分级学习 | ✅ 完成 | L1-L9 九级体系、闪卡学习、预制内容 |
+| Phase 4：用户内容引擎 | ✅ 完成 | 学习集上传 (PDF/文本)、AI 提取知识点、AI 老师 Lily |
+| 教学增强：Dashboard 改版 | ✅ 完成 | 每日学习教练、三步任务引导、连续学习天数 |
 
 ## 技术栈
 
-**前端** (当前目录)
-- Vue 3 + TypeScript + Vite 7
-- Pinia + Vue Router 4 (Hash 模式)
-- Phaser 3 (营地探索游戏引擎)
-- Web Audio API (8-bit 音效)
-- SpeechSynthesis API (TTS 发音)
+**前端**
+- Vue 3.5 + TypeScript + Vite 8
+- Pinia 状态管理 + Vue Router 4
+- Tailwind CSS v4 + SCSS
+- Axios HTTP（JWT 拦截器 + 全局 Toast 错误处理）
 
-**后端** (待开发)
-- Spring Boot 3.x + Java 17
-- Spring Security (Session + Cookie)
-- Spring Data JPA + Flyway
-- H2 (开发) / PostgreSQL (生产)
+**后端（微服务）**
+- Spring Cloud Gateway :8080（路由/JWT 鉴权）
+- service-user :8081（注册/登录/统计）
+- service-content :8082（题库/练习/SRS/错题/知识库/学习集）
+- service-ai :8083（GPT-4o 出题/评估/对话/内容提取）
+
+**数据库** — PostgreSQL 16（ll_user / ll_content / ll_ai）
+**AI** — GitHub Models GPT-4o via Spring AI
 
 ## 快速开始
 
@@ -45,76 +47,48 @@ npm run build
 npx vue-tsc --noEmit
 ```
 
-默认登录: 任意用户名密码 (当前 mock 模式)
+后端服务需要先启动（gateway:8080, user:8081, content:8082, ai:8083）。
 
 ## 核心功能
 
-- 🏕️ **营地探索**: Phaser 3 驱动的 RPG 地图 (24×18)，40 个单词怪物 + 3 NPC + 4 宝箱
-  - 5 种怪物造型: 🍄蘑菇 / 🌵仙人掌 / 🐛毛毛虫 / 🦇独眼蝙蝠 / 😈暗影恶魔
-  - 4 种 NPC 立绘: 向导 / 贤者 / 骑士 / 商人 (Visual Novel 全屏对话)
-  - 迷雾系统: 探索时逐步揭露地图
-- ⚔️ **每日主线**: 30 道题/天，11 种题型交替
-- 💀 **Boss 战**: HP 对决 + 连击系统
-- 🏟️ **SRS 副本**: 间隔重复复习 (待接入 SM-2 算法)
-- 🌟 **技能星图**: 技能点解锁被动技能
-- 📊 **竞争力分析**: 用户数据统计可视化
-- 🔔 **CEFR 等级测验**: 测验通过升级英语等级
+- 📋 **每日学习教练** — Dashboard 三步任务引导：复习 → 学习 → 练习
+- 📚 **分级知识库** — L1-L9 九级体系，按年级推荐，闪卡学习
+- 🔄 **间隔复习 (SRS)** — SM-2 算法，自动安排复习时间
+- ✏️ **智能练习** — 选择题/填空/翻译/拼写，AI 根据年级出题
+- 📝 **错题本** — 自动收集错题，支持重练
+- 🤖 **AI 老师 Lily** — 入学评估 + 英语对话练习
+- 📄 **学习集上传** — PDF/文本上传，AI 自动提取知识点并生成练习
+- 📊 **学习统计** — 每日数据、连续学习天数、正确率趋势
 
 ## 目录结构
 
 ```
 src/
-├── views/          # 10 个页面视图
-├── components/     # 11 种题卡 + 遭遇弹窗 + NPC 立绘 + Boss SVG
-├── game/           # Phaser 3 游戏 (场景/精灵/纹理/地图)
-├── stores/         # 6 个 Pinia 状态管理
-├── composables/    # 音效/奖励/题卡 组合式函数
-├── mock/           # 3 章 Mock 数据 (后端接入后废弃)
-├── data/           # 营地生成器 / 主线生成器 / 覆盖率检查
-├── types/          # TypeScript 类型定义
-├── layouts/        # 主布局
-├── router/         # 路由配置
-└── styles/         # SCSS 全局样式
+├── api/           # API 接口层 (10 个模块)
+├── components/    # 通用组件 (AppIcon, SpeakButton, Toast)
+├── composables/   # 组合式函数 (Toast, TTS)
+├── layouts/       # AppLayout 主布局
+├── lib/           # 工具函数
+├── router/        # 路由配置
+├── stores/        # Pinia 状态 (user, theme)
+├── styles/        # SCSS + Tailwind 全局样式
+├── types/         # TypeScript 类型定义
+└── views/         # 17 个页面视图
+    ├── DashboardView      # 首页（每日学习教练）
+    ├── LoginView          # 登录
+    ├── AssessmentView     # 入学评估
+    ├── ChatView           # AI Lily 对话
+    ├── LevelListView      # 知识库等级列表
+    ├── LevelDetailView    # 等级详情（单元列表）
+    ├── LearnView          # 闪卡学习
+    ├── PracticeView       # 练习
+    ├── ReviewView         # SRS 间隔复习
+    ├── MistakesView       # 错题本
+    ├── StatsView          # 学习统计
+    ├── BankListView       # 题库列表
+    ├── BankDetailView     # 题库详情
+    ├── UploadView         # 上传材料
+    ├── StudySetDetailView # 学习集详情
+    ├── StudySetReaderView # 学习集阅读
+    └── SettingsView       # 设置
 ```
-
-## 章节数据
-
-| 章节 | 标题 | CEFR | 天数 | 词量 | 地图 |
-|------|------|------|------|------|------|
-| PRE_A1_CH1 | First Contact (初次接触) | PRE_A1 | 5 | 40 词 + 8 短语 | 24×18, 45 怪物位 |
-| PRE_A1_CH2 | Numbers & Colors (数字与颜色) | PRE_A1 | 5 | Mock | 20×15 |
-| PRE_A1_CH3 | Family & Animals (家庭与动物) | PRE_A1 | 5 | Mock | 20×15 |
-
-章节流程: `locked → camp → quest → boss → completed`
-
-## 游戏流程
-
-```
-登录 → 仪表盘
-         ├── 营地探索 (Phaser RPG)
-         │     └── 遭遇怪物 → 三选一答题 → 击败/失败
-         │     └── NPC 对话 (Visual Novel)
-         │     └── 开宝箱 → 获得奖励
-         ├── 每日主线 (30 题/天, 11 题型)
-         ├── Boss 战 (HP 对决)
-         ├── SRS 副本 (间隔重复)
-         ├── 技能星图
-         ├── 竞争力分析
-         └── CEFR 等级测验
-```
-
-## 更新日志
-
-### v0.2.0 — 阶段 1.5 (2026-03-13)
-- **内容扩展**: CH1 词表从 6 词扩充到 40 词 + 8 短语
-- **NPC 体验**: Visual Novel 全屏对话系统，4 种 NPC 立绘升级
-- **怪物多样化**: 5 种全新造型 (蘑菇/仙人掌/毛毛虫/蝙蝠/恶魔)，Easy 怪物 3 种子变体轮换
-- **迷雾系统**: 半径 3 格逐步揭露地图
-- **竞争力分析**: StatsView 数据统计页面
-- **Bug 修复**: 地图数据注入 (defaultCampMap → ch1CampMap)、tile 重叠、ellipse 参数
-
-### v0.1.0 — 阶段一 (2026-03-12)
-- 前端框架完整实现: 10 页面 / 11 题型组件 / 6 Store
-- Phaser 3 营地探索: 地图渲染 / 碰撞检测 / 遭遇系统
-- Boss 战: HP 对决 + 连击系统
-- 程序化纹理生成: 地形 / 装饰物 / 角色 / 怪物

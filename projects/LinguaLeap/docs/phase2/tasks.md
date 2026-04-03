@@ -2,7 +2,7 @@
 
 > 目标：接入 AI API，实现 AI 智能出题、Prompt 模板、缓存/限流/日志，前端 AI 出题页面。
 > 对应学习路线：第一层（AI API 调用）+ 第二层（Prompt 工程）+ 第六层（AI 工程化基础）
-> **注意**：本文档编写时使用 Groq API，实际已切换为 GitHub Models GPT-4o（`models.inference.ai.azure.com`），Spring AI OpenAI starter 兼容。
+> **注意**：本文档编写时曾考虑 Groq API，实际已切换为 GitHub Models GPT-4o（`models.inference.ai.azure.com`），以下内容已同步更新。
 
 ---
 
@@ -10,7 +10,7 @@
 
 | # | 任务 | 类型 | 依赖 | 状态 |
 |---|------|------|------|------|
-| 2.1 | [Spring AI + Groq 集成](#21-spring-ai--groq-集成) | 后端 | — | ✅ |
+| 2.1 | [Spring AI + GitHub Models 集成](#21-spring-ai--github-models-集成) | 后端 | — | ✅ |
 | 2.2 | [Prompt 模板系统](#22-prompt-模板系统) | 后端 | 2.1 | ✅ |
 | 2.3 | [AI 智能出题 API](#23-ai-智能出题-api) | 后端 | 2.2 | ✅ |
 | 2.4 | [AI 出题质量校验](#24-ai-出题质量校验) | 后端 | 2.3 | ✅ |
@@ -48,26 +48,26 @@
 | 项 | 选择 | 理由 |
 |----|------|------|
 | AI 框架 | Spring AI 1.0.0 | Spring 官方，与 Boot 深度集成 |
-| AI 模型 | Groq API (Llama 3.3 70B) | 免费额度充足，速度快，支持 JSON mode |
+| AI 模型 | GitHub Models GPT-4o | 100次/天免费额度，智能度高，支持 JSON mode |
 | Prompt 管理 | Java 类 + 模板字符串 | 简单直接，版本可控 |
 | 缓存 | 数据库 (ai_analysis_cache) | 已有表，无需 Redis |
 | 限流 | 内存计数器 | 单实例足够，无需分布式 |
 
 ---
 
-## Groq API 信息
+## GitHub Models API 信息
 
-- **Endpoint**: `https://api.groq.com/openai/v1`
-- **模型**: `llama-3.3-70b-versatile`
-- **免费额度**: 6000 req/day, 6000 tokens/min
+- **Endpoint**: `https://models.inference.ai.azure.com`
+- **模型**: `gpt-4o`
+- **免费额度**: 100 req/day, 10 RPM, 40k tokens/min
 - **特点**: OpenAI 兼容协议，Spring AI 原生支持
-- **API Key**: 通过环境变量 `GROQ_API_KEY` 注入（不硬编码）
+- **API Key**: 通过环境变量 `GITHUB_TOKEN` 注入（不硬编码）
 
 ---
 
-## 2.1 Spring AI + Groq 集成
+## 2.1 Spring AI + GitHub Models 集成
 
-**目标**：service-ai 引入 Spring AI，配置 Groq ChatClient，验证基本调用。
+**目标**：service-ai 引入 Spring AI，配置 GitHub Models GPT-4o ChatClient，验证基本调用。
 
 **实现要点**：
 
@@ -79,18 +79,18 @@
     <artifactId>spring-ai-starter-model-openai</artifactId>
 </dependency>
 ```
-> Spring AI 的 OpenAI starter 兼容 Groq（因为 Groq 用 OpenAI 协议）
+> Spring AI 的 OpenAI starter 兼容 GitHub Models（因为 GitHub Models 用 OpenAI 协议）
 
 2. **application.yml 配置**：
 ```yaml
 spring:
   ai:
     openai:
-      api-key: ${GROQ_API_KEY}
-      base-url: https://api.groq.com/openai
+      api-key: ${GITHUB_TOKEN}
+      base-url: https://models.inference.ai.azure.com
       chat:
         options:
-          model: llama-3.3-70b-versatile
+          model: gpt-4o
           temperature: 0.3
 ```
 
@@ -114,13 +114,13 @@ public class ChatService {
 }
 ```
 
-4. **Health/Test 端点**：`GET /api/ai/health`（验证 Groq 连通性）
+4. **Health/Test 端点**：`GET /api/ai/health`（验证 GitHub Models 连通性）
 
 5. **UserContextFilter**：从 Gateway 接收 X-User-Id
 
 **验收标准**：
 - [ ] Maven 编译通过
-- [ ] 启动时能连接 Groq API
+- [ ] 启动时能连接 GitHub Models API
 - [ ] `/api/ai/test?prompt=hello` 返回 AI 回复
 - [ ] API Key 通过环境变量注入，不在代码中硬编码
 
@@ -265,7 +265,7 @@ JSON 格式：
 ### 调用日志（ai_call_log）
 
 每次 AI 调用记录：
-- user_id, api_provider（groq）, call_type（generate_question 等）
+- user_id, api_provider（github_models）, call_type（generate_question 等）
 - tokens_in, tokens_out（从 AI 响应中提取）
 - latency_ms, status（success/error）
 
@@ -341,7 +341,7 @@ JSON 格式：
 
 ## 2.7 降级策略：AI 不可用 → 模板出题
 
-**目标**：当 Groq API 不可用（超时/报错/限流耗尽）时，自动降级为模板出题。
+**目标**：当 AI API 不可用（超时/报错/限流耗尽）时，自动降级为模板出题。
 
 **降级逻辑**：
 ```
@@ -354,9 +354,9 @@ try {
 ```
 
 **降级场景**：
-- Groq API 超时（>10s）
-- Groq 返回 429（限流）
-- Groq 返回 5xx
+- AI API 超时（>10s）
+- API 返回 429（限流）
+- API 返回 5xx
 - AI 返回内容校验失败（重试后仍失败）
 
 **验收标准**：
@@ -444,7 +444,7 @@ try {
 
 **service-ai/pom.xml**：
 ```xml
-<!-- Spring AI - OpenAI compatible (for Groq) -->
+<!-- Spring AI - OpenAI compatible (for GitHub Models GPT-4o) -->
 <dependency>
     <groupId>org.springframework.ai</groupId>
     <artifactId>spring-ai-starter-model-openai</artifactId>
@@ -466,7 +466,7 @@ try {
 
 ## 环境准备
 
-1. 注册 Groq Console：https://console.groq.com
-2. 创建 API Key
-3. 设置环境变量：`export GROQ_API_KEY=gsk_xxxxx`
+1. 获取 GitHub Token：https://github.com/settings/tokens
+2. 确保 Token 有 `models:inference` 权限
+3. 设置环境变量：`export GITHUB_TOKEN=ghp_xxxxx`
 4. 确认 ll_ai 数据库存在且迁移已跑

@@ -39,11 +39,11 @@ graph TD
 
 | 概念 | 解释 | 项目实践 |
 |------|------|---------|
-| **Token** | LLM 处理的最小单位，大约 1 个中文字 = 1-2 token | Groq 免费额度按 token 计 |
+| **Token** | LLM 处理的最小单位，大约 1 个中文字 = 1-2 token | GitHub Models 免费额度 100次/天, 40k tokens/min |
 | **Temperature** | 控制输出的随机性，0=确定性，1=创意 | 出题用 0.3（稳定），对话用 0.7（自然） |
 | **System Prompt** | 给 AI 设定的角色/规则 | "你是一位专业英语教师..." |
 | **User Prompt** | 每次具体的请求 | "为单词 apple 出一道英译中选择题" |
-| **Context Window** | 模型能处理的最大 token 数 | Llama 3.3 70B = 128K tokens |
+| **Context Window** | 模型能处理的最大 token 数 | GPT-4o = 128K tokens |
 | **Structured Output** | 要求 AI 按固定格式输出 | JSON mode 返回题目结构 |
 
 **Spring AI 核心类**：
@@ -67,11 +67,11 @@ var question = chatClient.prompt()
 
 **项目中怎么用**：
 - `service-ai` 封装 `AiChatService`
-- 调用 Groq API 出题/分析/推荐
+- 调用 GitHub Models GPT-4o 出题/分析/推荐
 - 返回结构化 JSON，映射到 DTO
 
 **复盘时要理解**：
-- [ ] HTTP 请求怎么发到 Groq 的
+- [ ] HTTP 请求怎么发到 GitHub Models 的
 - [ ] token 是怎么计算的
 - [ ] temperature 不同值的实际效果差异
 - [ ] 出错了怎么重试/降级
@@ -157,11 +157,11 @@ flowchart LR
 | PDF 太长，超出 context window | 文本分块，分批发给 AI |
 | 提取的文本格式混乱 | 预处理：去多余空白、合并断行 |
 | AI 提取的知识点不准确 | 校验规则 + 人工确认 |
-| 图片/表格 PDF | Gemini 多模态 API 直接读图 |
+| 图片/表格 PDF | 多模态 API 或预处理文本 |
 
 **项目中怎么用**：
 - Phase 1：PDFBox 纯文本提取（不涉及 AI）
-- Phase 2：提取的文本 → 发给 Groq → 返回结构化知识点
+- Phase 2：提取的文本 → 发给 GPT-4o → 返回结构化知识点
 - 复杂 PDF → Gemini 多模态 API
 
 **复盘时要理解**：

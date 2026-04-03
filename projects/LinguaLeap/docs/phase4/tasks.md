@@ -45,7 +45,7 @@
 | description | TEXT | 用户备注/诉求 |
 | source_type | VARCHAR(20) | text / pdf / wordlist |
 | source_text | TEXT | 原始文本（text/wordlist 类型保存） |
-| source_file_url | VARCHAR(500) | MinIO 文件路径（PDF 类型） |
+| source_file_url | VARCHAR(500) | 本地文件路径（PDF 类型） |
 | grade | VARCHAR(20) | 年级 |
 | status | VARCHAR(20) | processing / ready / failed |
 | ai_summary | TEXT | AI 对内容的总结 |
@@ -132,13 +132,12 @@
 - `StudySetRepository.java` — findByUserId, countByUserId
 - `LearningItemRepository.java` — findByStudySetId, countByStudySetIdAndCategory
 
-### 4.3 MinIO 集成
+### 4.3 本地文件存储 + PDF 提取
 
-- 添加 `minio` Maven 依赖到 service-content
-- `application.yml` 配置 MinIO 连接
-- `MinioConfig.java` — MinIO Client Bean
-- `FileStorageService.java` — upload/download/delete 封装
-- 已有 Docker MinIO 服务 (9000/9001)
+- `FileStorageService.java` — 本地文件存储封装 (upload/download/delete)
+- `PdfExtractorService.java` — PDFBox 提取 PDF 文本
+- 存储目录: `uploads/` （可通过 application.yml 配置）
+- 无需外部存储服务，简单可靠
 
 ### 4.4 AI 内容提取 + 分类 Prompt
 

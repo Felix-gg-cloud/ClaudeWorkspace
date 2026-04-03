@@ -9,7 +9,7 @@
 | # | 任务 | 类型 | 状态 |
 |---|------|------|------|
 | 0.1 | [Maven 多模块骨架](#01-maven-多模块骨架) | 后端 | ✅ |
-| 0.2 | [Docker Compose (PG + MinIO)](#02-docker-compose) | 基础设施 | ✅ |
+| 0.2 | [Docker Compose (PG)](#02-docker-compose) | 基础设施 | ✅ |
 | 0.3 | [common 公共模块](#03-common-公共模块) | 后端 | ✅ |
 | 0.4 | [Gateway 路由 + JWT 过滤器](#04-gateway) | 后端 | ✅ |
 | 0.5 | [service-user 核心功能](#05-service-user) | 后端 | ✅ |
@@ -62,7 +62,7 @@ LinguaLeap/
 - `common` → 无外部依赖，纯 Java
 - `gateway` → Spring Cloud Gateway + common
 - `service-user` → Spring Boot Web + JPA + PostgreSQL + common
-- `service-content` → Spring Boot Web + JPA + PostgreSQL + MinIO + common
+- `service-content` → Spring Boot Web + JPA + PostgreSQL + common
 - `service-ai` → Spring Boot Web + Spring AI + common
 
 **验收标准**：
@@ -73,24 +73,22 @@ LinguaLeap/
 
 ## 0.2 Docker Compose
 
-**目标**：一键启动 PostgreSQL + MinIO 基础设施。
+**目标**：一键启动 PostgreSQL 基础设施。
+
+> 注：原规划包含 MinIO，实际已改用本地文件存储，无需 MinIO。
 
 **docker-compose.yml 内容**：
 - `postgres:16` — 端口 5432，创建 3 个数据库：ll_user / ll_content / ll_ai
-- `minio/minio` — 端口 9000(API) + 9001(Console)，创建 bucket: `ll-files`
 
 **环境变量**：
 ```
 POSTGRES_USER=lingualeap
 POSTGRES_PASSWORD=lingualeap123
-MINIO_ROOT_USER=minioadmin
-MINIO_ROOT_PASSWORD=minioadmin123
 ```
 
 **验收标准**：
 - [ ] `docker compose up -d` 一键启动
 - [ ] 可用 psql/pgAdmin 连接 3 个数据库
-- [ ] 可访问 MinIO Console http://localhost:9001
 
 ---
 
@@ -315,7 +313,7 @@ CREATE TABLE users (
 **目标**：端到端验证所有组件协同工作。
 
 **测试流程**：
-1. `docker compose up -d` → PG + MinIO 启动
+1. `docker compose up -d` → PG 启动
 2. 启动 gateway (8080)
 3. 启动 service-user (8081)
 4. 启动 service-content (8082)
