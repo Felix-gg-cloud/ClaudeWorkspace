@@ -1,0 +1,31 @@
+server:
+  port: 8080
+  max-http-request-header-size: 32KB
+
+spring:
+  application:
+    name: lingualeap-gateway
+  codec:
+    max-in-memory-size: 10MB
+  cloud:
+    gateway:
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: "http://localhost:5173"
+            allowed-methods: "*"
+            allowed-headers: "*"
+            allow-credentials: true
+      routes:
+        - id: user-service
+          uri: http://localhost:8081
+          predicates:
+            - Path=/api/auth/**, /api/user/**
+        - id: content-service
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/content/**
+        - id: ai-service
+          uri: http://localhost:8083
+          predicates:
+            - Path=/api/ai/**

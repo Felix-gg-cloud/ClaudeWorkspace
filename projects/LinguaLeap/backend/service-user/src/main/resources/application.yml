@@ -1,0 +1,18 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: lingualeap-user
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ll_user
+    username: lingualeap
+    password: lingualeap123
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration

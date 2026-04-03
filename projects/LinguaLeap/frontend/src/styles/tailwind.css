@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* ---- LinguaLeap Design Tokens ---- */
+@theme {
+  /* Colors */
+  --color-primary: #6366F1;
+  --color-primary-light: #EEF2FF;
+  --color-primary-hover: #4F46E5;
+  --color-primary-dark: #4338CA;
+  --color-primary-foreground: #FFFFFF;
+
+  --color-secondary: #F1F5F9;
+  --color-secondary-foreground: #0F172A;
+
+  --color-accent: #F1F5F9;
+  --color-accent-foreground: #0F172A;
+
+  --color-destructive: #EF4444;
+  --color-destructive-foreground: #FFFFFF;
+
+  --color-success: #10B981;
+  --color-success-light: #ECFDF5;
+  --color-warning: #F59E0B;
+  --color-warning-light: #FFFBEB;
+
+  --color-background: #F8FAFC;
+  --color-foreground: #0F172A;
+  --color-card: #FFFFFF;
+  --color-card-foreground: #0F172A;
+
+  --color-muted: #F1F5F9;
+  --color-muted-foreground: #64748B;
+
+  --color-border: #E2E8F0;
+  --color-input: #E2E8F0;
+  --color-ring: #6366F1;
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-2xl: 32px;
+
+  /* Animations */
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-slide-up: slide-up 0.4s ease-out;
+  --animate-slide-down: slide-down 0.3s ease-out;
+  --animate-scale-in: scale-in 0.2s ease-out;
+  --animate-float: float 3s ease-in-out infinite alternate;
+  --animate-shimmer: shimmer 2s linear infinite;
+  --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slide-down {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes float {
+  from { transform: translateY(0) rotate(-5deg); }
+  to { transform: translateY(-8px) rotate(5deg); }
+}
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(99, 102, 241, 0); }
+  50% { box-shadow: 0 0 20px 4px rgba(99, 102, 241, 0.15); }
+}
+
+/* Dark theme overrides */
+:root[data-theme='dark'] {
+  --color-primary: #818CF8;
+  --color-primary-light: #1E1B4B;
+  --color-primary-hover: #6366F1;
+  --color-primary-foreground: #FFFFFF;
+
+  --color-secondary: #1E293B;
+  --color-secondary-foreground: #F1F5F9;
+
+  --color-accent: #1E293B;
+  --color-accent-foreground: #F1F5F9;
+
+  --color-destructive: #F87171;
+
+  --color-background: #0F172A;
+  --color-foreground: #F1F5F9;
+  --color-card: #1E293B;
+  --color-card-foreground: #F1F5F9;
+
+  --color-muted: #334155;
+  --color-muted-foreground: #94A3B8;
+
+  --color-border: #334155;
+  --color-input: #334155;
+  --color-ring: #818CF8;
+}
