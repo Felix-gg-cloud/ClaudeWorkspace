@@ -11,6 +11,21 @@
       <svg class="banner-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
     </div>
 
+    <!-- Phase 5a: AI 学习计划卡 -->
+    <div v-if="teachingPlan && !showAssessmentBanner" class="plan-card" @click="goToChat">
+      <div class="plan-card__header">
+        <span class="plan-card__icon">{{ phaseEmoji }}</span>
+        <div class="plan-card__info">
+          <h3>{{ teachingPlan.phaseLabel }}</h3>
+          <p v-if="teachingPlan.levelCode">当前级别：{{ teachingPlan.levelCode }}</p>
+        </div>
+        <span class="plan-card__badge">{{ phaseAction }}</span>
+      </div>
+      <div class="plan-card__hint">
+        点击与 Lily 老师开始今天的 {{ teachingPlan.phaseLabel }}
+      </div>
+    </div>
+
     <!-- Hero 欢迎区域 -->
     <div class="hero">
       <div class="hero-bg">
@@ -146,7 +161,7 @@
 import { computed, ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
-import { assessmentApi, type StudentProfile } from '@/api/teacher'
+import { assessmentApi, orchestratorApi, type StudentProfile, type TeachingPlan } from '@/api/teacher'
 import { statsApi, type TodayStats, type StreakInfo } from '@/api/stats'
 import { srsApi, type SrsStats } from '@/api/srs'
 import { levelApi } from '@/api/level'
@@ -158,6 +173,7 @@ const router = useRouter()
 const userStore = useUserStore()
 const displayName = computed(() => userStore.user?.displayName || userStore.user?.username || '同学')
 const showAssessmentBanner = ref(false)
+const teachingPlan = ref<TeachingPlan | null>(null)
 const todayStats = ref<TodayStats | null>(null)
 const streakInfo = ref<StreakInfo | null>(null)
 const srsStats = ref<SrsStats>({ total: 0, dueCount: 0, mastered: 0, learning: 0 })
@@ -214,6 +230,16 @@ function goToCurrentUnit() {
   else router.push('/levels')
 }
 
+const phaseEmoji = computed(() => {
+  const map: Record<string, string> = { review: '🔄', learn: '📖', practice: '✏️', summary: '📊' }
+  return map[teachingPlan.value?.phase || ''] || '📋'
+})
+const phaseAction = computed(() => {
+  const map: Record<string, string> = { review: '开始复习', learn: '开始学习', practice: '开始练习', summary: '查看总结' }
+  return map[teachingPlan.value?.phase || ''] || '开始'
+})
+function goToChat() { router.push('/chat') }
+
 onMounted(async () => {
   const [assessRes, statsRes, streakRes, srsRes, setsRes, mistakeRes, levelsRes] = await Promise.allSettled([
     assessmentApi.status(),
@@ -234,7 +260,14 @@ onMounted(async () => {
   if (assessRes.status === 'fulfilled') {
     const assessed = assessRes.value.data.data.assessed
     showAssessmentBanner.value = !assessed
-    if (assessed && levelsRes.status === 'fulfilled') {
+    if (assessed) {
+      // 获取教学计划
+      try {
+        const planRes = await orchestratorApi.getPlan()
+        teachingPlan.value = planRes.data.data
+      } catch { /* ignore */ }
+
+      if (levelsRes.status === 'fulfilled') {
       try {
         const profileRes = await assessmentApi.getProfile()
         const p: StudentProfile = profileRes.data.data
@@ -759,5 +792,63 @@ function goToAssessment() { router.push('/assessment') }
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
+}
+
+/* ====== Phase 5a: 学习计划卡 ====== */
+.plan-card {
+  background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 100%);
+  border-radius: 18px;
+  padding: 20px 22px;
+  color: #fff;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.3);
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  &__icon {
+    font-size: 32px;
+    flex-shrink: 0;
+  }
+
+  &__info {
+    flex: 1;
+
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0;
+    }
+    p {
+      font-size: 13px;
+      opacity: 0.85;
+      margin: 2px 0 0;
+    }
+  }
+
+  &__badge {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  &__hint {
+    margin-top: 12px;
+    font-size: 13px;
+    opacity: 0.75;
+  }
 }
 </style>

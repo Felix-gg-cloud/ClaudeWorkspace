@@ -181,4 +181,26 @@ public class ContentServiceClient {
             return 0;
         }
     }
+
+    /**
+     * Phase 5a — 查询教学约束数据
+     * @param path API 路径，如 /api/content/constraints/vocab/L7
+     * @return data 节点内容，失败返回 null
+     */
+    @SuppressWarnings("unchecked")
+    public Map<String, Object> fetchConstraintData(String path) {
+        try {
+            String url = contentServiceUrl + path;
+            ResponseEntity<String> resp = restTemplate.getForEntity(url, String.class);
+            JsonNode root = objectMapper.readTree(resp.getBody());
+            if (root.get("code").asInt() != 200) {
+                log.warn("查询约束数据失败: {} → {}", path, root.get("message").asText());
+                return null;
+            }
+            return objectMapper.convertValue(root.get("data"), Map.class);
+        } catch (Exception e) {
+            log.error("调用 content-service 约束 API 失败: {} → {}", path, e.getMessage());
+            return null;
+        }
+    }
 }

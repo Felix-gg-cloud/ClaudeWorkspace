@@ -46,6 +46,17 @@ export interface StudentProfile {
   learningStyle: string
   aiAssessment: string
   assessedAt: string
+  levelCode?: string
+  weakTags?: string
+  totalSessions?: number
+  totalCorrect?: number
+  totalAnswered?: number
+}
+
+export interface TeachingPlan {
+  phase: 'assessment' | 'review' | 'learn' | 'practice' | 'summary'
+  levelCode: string | null
+  phaseLabel: string
 }
 
 // ========== 对话 API ==========
@@ -103,5 +114,19 @@ export const assessmentApi = {
   /** 获取学生画像 */
   getProfile() {
     return http.get<{ code: number; data: StudentProfile }>('/ai/teacher/profile')
+  },
+}
+
+// ========== 编排引擎 API ==========
+
+export const orchestratorApi = {
+  /** 获取当前教学计划 */
+  getPlan() {
+    return http.get<{ code: number; data: TeachingPlan }>('/ai/teacher/plan')
+  },
+
+  /** 记录答题结果 */
+  recordAnswer(correct: boolean, kp?: string) {
+    return http.post('/ai/teacher/answer-result', { correct, kp })
   },
 }

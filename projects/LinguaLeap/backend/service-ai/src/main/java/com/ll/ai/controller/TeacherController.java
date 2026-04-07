@@ -2,12 +2,14 @@ package com.ll.ai.controller;
 
 import com.ll.ai.entity.ChatSession;
 import com.ll.ai.service.AssessmentService;
+import com.ll.ai.service.OrchestratorService;
 import com.ll.ai.service.TeacherChatService;
 import com.ll.common.dto.ApiResponse;
 import com.ll.common.exception.BizException;
 import com.ll.common.util.UserContext;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,10 +22,14 @@ public class TeacherController {
 
     private final TeacherChatService chatService;
     private final AssessmentService assessmentService;
+    private final OrchestratorService orchestratorService;
 
-    public TeacherController(TeacherChatService chatService, AssessmentService assessmentService) {
+    public TeacherController(TeacherChatService chatService,
+                             AssessmentService assessmentService,
+                             OrchestratorService orchestratorService) {
         this.chatService = chatService;
         this.assessmentService = assessmentService;
+        this.orchestratorService = orchestratorService;
     }
 
     // ========== 对话 API ==========
@@ -128,6 +134,45 @@ public class TeacherController {
             throw new BizException(404, "尚未完成入学评估");
         }
         return ApiResponse.ok(profile);
+    }
+
+    // ========== Phase 5a: 编排引擎 API ==========
+
+    /**
+     * 获取当前教学计划（Dashboard 用）
+     */
+    @GetMapping("/plan")
+    public ApiResponse<Map<String, Object>> getPlan() {
+        Long userId = getUserId();
+        OrchestratorService.OrchestratedPrompt plan = orchestratorService.orchestrate(userId);
+
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("phase", plan.phase());
+        result.put("levelCode", plan.levelCode());
+
+        String phaseLabel = switch (plan.phase()) {
+            case "assessment" -> "入学评估";
+            case "review" -> "复习巩固";
+            case "learn" -> "学习新知识";
+            case "practice" -> "练习检测";
+            case "summary" -> "学习总结";
+            default -> plan.phase();
+        };
+        result.put("phaseLabel", phaseLabel);
+
+        return ApiResponse.ok(result);
+    }
+
+    /**
+     * 记录答题结果（更新 Learner Model）
+     */
+    @PostMapping("/answer-result")
+    public ApiResponse<Void> recordAnswerResult(@RequestBody Map<String, Object> body) {
+        Long userId = getUserId();
+        boolean correct = Boolean.TRUE.equals(body.get("correct"));
+        String kp = (String) body.get("kp");
+        orchestratorService.updateAfterAnswer(userId, correct, kp);
+        return ApiResponse.ok(null);
     }
 
     // ========== 工具方法 ==========

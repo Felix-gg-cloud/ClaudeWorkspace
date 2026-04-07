@@ -1,0 +1,790 @@
+source_book,word,pos,meaning_zh
+三年级上册,ruler,n.,尺子
+三年级上册,pencil,n.,铅笔
+三年级上册,eraser,n.,橡皮
+三年级上册,crayon,n.,蜡笔
+三年级上册,bag,n.,包
+三年级上册,pen,n.,钢笔
+三年级上册,pencil box,n.,铅笔盒
+三年级上册,book,n.,书
+三年级上册,no,int.,不
+三年级上册,your,pron.,你（们）的
+三年级上册,red,adj.&n.,红色；红色的
+三年级上册,green,adj.&n.,绿色；绿色的
+三年级上册,yellow,adj.&n.,黄色；黄色的
+三年级上册,blue,adj.&n.,蓝色；蓝色的
+三年级上册,black,adj.&n.,黑色；黑色的
+三年级上册,brown,adj.&n.,棕色；棕色的
+三年级上册,white,adj.&n.,白色；白色的
+三年级上册,orange,adj.&n.,橙色；橙色的
+三年级上册,OK,int.,好；行
+三年级上册,mum,n.,妈妈
+三年级上册,face,n.,脸
+三年级上册,ear,n.,耳朵
+三年级上册,eye,n.,眼睛
+三年级上册,nose,n.,鼻子
+三年级上册,mouth,n.,嘴
+三年级上册,arm,n.,胳膊
+三年级上册,hand,n.,手
+三年级上册,head,n.,头
+三年级上册,body,n.,身体
+三年级上册,leg,n.,腿
+三年级上册,foot,n.,脚
+三年级上册,duck,n.,鸭子
+三年级上册,pig,n.,猪
+三年级上册,cat,n.,猫
+三年级上册,bear,n.,熊
+三年级上册,dog,n.,狗
+三年级上册,elephant,n.,大象
+三年级上册,monkey,n.,猴子
+三年级上册,bird,n.,鸟
+三年级上册,tiger,n.,老虎
+三年级上册,panda,n.,大熊猫
+三年级上册,zoo,n.,动物园
+三年级上册,funny,adj.,滑稽的；好笑的
+三年级上册,bread,n.,面包
+三年级上册,juice,n.,果汁
+三年级上册,egg,n.,蛋
+三年级上册,milk,n.,牛奶
+三年级上册,water,n.,水
+三年级上册,cake,n.,蛋糕
+三年级上册,fish,n.,鱼
+三年级上册,rice,n.,米饭
+三年级上册,one,num.,一
+三年级上册,two,num.,二
+三年级上册,three,num.,三
+三年级上册,four,num.,四
+三年级上册,five,num.,五
+三年级上册,six,num.,六
+三年级上册,seven,num.,七
+三年级上册,eight,num.,八
+三年级上册,nine,num.,九
+三年级上册,ten,num.,十
+三年级上册,brother,n.,兄；弟
+三年级上册,plate,n.,盘子
+三年级下册,UK,n.,英国
+三年级下册,Canada,n.,加拿大
+三年级下册,USA,n.,美国
+三年级下册,China,n.,中国
+三年级下册,she,pron.,她
+三年级下册,student,n.,学生
+三年级下册,pupil,n.,小学生
+三年级下册,he,pron.,他
+三年级下册,teacher,n.,教师
+三年级下册,boy,n.,男孩
+三年级下册,and,conj.,和；与
+三年级下册,girl,n.,女孩
+三年级下册,new,adj.,新的
+三年级下册,friend,n.,朋友
+三年级下册,today,adv.,今天
+三年级下册,father,n.,父亲；爸爸
+三年级下册,dad,n.,爸爸（口语）
+三年级下册,man,n.,男人
+三年级下册,woman,n.,女人
+三年级下册,mother,n.,母亲；妈妈
+三年级下册,sister,n.,姐；妹
+三年级下册,brother,n.,兄；弟
+三年级下册,grandmother,n.,（外）祖母
+三年级下册,grandma,n.,（口语）祖母
+三年级下册,grandfather,n.,（外）祖父
+三年级下册,grandpa,n.,（口语）祖父
+三年级下册,family,n.,家；家庭
+三年级下册,thin,adj.,瘦的
+三年级下册,fat,adj.,胖的；肥的
+三年级下册,tall,adj.,高的
+三年级下册,short,adj.,矮的；短的
+三年级下册,long,adj.,长的
+三年级下册,small,adj.,小的
+三年级下册,big,adj.,大的
+三年级下册,giraffe,n.,长颈鹿
+三年级下册,so,adv.,这么；那么
+三年级下册,children,n.,儿童（child复数）
+三年级下册,on,prep.,在……上
+三年级下册,in,prep.,在……里
+三年级下册,under,prep.,在……下面
+三年级下册,chair,n.,椅子
+三年级下册,desk,n.,书桌
+三年级下册,cap,n.,帽子
+三年级下册,ball,n.,球
+三年级下册,car,n.,小汽车
+三年级下册,boat,n.,小船
+三年级下册,map,n.,地图
+三年级下册,toy,n.,玩具
+三年级下册,box,n.,盒；箱
+三年级下册,pear,n.,梨
+三年级下册,apple,n.,苹果
+三年级下册,orange,n.,橙子
+三年级下册,banana,n.,香蕉
+三年级下册,grape,n.,葡萄
+三年级下册,buy,v.,买
+三年级下册,fruit,n.,水果
+三年级下册,eleven,num.,十一
+三年级下册,twelve,num.,十二
+三年级下册,thirteen,num.,十三
+三年级下册,fourteen,num.,十四
+三年级下册,fifteen,num.,十五
+三年级下册,sixteen,num.,十六
+三年级下册,seventeen,num.,十七
+三年级下册,eighteen,num.,十八
+三年级下册,nineteen,num.,十九
+三年级下册,twenty,num.,二十
+三年级下册,kite,n.,风筝
+三年级下册,beautiful,adj.,美丽的
+四年级上册,classroom,n.,教室
+四年级上册,window,n.,窗户
+四年级上册,blackboard,n.,黑板
+四年级上册,light,n.,电灯
+四年级上册,picture,n.,图画
+四年级上册,door,n.,门
+四年级上册,teacher's desk,n.,讲台
+四年级上册,computer,n.,计算机
+四年级上册,fan,n.,风扇
+四年级上册,wall,n.,墙壁
+四年级上册,floor,n.,地板
+四年级上册,really,adv.,真的
+四年级上册,near,prep.,距离近
+四年级上册,TV,n.,电视
+四年级上册,schoolbag,n.,书包
+四年级上册,maths book,n.,数学书
+四年级上册,English book,n.,英语书
+四年级上册,Chinese book,n.,语文书
+四年级上册,storybook,n.,故事书
+四年级上册,candy,n.,糖果
+四年级上册,notebook,n.,笔记本
+四年级上册,toy,n.,玩具
+四年级上册,key,n.,钥匙
+四年级上册,lost,v.,丢失（lose过去式）
+四年级上册,so much,adv.,非常地
+四年级上册,cute,adj.,可爱的
+四年级上册,strong,adj.,强壮的
+四年级上册,friendly,adj.,友好的
+四年级上册,quiet,adj.,安静的
+四年级上册,hair,n.,头发
+四年级上册,shoe,n.,鞋
+四年级上册,glasses,n.,眼镜
+四年级上册,his,pron.,他的
+四年级上册,her,pron.,她的
+四年级上册,bedroom,n.,卧室
+四年级上册,living room,n.,客厅；起居室
+四年级上册,study,n.,书房
+四年级上册,kitchen,n.,厨房
+四年级上册,bathroom,n.,浴室；洗手间
+四年级上册,bed,n.,床
+四年级上册,phone,n.,电话
+四年级上册,table,n.,桌子
+四年级上册,sofa,n.,长沙发
+四年级上册,fridge,n.,冰箱
+四年级上册,beef,n.,牛肉
+四年级上册,chicken,n.,鸡肉
+四年级上册,noodles,n.,面条
+四年级上册,soup,n.,汤
+四年级上册,vegetable,n.,蔬菜
+四年级上册,chopsticks,n.,筷子
+四年级上册,bowl,n.,碗
+四年级上册,fork,n.,餐叉
+四年级上册,knife,n.,刀
+四年级上册,spoon,n.,勺
+四年级上册,dinner,n.,正餐
+四年级上册,ready,adj.,准备好
+四年级上册,help yourself,phr.,为（自己）取用
+四年级上册,pass,v.,给；递
+四年级上册,try,v.,试；尝试
+四年级上册,parents,n.,父母
+四年级上册,cousin,n.,同辈表亲（或堂亲）
+四年级上册,uncle,n.,舅父；叔父；伯父；姑父；姨父
+四年级上册,aunt,n.,姑母；姨母
+四年级上册,baby brother,n.,婴儿小弟弟
+四年级上册,doctor,n.,医生
+四年级上册,cook,n.,厨师
+四年级上册,driver,n.,司机
+四年级上册,farmer,n.,农民
+四年级上册,nurse,n.,护士
+四年级上册,people,n.,人们
+四年级上册,but,conj.,但是
+四年级上册,little,adj.,小的
+四年级上册,puppy,n.,小狗
+四年级上册,job,n.,工作
+四年级上册,basketball,n.,篮球
+四年级下册,first floor,n.,一楼
+四年级下册,second floor,n.,二楼
+四年级下册,teacher's office,n.,教师办公室
+四年级下册,library,n.,图书馆
+四年级下册,playground,n.,操场
+四年级下册,computer room,n.,计算机房
+四年级下册,art room,n.,美术教室
+四年级下册,music room,n.,音乐教室
+四年级下册,next to,prep.,紧邻；在……近旁
+四年级下册,homework,n.,作业
+四年级下册,class,n.,班；班级
+四年级下册,forty,num.,四十
+四年级下册,way,n.,方向
+四年级下册,breakfast,n.,早餐；早饭
+四年级下册,English class,n.,英语课
+四年级下册,lunch,n.,午餐；午饭
+四年级下册,music class,n.,音乐课
+四年级下册,PE class,n.,体育课
+四年级下册,dinner,n.,正餐
+四年级下册,get up,v.,起床
+四年级下册,go to school,v.,去上学
+四年级下册,go home,v.,回家
+四年级下册,go to bed,v.,上床睡觉
+四年级下册,over,adv.,结束
+四年级下册,now,adv.,现在；目前
+四年级下册,o'clock,adv.,（表示整点）……点钟
+四年级下册,kid,n.,小孩
+四年级下册,thirty,num.,三十
+四年级下册,hurry up,phr.,快点
+四年级下册,come on,phr.,快；加油
+四年级下册,just a minute,phr.,稍等一会儿
+四年级下册,cold,adj.,寒冷的；冷的
+四年级下册,cool,adj.,凉的；凉爽的
+四年级下册,warm,adj.,温暖的；暖和的
+四年级下册,hot,adj.,热的；烫的
+四年级下册,sunny,adj.,阳光充足的
+四年级下册,windy,adj.,多风的；风大的
+四年级下册,cloudy,adj.,阴天的；多云的
+四年级下册,snowy,adj.,下雪的
+四年级下册,rainy,adj.,阴雨的；多雨的
+四年级下册,outside,adv.,在户外
+四年级下册,be careful,phr.,小心
+四年级下册,weather,n.,天气
+四年级下册,New York,n.,纽约
+四年级下册,how about,phr.,……怎么样？
+四年级下册,degree,n.,度数；度
+四年级下册,world,n.,世界
+四年级下册,London,n.,伦敦
+四年级下册,Moscow,n.,莫斯科
+四年级下册,Singapore,n.,新加坡
+四年级下册,Sydney,n.,悉尼
+四年级下册,fly,v.,放（风筝等）
+四年级下册,love,int.,（写信结尾）爱你的
+四年级下册,tomato,n.,西红柿
+四年级下册,potato,n.,马铃薯；土豆
+四年级下册,green beans,n.,豆角；四季豆
+四年级下册,carrot,n.,胡萝卜
+四年级下册,horse,n.,马
+四年级下册,cow,n.,母牛；奶牛
+四年级下册,sheep,n.,羊；绵羊
+四年级下册,hen,n.,母鸡
+四年级下册,these,pron.,这些（this的复数）
+四年级下册,animal,n.,动物
+四年级下册,those,pron.,那些（that的复数）
+四年级下册,garden,n.,花园；菜园
+四年级下册,farm,n.,农场
+四年级下册,goat,n.,山羊
+四年级下册,eat,v.,吃
+四年级下册,clothes,n.,衣服；服装
+四年级下册,pants,n.,裤子
+四年级下册,hat,n.,帽子
+四年级下册,dress,n.,连衣裙
+四年级下册,skirt,n.,女裙
+四年级下册,coat,n.,外衣；大衣
+四年级下册,sweater,n.,毛衣
+四年级下册,sock,n.,短袜
+四年级下册,shorts,n.,短裤
+四年级下册,jacket,n.,夹克衫
+四年级下册,shirt,n.,衬衫
+四年级下册,yours,pron.,你的；你们的
+四年级下册,whose,pron.,谁的
+四年级下册,mine,pron.,我的
+四年级下册,pack,v.,收拾（行李）
+四年级下册,wait,v.,等待
+四年级下册,glove,n.,手套
+四年级下册,scarf,n.,围巾；披巾
+四年级下册,umbrella,n.,伞；雨伞
+四年级下册,sunglasses,n.,太阳镜
+四年级下册,pretty,adj.,美观的；精致的
+四年级下册,expensive,adj.,昂贵的
+四年级下册,cheap,adj.,便宜的
+四年级下册,nice,adj.,好的
+四年级下册,try on,phr.,试穿
+四年级下册,size,n.,尺码；号
+四年级下册,of course,phr.,当然
+四年级下册,too,adv.,太；过于
+四年级下册,just,adv.,正好；恰好
+四年级下册,how much,phr.,多少钱
+四年级下册,eighty,num.,八十
+四年级下册,dollar,n.,元（美国等国货币）
+四年级下册,sale,n.,特价销售；大减价
+四年级下册,more,adj.,更多的
+四年级下册,us,pron.,我们
+五年级上册,old,adj.,老的；年纪大的
+五年级上册,young,adj.,年轻的；岁数不大的
+五年级上册,funny,adj.,滑稽的；可笑的
+五年级上册,kind,adj.,体贴的；慈祥的；宽容的
+五年级上册,strict,adj.,严厉的
+五年级上册,polite,adj.,有礼貌的
+五年级上册,hard-working,adj.,工作努力的；辛勤的
+五年级上册,helpful,adj.,有用的；愿意帮忙的
+五年级上册,clever,adj.,聪明的；聪颖的
+五年级上册,shy,adj.,羞怯的；腼腆的
+五年级上册,know,v.,知道；了解
+五年级上册,our,pron.,我们的
+五年级上册,Ms,n.,女士（不指明婚否）
+五年级上册,will,modal v.,将要
+五年级上册,sometimes,adv.,有时；间或
+五年级上册,robot,n.,机器人
+五年级上册,him,pron.,他（宾格）
+五年级上册,speak,v.,会说；会讲（某种语言）
+五年级上册,finish,v.,完成；做好
+五年级上册,Monday,n.,星期一
+五年级上册,Tuesday,n.,星期二
+五年级上册,Wednesday,n.,星期三
+五年级上册,Thursday,n.,星期四
+五年级上册,Friday,n.,星期五
+五年级上册,Saturday,n.,星期六
+五年级上册,Sunday,n.,星期日
+五年级上册,weekend,n.,周末
+五年级上册,wash,v.,洗
+五年级上册,wash my clothes,phr.,洗我的衣服
+五年级上册,watch,v.,看
+五年级上册,watch TV,phr.,看电视
+五年级上册,read,v.,读；看
+五年级上册,read books,phr.,看书
+五年级上册,do,v.,做；干
+五年级上册,do homework,phr.,做作业
+五年级上册,play,v.,踢；玩；参加（体育运动）
+五年级上册,play football,phr.,踢足球
+五年级上册,cooking,n.,烹饪；烹调
+五年级上册,often,adv.,时常；常常
+五年级上册,park,n.,公园
+五年级上册,tired,adj.,疲倦的
+五年级上册,sport,n.,体育运动
+五年级上册,play sports,phr.,做体育运动
+五年级上册,should,modal v.,应该
+五年级上册,every,adj.,每一个；每个
+五年级上册,day,n.,一天；一日
+五年级上册,schedule,n.,工作计划；日程安排
+五年级上册,sandwich,n.,三明治
+五年级上册,salad,n.,蔬菜沙拉；混合沙拉
+五年级上册,hamburger,n.,汉堡包
+五年级上册,ice cream,n.,冰淇淋
+五年级上册,tea,n.,茶；茶水
+五年级上册,fresh,adj.,新鲜的
+五年级上册,healthy,adj.,健康的
+五年级上册,delicious,adj.,美味的
+五年级上册,hot,adj.,辣的
+五年级上册,sweet,adj.,甜的
+五年级上册,drink,v.,喝；饮
+五年级上册,thirsty,adj.,渴的
+五年级上册,favourite,adj.,特别喜爱的
+五年级上册,food,n.,食物
+五年级上册,onion,n.,洋葱；葱头
+五年级上册,sing,v.,唱；唱歌
+五年级上册,song,n.,歌曲
+五年级上册,sing English songs,phr.,唱英文歌
+五年级上册,play the pipa,phr.,弹琵琶
+五年级上册,kung fu,n.,功夫；武术
+五年级上册,do kung fu,phr.,练武术
+五年级上册,dance,v.,跳舞
+五年级上册,draw,v.,画
+五年级上册,cartoon,n.,漫画
+五年级上册,draw cartoons,phr.,画漫画
+五年级上册,cook,v.,烹调；烹饪
+五年级上册,swim,v.,游泳
+五年级上册,play basketball,phr.,打篮球
+五年级上册,ping-pong,n.,乒乓球
+五年级上册,play ping-pong,phr.,打乒乓球
+五年级上册,speak English,phr.,说英语
+五年级上册,party,n.,聚会；派对
+五年级上册,next,adj.,下一个的
+五年级上册,wonderful,adj.,极好的
+五年级上册,learn,v.,学；学习
+五年级上册,any,adj.,任何的
+五年级上册,problem,n.,问题
+五年级上册,no problem,phr.,没问题
+五年级上册,want,v.,想要
+五年级上册,send,v.,邮寄；发送
+五年级上册,email,n.,电子邮件
+五年级上册,at,prep.,在（后面接邮件地址）
+五年级上册,clock,n.,时钟；钟
+五年级上册,plant,n.,植物
+五年级上册,bottle,n.,瓶子
+五年级上册,water bottle,n.,水瓶
+五年级上册,bike,n.,自行车；脚踏车
+五年级上册,photo,n.,照片；相片
+五年级上册,front,n.,正面
+五年级上册,in front of,prep.,在……前面
+五年级上册,between,prep.,在……中间
+五年级上册,above,prep.,在（或向）……上面
+五年级上册,beside,prep.,在旁边（附近）
+五年级上册,behind,prep.,在（或向）……后面
+五年级上册,there,adv.,表示存在或发生
+五年级上册,grandparent,n.,祖父；祖母；外祖父；外祖母
+五年级上册,their,pron.,他们的；她们的；它们的
+五年级上册,house,n.,房屋；房子；住宅
+五年级上册,lot,n.,大量；许多
+五年级上册,lots of,phr.,大量；许多
+五年级上册,flower,n.,花；花朵
+五年级上册,move,v.,搬家
+五年级上册,dirty,adj.,肮脏的
+五年级上册,everywhere,adv.,处处；到处
+五年级上册,mouse,n.,老鼠
+五年级上册,live,v.,住；居住
+五年级上册,nature,n.,自然界；大自然
+五年级上册,forest,n.,森林；林区
+五年级上册,river,n.,河；江
+五年级上册,lake,n.,湖；湖泊
+五年级上册,mountain,n.,高山；山岳
+五年级上册,hill,n.,小山；山丘
+五年级上册,tree,n.,树；树木；乔木
+五年级上册,bridge,n.,桥
+五年级上册,village,n.,村庄；村镇
+五年级上册,boating,n.,划船
+五年级上册,go boating,phr.,去划船
+五年级上册,rabbit,n.,兔；野兔
+五年级上册,high,adj.,高的
+五年级下册,eat breakfast,phr.,吃早饭
+五年级下册,have...class,phr.,上……课
+五年级下册,play sports,phr.,进行体育运动
+五年级下册,exercise,n.,活动；运动
+五年级下册,do morning exercises,phr.,做早操
+五年级下册,eat dinner,phr.,吃晚饭
+五年级下册,clean my room,phr.,打扫我的房间
+五年级下册,go for a walk,phr.,散步
+五年级下册,go shopping,phr.,购物
+五年级下册,take a dancing class,phr.,上舞蹈课
+五年级下册,when,adv.,什么时候；何时
+五年级下册,after,prep.,在（时间）后
+五年级下册,start,v.,开始
+五年级下册,usually,adv.,通常地；惯常地
+五年级下册,Spain,n.,西班牙
+五年级下册,late,adj.,晚；迟
+五年级下册,a.m.,n.,午前；上午
+五年级下册,p.m.,n.,午后；下午
+五年级下册,why,adv.,为什么
+五年级下册,shop,v.,去买东西；购物
+五年级下册,work,v.,工作
+五年级下册,last,adj.,上一个的；刚过去的
+五年级下册,sound,v.,听起来好像
+五年级下册,also,adv.,还；也
+五年级下册,busy,adj.,忙的
+五年级下册,need,v.,需要
+五年级下册,play,n.,戏剧；剧本
+五年级下册,letter,n.,信
+五年级下册,live,v.,居住
+五年级下册,island,n.,岛
+五年级下册,always,adv.,总是；一直
+五年级下册,cave,n.,山洞；洞穴
+五年级下册,go swimming,phr.,去游泳
+五年级下册,win,v.,获胜
+五年级下册,spring,n.,春天
+五年级下册,summer,n.,夏天
+五年级下册,autumn,n.,秋天
+五年级下册,winter,n.,冬天
+五年级下册,season,n.,季节
+五年级下册,picnic,n.,野餐
+五年级下册,go on a picnic,phr.,去野餐
+五年级下册,pick,v.,摘；采集
+五年级下册,pick apples,phr.,摘苹果
+五年级下册,snowman,n.,雪人
+五年级下册,make a snowman,phr.,堆雪人
+五年级下册,go swimming,phr.,去游泳
+五年级下册,which,pron.,哪一个
+五年级下册,best,adv.,最；最高程度地
+五年级下册,snow,n.,雪
+五年级下册,good job,phr.,做得好
+五年级下册,because,conj.,因为
+五年级下册,vacation,n.,假期
+五年级下册,all,adv.,全程；一直
+五年级下册,pink,adj.&n.,粉色；粉色的
+五年级下册,lovely,adj.,可爱的；美丽的
+五年级下册,leaf,n.,叶子
+五年级下册,fall,v.&n.,落下；秋天
+五年级下册,paint,v.,用颜料绘画
+五年级下册,January,n.,一月
+五年级下册,February,n.,二月
+五年级下册,March,n.,三月
+五年级下册,April,n.,四月
+五年级下册,May,n.,五月
+五年级下册,June,n.,六月
+五年级下册,July,n.,七月
+五年级下册,August,n.,八月
+五年级下册,September,n.,九月
+五年级下册,October,n.,十月
+五年级下册,November,n.,十一月
+五年级下册,December,n.,十二月
+五年级下册,few,adj.,不多；很少
+五年级下册,a few,phr.,一些
+五年级下册,thing,n.,事情
+五年级下册,meet,n.,集会；开会
+五年级下册,sports meet,n.,运动会
+五年级下册,Easter,n.,复活节
+五年级下册,trip,n.,旅行
+五年级下册,year,n.,年
+五年级下册,plant,v.,种植
+五年级下册,contest,n.,比赛；竞赛
+五年级下册,the Great Wall,n.,长城
+五年级下册,national,adj.,国家的
+五年级下册,National Day,n.,国庆日
+五年级下册,American,adj.,美国的
+五年级下册,Thanksgiving,n.,感恩节
+五年级下册,Christmas,n.,圣诞节
+五年级下册,holiday,n.,假日；节日
+五年级下册,game,n.,游戏
+五年级下册,roll,v.,滚动
+五年级下册,look for,phr.,寻找
+五年级下册,chocolate,n.,巧克力
+五年级下册,bunny,n.,兔子（儿语）
+五年级下册,first,num.,第一
+五年级下册,second,num.,第二
+五年级下册,third,num.,第三
+五年级下册,fourth,num.,第四
+五年级下册,fifth,num.,第五
+五年级下册,twelfth,num.,第十二
+五年级下册,twentieth,num.,第二十
+五年级下册,twenty-first,num.,第二十一
+五年级下册,twenty-third,num.,第二十三
+五年级下册,thirtieth,num.,第三十
+五年级下册,special,adj.,特殊的；特别的
+五年级下册,fool,n.,蠢人；傻瓜
+五年级下册,kitten,n.,小猫
+五年级下册,diary,n.,日记
+五年级下册,still,adv.,仍然；依旧；还是
+五年级下册,noise,n.,声音；噪音
+五年级下册,fur,n.,浓密的软毛
+五年级下册,open,adj.,开着的
+五年级下册,walk,v.,行走
+五年级下册,mine,pron.,我的
+五年级下册,yours,pron.,你（们）的
+五年级下册,his,pron.,他的
+五年级下册,hers,pron.,她的
+五年级下册,theirs,pron.,他们的；她们的；它们的
+五年级下册,ours,pron.,我们的
+五年级下册,climbing,v.,（正在）攀登；攀爬
+五年级下册,eating,v.,（正在）吃
+五年级下册,playing,v.,（正在）玩耍
+五年级下册,jumping,v.,（正在）跳
+五年级下册,drinking,v.,（正在）喝（水）
+五年级下册,sleeping,v.,（正在）睡觉
+五年级下册,each,adj.,每一；各个
+五年级下册,each other,phr.,相互
+五年级下册,excited,adj.,兴奋的；激动的
+五年级下册,like,prep.,像……那样
+五年级下册,doing morning exercises,phr.,正在做早操
+五年级下册,having...class,phr.,正在上……课
+五年级下册,eating lunch,phr.,正在吃午饭
+五年级下册,reading a book,phr.,正在看书
+五年级下册,listening to music,phr.,正在听音乐
+五年级下册,keep to the right,phr.,靠右
+五年级下册,keep your desk clean,phr.,保持你的课桌干净
+五年级下册,talk quietly,phr.,小声讲话
+五年级下册,take turns,phr.,按顺序来
+五年级下册,bamboo,n.,竹子
+五年级下册,its,pron.,它的；他的；她的
+五年级下册,show,v.,给人看；指引
+五年级下册,anything,pron.,任何事物
+五年级下册,else,adv.,另外；其他
+五年级下册,exhibition,n.,展览
+五年级下册,say,v.,说；讲
+五年级下册,have a look,phr.,看一看
+五年级下册,sushi,n.,寿司
+五年级下册,teach,v.,教
+五年级下册,sure,adv.,当然
+五年级下册,Canadian,adj.,加拿大的
+五年级下册,Spanish,adj.,西班牙的
+六年级上册,science,n.,科学
+六年级上册,museum,n.,博物馆
+六年级上册,science museum,n.,科学博物馆
+六年级上册,post office,n.,邮局
+六年级上册,bookstore,n.,书店
+六年级上册,cinema,n.,电影院
+六年级上册,hospital,n.,医院
+六年级上册,crossing,n.,十字路口
+六年级上册,turn left,phr.,左转
+六年级上册,straight,adv.,直地
+六年级上册,go straight,phr.,直走
+六年级上册,turn right,phr.,右转
+六年级上册,ask,v.,问
+六年级上册,interesting,adj.,有趣的
+六年级上册,Italian,adj.,意大利的
+六年级上册,restaurant,n.,餐馆
+六年级上册,pizza,n.,比萨饼
+六年级上册,street,n.,大街；街道
+六年级上册,get,v.,到达
+六年级上册,far,adj.,较远的
+六年级上册,tell,v.,告诉
+六年级上册,sir,n.,（对男子的礼貌称呼）先生
+六年级上册,on foot,phr.,步行
+六年级上册,by,prep.,乘
+六年级上册,bus,n.,公共汽车
+六年级上册,plane,n.,飞机
+六年级上册,taxi,n.,出租汽车
+六年级上册,ship,n.,船
+六年级上册,subway,n.,地铁
+六年级上册,train,n.,火车
+六年级上册,slow,adj.,慢的
+六年级上册,down,adv.,减少；降低
+六年级上册,slow down,phr.,慢下来
+六年级上册,stop,v.,停下
+六年级上册,wait,v.,等待
+六年级上册,must,modal v.,必须
+六年级上册,visit,v.,拜访
+六年级上册,film,n.,电影
+六年级上册,see a film,phr.,看电影
+六年级上册,trip,n.,旅行
+六年级上册,take a trip,phr.,去旅行
+六年级上册,supermarket,n.,超市
+六年级上册,evening,n.,晚上；傍晚
+六年级上册,tonight,n.,今晚
+六年级上册,tomorrow,n.,明天
+六年级上册,next week,phr.,下周
+六年级上册,dictionary,n.,词典
+六年级上册,comic,adj.,滑稽的
+六年级上册,comic book,n.,连环画册
+六年级上册,word book,n.,单词书
+六年级上册,postcard,n.,明信片
+六年级上册,lesson,n.,课
+六年级上册,space,n.,太空
+六年级上册,travel,v.,旅行
+六年级上册,half,n.,一半
+六年级上册,price,n.,价格
+六年级上册,midnight,n.,午夜
+六年级上册,studies,v.,（study的第三人称单数）学习
+六年级上册,puzzle,n.,谜
+六年级上册,word puzzles,n.,字谜
+六年级上册,hiking,n.,远足
+六年级上册,pen pal,n.,笔友
+六年级上册,hobby,n.,业余爱好
+六年级上册,jasmine,n.,茉莉
+六年级上册,idea,n.,想法；主意
+六年级上册,Canberra,n.,堪培拉
+六年级上册,amazing,adj.,令人惊奇的
+六年级上册,shall,modal v.,表示征求意见
+六年级上册,goal,n.,射门
+六年级上册,join,v.,加入
+六年级上册,club,n.,俱乐部
+六年级上册,share,v.,分享
+六年级上册,factory,n.,工厂
+六年级上册,worker,n.,工人
+六年级上册,postman,n.,邮递员
+六年级上册,businessman,n.,商人；企业家
+六年级上册,police officer,n.,警察
+六年级上册,fisherman,n.,渔民
+六年级上册,scientist,n.,科学家
+六年级上册,pilot,n.,飞行员
+六年级上册,coach,n.,教练
+六年级上册,country,n.,国家
+六年级上册,head teacher,n.,校长
+六年级上册,sea,n.,大海
+六年级上册,stay,v.,保持
+六年级上册,university,n.,大学
+六年级上册,gym,n.,体育馆
+六年级上册,if,conj.,如果
+六年级上册,reporter,n.,记者
+六年级上册,use,v.,使用
+六年级上册,type,v.,打字
+六年级上册,quickly,adv.,迅速地
+六年级上册,secretary,n.,秘书
+六年级上册,angry,adj.,生气的
+六年级上册,afraid,adj.,害怕
+六年级上册,sad,adj.,难过的
+六年级上册,worried,adj.,担心的；发愁的
+六年级上册,happy,adj.,高兴的
+六年级上册,see a doctor,phr.,看病
+六年级上册,wear,v.,穿
+六年级上册,more,adj.,更多的
+六年级上册,deep,adj.,深的
+六年级上册,breath,n.,呼吸
+六年级上册,take a deep breath,phr.,深深吸一口气
+六年级上册,count,v.,数数
+六年级上册,count to ten,phr.,数到十
+六年级上册,chase,v.,追赶
+六年级上册,mice,n.,老鼠（mouse复数）
+六年级上册,bad,adj.,坏的
+六年级上册,hurt,v.,受伤
+六年级上册,ill,adj.,有病；不舒服
+六年级上册,wrong,adj.,有毛病
+六年级上册,should,modal v.,应该
+六年级上册,feel,v.,觉得；感到
+六年级上册,well,adj.,健康；身体好
+六年级上册,sit,v.,坐
+六年级上册,grass,n.,草坪
+六年级上册,hear,v.,听见
+六年级上册,ant,n.,蚂蚁
+六年级上册,worry,v.,担心；担忧
+六年级上册,stuck,adj.,陷住；无法移动
+六年级上册,mud,n.,泥
+六年级上册,pull,v.,拉；拽
+六年级上册,everyone,pron.,每人
+六年级下册,younger,adj.,更年轻的
+六年级下册,older,adj.,更年长的
+六年级下册,taller,adj.,更高的
+六年级下册,shorter,adj.,更矮的；更短的
+六年级下册,longer,adj.,更长的
+六年级下册,thinner,adj.,更瘦的
+六年级下册,heavier,adj.,更重的
+六年级下册,bigger,adj.,更大的
+六年级下册,smaller,adj.,更小的
+六年级下册,stronger,adj.,更强壮的
+六年级下册,dinosaur,n.,恐龙
+六年级下册,hall,n.,大厅
+六年级下册,metre,n.,米（美式meter）
+六年级下册,than,prep.,比
+六年级下册,both,pron.,两个都
+六年级下册,kilogram,n.,千克；公斤
+六年级下册,countryside,n.,乡村
+六年级下册,lower,adj.,更低的
+六年级下册,shadow,n.,阴影；影子
+六年级下册,smarter,adj.,更聪明的
+六年级下册,become,v.,开始变得；变成
+六年级下册,cleaned,v.,打扫（clean过去式）
+六年级下册,washed,v.,洗（wash过去式）
+六年级下册,watched,v.,看（watch过去式）
+六年级下册,had,v.,患病；得病（have过去式）
+六年级下册,had a cold,phr.,感冒
+六年级下册,slept,v.,睡觉（sleep过去式）
+六年级下册,read,v.,读（read过去式）
+六年级下册,saw,v.,看见（see过去式）
+六年级下册,last,adj.,最近的；上一个的
+六年级下册,yesterday,n.,昨天
+六年级下册,before,prep.,在……之前
+六年级下册,better,adj.,更好的
+六年级下册,faster,adj.,更快的
+六年级下册,hotel,n.,旅馆
+六年级下册,fixed,v.,修理（fix过去式）
+六年级下册,broken,adj.,破损的
+六年级下册,lamp,n.,台灯
+六年级下册,loud,adj.,喧闹的；大声的
+六年级下册,enjoy,v.,享受……乐趣；喜爱
+六年级下册,stay,v.,暂住；逗留
+六年级下册,went,v.,去（go过去式）
+六年级下册,go camping,phr.,野营
+六年级下册,went fishing,phr.,去钓鱼
+六年级下册,rode,v.,骑（ride过去式）
+六年级下册,hurt,v.,受伤（hurt过去式）
+六年级下册,ate,v.,吃（eat过去式）
+六年级下册,took,v.,拍照（take过去式）
+六年级下册,took pictures,phr.,照相
+六年级下册,bought,v.,买（buy过去式）
+六年级下册,gift,n.,礼物
+六年级下册,fell,v.,摔倒（fall过去式）
+六年级下册,off,prep.,从（某处）落下
+六年级下册,labour,n.,劳动
+六年级下册,Labour Day,n.,劳动节
+六年级下册,mule,n.,骡子
+六年级下册,Turpan,n.,吐鲁番
+六年级下册,could,modal v.,能（can过去式）
+六年级下册,till,prep.,直到
+六年级下册,dining hall,n.,饭厅
+六年级下册,grass,n.,草坪
+六年级下册,gym,n.,体育馆
+六年级下册,ago,adv.,以前
+六年级下册,cycling,n.,骑自行车运动
+六年级下册,go cycling,phr.,去骑自行车
+六年级下册,ice-skate,v.,滑冰
+六年级下册,badminton,n.,羽毛球运动
+六年级下册,star,n.,星
+六年级下册,easy,adj.,容易的
+六年级下册,look up,phr.,查阅
+六年级下册,Internet,n.,互联网
+六年级下册,different,adj.,不同的
+六年级下册,active,adj.,积极的；活跃的
+六年级下册,race,n.,赛跑
+六年级下册,nothing,pron.,没有什么
+六年级下册,thought,v.,想（think过去式）
+六年级下册,felt,v.,感觉（feel过去式）
+六年级下册,cheetah,n.,猎豹
+六年级下册,trip,v.,绊倒
+六年级下册,woke,v.,醒（wake过去式）
+六年级下册,dream,n.,梦

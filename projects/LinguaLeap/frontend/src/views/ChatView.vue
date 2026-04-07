@@ -86,7 +86,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, nextTick, computed } from 'vue'
-import { teacherApi, type ChatMessage } from '@/api/teacher'
+import { teacherApi, orchestratorApi, type ChatMessage } from '@/api/teacher'
 import { useUserStore } from '@/stores/user'
 
 interface QuizData {
@@ -197,6 +197,9 @@ async function send() {
       createdAt: new Date().toISOString(),
       quiz: parseQuizData(rd.quizData),
     } as LocalMsg)
+
+    // Phase 5a: 解析 [FEEDBACK] 标签，记录答题结果
+    parseFeedback(rd.reply)
   } catch (e: any) {
     messages.value.push({
       id: Date.now() + 1,
@@ -244,9 +247,21 @@ function renderContent(content: string): string {
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
     .replace(/>/g, '&gt;')
+    // 移除 [FEEDBACK]...[/FEEDBACK] 标签（不展示给用户）
+    .replace(/\[FEEDBACK\].*?\[\/FEEDBACK\]/gs, '')
     .replace(/\n/g, '<br>')
     .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
     .replace(/`(.*?)`/g, '<code>$1</code>')
+}
+
+/** Phase 5a: 解析 AI 回复中的 [FEEDBACK] 标签并记录到 Learner Model */
+function parseFeedback(reply: string) {
+  const match = reply.match(/\[FEEDBACK\](.*?)\[\/FEEDBACK\]/s)
+  if (!match) return
+  try {
+    const fb = JSON.parse(match[1])
+    orchestratorApi.recordAnswer(!!fb.correct, fb.kp || undefined).catch(() => {})
+  } catch { /* ignore parse errors */ }
 }
 
 function formatTime(ts: string): string {

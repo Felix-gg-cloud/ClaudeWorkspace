@@ -41,6 +41,32 @@ public class StudentProfile {
     @Column(name = "ai_assessment", columnDefinition = "TEXT")
     private String aiAssessment;
 
+    // === Phase 5a: Learner Model 扩展字段 ===
+
+    @Column(name = "level_code", length = 10)
+    private String levelCode;
+
+    @Column(name = "kp_mastery", columnDefinition = "TEXT")
+    private String kpMastery;
+
+    @Column(name = "weak_tags", columnDefinition = "TEXT")
+    private String weakTags;
+
+    @Column(name = "i1_params", columnDefinition = "TEXT")
+    private String i1Params;
+
+    @Column(name = "total_sessions")
+    private Integer totalSessions = 0;
+
+    @Column(name = "total_correct")
+    private Integer totalCorrect = 0;
+
+    @Column(name = "total_answered")
+    private Integer totalAnswered = 0;
+
+    @Column(name = "last_session_state", columnDefinition = "TEXT")
+    private String lastSessionState;
+
     @Column(name = "assessed_at")
     private LocalDateTime assessedAt;
 
@@ -89,4 +115,22 @@ public class StudentProfile {
     public void setCreatedAt(LocalDateTime v) { this.createdAt = v; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime v) { this.updatedAt = v; }
+
+    // Phase 5a: Learner Model getters & setters
+    public String getLevelCode() { return levelCode; }
+    public void setLevelCode(String v) { this.levelCode = v; }
+    public String getKpMastery() { return kpMastery; }
+    public void setKpMastery(String v) { this.kpMastery = v; }
+    public String getWeakTags() { return weakTags; }
+    public void setWeakTags(String v) { this.weakTags = v; }
+    public String getI1Params() { return i1Params; }
+    public void setI1Params(String v) { this.i1Params = v; }
+    public Integer getTotalSessions() { return totalSessions; }
+    public void setTotalSessions(Integer v) { this.totalSessions = v; }
+    public Integer getTotalCorrect() { return totalCorrect; }
+    public void setTotalCorrect(Integer v) { this.totalCorrect = v; }
+    public Integer getTotalAnswered() { return totalAnswered; }
+    public void setTotalAnswered(Integer v) { this.totalAnswered = v; }
+    public String getLastSessionState() { return lastSessionState; }
+    public void setLastSessionState(String v) { this.lastSessionState = v; }
 }
