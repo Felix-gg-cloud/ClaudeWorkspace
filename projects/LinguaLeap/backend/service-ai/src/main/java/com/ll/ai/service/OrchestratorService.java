@@ -239,17 +239,86 @@ public class OrchestratorService {
 
     private String buildReviewBlock(StudentProfile profile) {
         String weakTags = profile.getWeakTags() != null ? profile.getWeakTags() : "无";
-        return TeachingProtocol.reviewPhase(weakTags, "（由 SRS 系统提供，暂无到期卡片）");
+
+        // 查询 SRS 到期卡片
+        String dueCardsInfo = "暂无到期卡片";
+        try {
+            List<String> dueItems = fetchSrsDueCards(profile.getUserId());
+            if (!dueItems.isEmpty()) {
+                dueCardsInfo = String.join("\n", dueItems);
+            }
+        } catch (Exception e) {
+            log.warn("查询 SRS 到期卡片失败", e);
+        }
+
+        return TeachingProtocol.reviewPhase(weakTags, dueCardsInfo);
     }
 
     private String buildLearnBlock(StudentProfile profile) {
-        // 简单策略：从语法点中选一个未掌握的作为教学目标
+        String levelCode = profile.getLevelCode();
+
+        // 从语法约束表选取具体知识点作为教学目标
         String targetKp = "本级别课标要求的下一个知识点";
-        return TeachingProtocol.learnPhase(targetKp, "请根据词汇约束和语法约束选择适当的教学内容");
+        String context = "请根据词汇约束和语法约束选择适当的教学内容";
+
+        try {
+            Map<String, Object> grammarData = contentClient.fetchConstraintData(
+                    "/api/content/constraints/grammar/" + levelCode);
+            if (grammarData != null) {
+                @SuppressWarnings("unchecked")
+                List<String> points = (List<String>) grammarData.get("points");
+                if (points != null && !points.isEmpty()) {
+                    // 排除已掌握（weak_tags 中没有的就是还未教过的优先教）
+                    List<String> weakList = parseJsonArray(profile.getWeakTags());
+                    // 策略：优先教薄弱的语法点（在 weakList 中的），其次教新的
+                    String selected = null;
+                    for (String p : points) {
+                        if (weakList.contains(p)) {
+                            selected = p;
+                            break;
+                        }
+                    }
+                    if (selected == null) {
+                        // 随机选一个新的语法点
+                        Collections.shuffle(points);
+                        selected = points.get(0);
+                    }
+                    targetKp = selected;
+                    context = String.format("本级别(%s)共有%d个语法点，本次教学目标：%s",
+                            levelCode, points.size(), selected);
+                }
+            }
+        } catch (Exception e) {
+            log.warn("选择教学知识点失败", e);
+        }
+
+        return TeachingProtocol.learnPhase(targetKp, context);
     }
 
     private String buildPracticeBlock(StudentProfile profile) {
-        return TeachingProtocol.practicePhase("本次已学/复习的知识点", "选择题或填空题");
+        // 构建更具体的练习内容
+        String levelCode = profile.getLevelCode();
+        String weakTags = profile.getWeakTags();
+        String practicedKps;
+        if (weakTags != null && !weakTags.equals("[]") && !weakTags.isBlank()) {
+            practicedKps = "薄弱知识点：" + weakTags;
+        } else {
+            practicedKps = "本级别(" + levelCode + ")已学知识点";
+        }
+
+        // 根据级别选择推荐题型
+        String questionType;
+        if (levelCode != null) {
+            int num = 0;
+            try { num = Integer.parseInt(levelCode.replace("L", "")); } catch (Exception ignored) {}
+            if (num <= 6) questionType = "英译中选择题或中译英选择题";
+            else if (num <= 9) questionType = "选择题或填空题";
+            else questionType = "填空题或翻译题";
+        } else {
+            questionType = "选择题或填空题";
+        }
+
+        return TeachingProtocol.practicePhase(practicedKps, questionType);
     }
 
     private String buildSummaryBlock(StudentProfile profile) {
@@ -306,6 +375,30 @@ public class OrchestratorService {
             return LEVEL_ORDER.get(idx + 1);
         }
         return null;
+    }
+
+    /**
+     * 从 SRS 系统获取用户到期卡片摘要（用于注入 review prompt）
+     */
+    private List<String> fetchSrsDueCards(Long userId) {
+        try {
+            List<Map<String, Object>> cards = contentClient.fetchSrsDueCards(userId);
+            List<String> items = new ArrayList<>();
+            for (Map<String, Object> card : cards) {
+                String content = String.valueOf(card.getOrDefault("content", ""));
+                String meaning = String.valueOf(card.getOrDefault("meaningZh", ""));
+                int streak = card.get("correctStreak") != null
+                        ? ((Number) card.get("correctStreak")).intValue() : 0;
+                if (!content.isEmpty()) {
+                    items.add(String.format("• %s (%s) — %d连对", content, meaning, streak));
+                }
+                if (items.size() >= 10) break;
+            }
+            return items;
+        } catch (Exception e) {
+            log.debug("获取 SRS 到期卡片失败: {}", e.getMessage());
+            return List.of();
+        }
     }
 
     // ========== DTO ==========

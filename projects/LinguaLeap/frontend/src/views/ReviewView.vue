@@ -170,6 +170,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { srsApi, type SrsCard, type SrsStats } from '@/api/srs'
+import { orchestratorApi } from '@/api/teacher'
 import AppIcon from '@/components/AppIcon.vue'
 import { showToast } from '@/composables/useToast'
 
@@ -255,6 +256,9 @@ async function reviewCard(correct: boolean) {
     await srsApi.review(card.kpId, correct)
     if (correct) correctCount.value++
     else forgotCount.value++
+
+    // Phase 5a: 上报编排引擎
+    orchestratorApi.recordAnswer(correct, card.content || '').catch(() => {})
   } catch (e) {
     showToast('提交复习结果失败', 'error')
   }

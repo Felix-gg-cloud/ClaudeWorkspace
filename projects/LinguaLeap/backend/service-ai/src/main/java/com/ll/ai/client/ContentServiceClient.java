@@ -224,4 +224,27 @@ public class ContentServiceClient {
             log.warn("SRS 反馈通知失败: {}", e.getMessage());
         }
     }
+
+    /**
+     * Phase 5a: 获取用户 SRS 到期卡片列表（编排引擎复习环节注入）
+     */
+    @SuppressWarnings("unchecked")
+    public List<Map<String, Object>> fetchSrsDueCards(Long userId) {
+        try {
+            String url = contentServiceUrl + "/api/content/srs/due";
+            HttpHeaders headers = new HttpHeaders();
+            headers.set("X-User-Id", userId.toString());
+            HttpEntity<Void> entity = new HttpEntity<>(headers);
+
+            ResponseEntity<String> resp = restTemplate.exchange(url, HttpMethod.GET, entity, String.class);
+            JsonNode root = objectMapper.readTree(resp.getBody());
+            if (root.get("code").asInt() == 200 && root.get("data").isArray()) {
+                return objectMapper.convertValue(root.get("data"),
+                        objectMapper.getTypeFactory().constructCollectionType(List.class, Map.class));
+            }
+        } catch (Exception e) {
+            log.debug("获取 SRS 到期卡片失败: {}", e.getMessage());
+        }
+        return List.of();
+    }
 }
