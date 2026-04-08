@@ -285,36 +285,37 @@ onMounted(async () => {
       } catch { /* ignore */ }
 
       if (levelsRes.status === 'fulfilled') {
-      try {
-        const profileRes = await assessmentApi.getProfile()
-        const p: StudentProfile = profileRes.data.data
-        // Phase 5b: 优先使用编排引擎的 levelCode，退而求其次用画像推算
-        const targetCode = teachingPlan.value?.levelCode
-            || p.levelCode
-            || mapVocabToLevel(p.vocabularyLevel, userStore.user?.grade || 'junior')
-        if (targetCode) {
-          const levels = levelsRes.value.data.data
-          const found = levels.find((l: any) => l.code === targetCode)
-          if (found) {
-            // 找到当前正在学的 unit
-            try {
-              const detailRes = await levelApi.getDetail(found.id)
-              const units = detailRes.data.data.units || []
-              const current = units.find((u: any) => (u.progress || 0) < 100)
-              if (current) {
-                currentUnitName.value = `${found.name} · ${current.name}`
-                currentUnitPath.value = `/learn/${current.id}`
-              } else {
+        try {
+          const profileRes = await assessmentApi.getProfile()
+          const p: StudentProfile = profileRes.data.data
+          // Phase 5b: 优先使用编排引擎的 levelCode，退而求其次用画像推算
+          const targetCode = teachingPlan.value?.levelCode
+              || p.levelCode
+              || mapVocabToLevel(p.vocabularyLevel, userStore.user?.grade || 'junior')
+          if (targetCode) {
+            const levels = levelsRes.value.data.data
+            const found = levels.find((l: any) => l.code === targetCode)
+            if (found) {
+              // 找到当前正在学的 unit
+              try {
+                const detailRes = await levelApi.getDetail(found.id)
+                const units = detailRes.data.data.units || []
+                const current = units.find((u: any) => (u.progress || 0) < 100)
+                if (current) {
+                  currentUnitName.value = `${found.name} · ${current.name}`
+                  currentUnitPath.value = `/learn/${current.id}`
+                } else {
+                  currentUnitName.value = found.name
+                  currentUnitPath.value = `/levels/${found.id}`
+                }
+              } catch {
                 currentUnitName.value = found.name
                 currentUnitPath.value = `/levels/${found.id}`
               }
-            } catch {
-              currentUnitName.value = found.name
-              currentUnitPath.value = `/levels/${found.id}`
             }
           }
-        }
-      } catch { /* ignore */ }
+        } catch { /* ignore */ }
+      }
     }
   }
 })
