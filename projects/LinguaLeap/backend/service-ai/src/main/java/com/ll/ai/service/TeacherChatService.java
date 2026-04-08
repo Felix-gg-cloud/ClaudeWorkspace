@@ -36,17 +36,20 @@ public class TeacherChatService {
     private final ChatMessageRepository messageRepo;
     private final StudentProfileRepository profileRepo;
     private final RateLimiter rateLimiter;
+    private final OrchestratorService orchestratorService;
 
     public TeacherChatService(ChatModel chatModel,
                               ChatSessionRepository sessionRepo,
                               ChatMessageRepository messageRepo,
                               StudentProfileRepository profileRepo,
-                              RateLimiter rateLimiter) {
+                              RateLimiter rateLimiter,
+                              OrchestratorService orchestratorService) {
         this.chatClient = ChatClient.builder(chatModel).build();
         this.sessionRepo = sessionRepo;
         this.messageRepo = messageRepo;
         this.profileRepo = profileRepo;
         this.rateLimiter = rateLimiter;
+        this.orchestratorService = orchestratorService;
     }
 
     /**
@@ -100,6 +103,16 @@ public class TeacherChatService {
                 content = aiReply.substring(0, quizStart).trim();
                 if (content.isEmpty()) content = "来做道题试试～";
                 msgType = "quiz";
+            }
+
+            // Phase 5a: 解析 [FEEDBACK]...[/FEEDBACK] 标签，自动更新 Learner Model
+            int fbStart = aiReply.indexOf("[FEEDBACK]");
+            int fbEnd = aiReply.indexOf("[/FEEDBACK]");
+            if (fbStart >= 0 && fbEnd > fbStart) {
+                String fbJson = aiReply.substring(fbStart + 10, fbEnd).trim();
+                parseFeedbackAndUpdate(userId, fbJson);
+                // 从显示内容中移除 FEEDBACK 标签
+                content = content.replace("[FEEDBACK]" + fbJson + "[/FEEDBACK]", "").trim();
             }
         }
 
@@ -195,13 +208,25 @@ public class TeacherChatService {
 
     /**
      * 构建 System Prompt — 根据会话类型和学生画像
+     * Phase 5a: 普通对话走编排引擎，获取带约束的 prompt
      */
     private String buildSystemPrompt(Long userId, String grade, String sessionType) {
         if ("assessment".equals(sessionType)) {
             return TeacherPrompts.ASSESSMENT_WELCOME;
         }
 
-        // 普通对话 — 注入学生画像
+        // Phase 5a: 尝试通过编排引擎获取带约束的 prompt
+        try {
+            OrchestratorService.OrchestratedPrompt plan = orchestratorService.orchestrate(userId);
+            if (!"assessment".equals(plan.phase()) && plan.systemPrompt() != null) {
+                log.info("编排引擎: userId={}, phase={}, level={}", userId, plan.phase(), plan.levelCode());
+                return plan.systemPrompt();
+            }
+        } catch (Exception e) {
+            log.warn("编排引擎降级: {}", e.getMessage());
+        }
+
+        // 降级：使用旧的简单 prompt
         String profileSummary = getProfileSummary(userId);
         return TeacherPrompts.chatSystem(grade, profileSummary);
     }
@@ -259,6 +284,22 @@ public class TeacherChatService {
         } catch (Exception e) {
             log.error("AI 老师对话失败", e);
             return "抱歉，Lily 老师暂时遇到了一点小问题，请稍后再试哦～ 🌸";
+        }
+    }
+
+    /**
+     * Phase 5a: 解析 [FEEDBACK] JSON 并更新 Learner Model
+     */
+    private void parseFeedbackAndUpdate(Long userId, String fbJson) {
+        try {
+            com.fasterxml.jackson.databind.JsonNode fb =
+                    new com.fasterxml.jackson.databind.ObjectMapper().readTree(fbJson);
+            boolean correct = fb.path("correct").asBoolean(false);
+            String kp = fb.path("kp").asText(null);
+            orchestratorService.updateAfterAnswer(userId, correct, kp);
+            log.debug("FEEDBACK 更新: userId={}, correct={}, kp={}", userId, correct, kp);
+        } catch (Exception e) {
+            log.warn("解析 FEEDBACK 失败: {}", e.getMessage());
         }
     }
 }

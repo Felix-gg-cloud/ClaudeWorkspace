@@ -214,10 +214,11 @@ const heroMessage = computed(() => {
 })
 
 function mapVocabToLevel(vocab: string, grade: string): string | null {
+  // L3-L12 体系：每年级一个级别
   const gradeMap: Record<string, string[]> = {
-    elementary: ['L1', 'L2', 'L3', 'L4'],
-    junior: ['L5', 'L6', 'L7'],
-    senior: ['L8', 'L9'],
+    primary: ['L3', 'L4', 'L5', 'L6'],
+    junior: ['L7', 'L8', 'L9'],
+    senior: ['L10', 'L11', 'L12'],
   }
   const codes = gradeMap[grade] ?? gradeMap['junior']!
   const vocabIdx: Record<string, number> = { beginner: 0, elementary: 1, intermediate: 1, upper: 2, advanced: codes.length - 1 }

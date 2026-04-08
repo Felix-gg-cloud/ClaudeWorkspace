@@ -68,14 +68,12 @@ public class KnowledgeGenerateService {
 
     private String getTypeHint(String levelCode, int count) {
         return switch (levelCode) {
-            case "L1" -> String.format("word %d 个, sentence %d 个", (int)(count * 0.6), (int)(count * 0.4));
-            case "L2" -> String.format("word %d 个, phrase %d 个, sentence %d 个",
+            case "L3", "L4" -> String.format("word %d 个, sentence %d 个", (int)(count * 0.6), (int)(count * 0.4));
+            case "L5", "L6" -> String.format("word %d 个, phrase %d 个, sentence %d 个",
                     (int)(count * 0.5), (int)(count * 0.2), (int)(count * 0.3));
-            case "L3", "L4" -> String.format("word %d 个, phrase %d 个, sentence %d 个",
-                    (int)(count * 0.5), (int)(count * 0.3), (int)(count * 0.2));
-            case "L5", "L6", "L7" -> String.format("word %d 个, phrase %d 个",
+            case "L7", "L8", "L9" -> String.format("word %d 个, phrase %d 个",
                     (int)(count * 0.7), (int)(count * 0.3));
-            default -> String.format("word %d 个", count);
+            default -> String.format("word %d 个", count); // L10-L12
         };
     }
 
