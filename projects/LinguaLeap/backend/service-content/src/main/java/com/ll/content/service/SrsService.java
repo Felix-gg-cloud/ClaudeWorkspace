@@ -176,4 +176,19 @@ public class SrsService {
         }
         return result;
     }
+
+    /**
+     * Phase 5a: 按知识点内容字符串复习 SRS 卡片（AI 对话反馈联动）
+     * @param userId 用户 ID
+     * @param content 知识点内容（如 "apple" 或 "present tense"）
+     * @param correct 是否答对
+     * @return 复习结果，找不到知识点则返回 null
+     */
+    @Transactional
+    public Map<String, Object> reviewByContent(Long userId, String content, boolean correct) {
+        if (content == null || content.isBlank()) return null;
+        return kpRepo.findFirstByContentIgnoreCase(content.trim())
+                .map(kp -> review(userId, kp.getId(), correct))
+                .orElse(null);
+    }
 }

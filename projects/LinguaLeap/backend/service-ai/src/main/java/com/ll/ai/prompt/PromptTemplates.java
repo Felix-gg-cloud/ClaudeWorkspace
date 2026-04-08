@@ -409,22 +409,28 @@ public final class PromptTemplates {
 
             **关键：不同级别的词汇和句型必须有明显难度区分！**
 
-            小学(L1~L4) difficulty=1~2：
-            - 只用最基础词汇：hello, apple, dog, red, one, big 等
-            - 句子3~5个词，只用 I/You/This is 等基本句型
-            - 例：I like cats. / This is a book.
+            小学(L3~L6) difficulty=1~2：
+            - L3(三年级)：最基础词汇 hello, apple, dog, red, one, big 等，句子2~4词
+            - L4(四年级)：基础词汇扩展 family, school, weather, food 等，句子3~5词
+            - L5(五年级)：日常话题词 hobby, season, subject, country 等，句子4~6词
+            - L6(六年级)：小升初衔接词 compare, describe, opinion 等，简单复合句
+            - 只用 I/You/He/She/This is/There is 等基本句型
+            - 例：I like cats. / She goes to school every day.
 
-            初中(L5~L7) difficulty=2~3：
-            - 必须用初中核心词汇，禁止用 hello/name/friend/teacher 等小学词
-            - 要求有语法变化：时态、从句、情态动词
-            - word 示例：experience, achieve, suggestion, environment, communicate
+            初中(L7~L9) difficulty=2~3：
+            - L7(七年级)：初一核心词汇，现在时/过去时，简单从句
+            - L8(八年级)：初二核心词汇 experience, achieve, suggestion 等，各种时态+被动语态
+            - L9(九年级)：中考核心词 environment, communicate, opportunity 等，定语从句+宾语从句
+            - 禁止用 hello/name/friend/teacher 等小学词
             - phrase 示例：look forward to, be good at, make a decision
             - 句子8~15个词，含复合句
             - 例：She suggested that we should try a different approach.
 
-            高中(L8~L9) difficulty=3~5：
-            - 必须用高考核心/学术词汇，禁止用初中常见词
-            - word 示例：sophisticated, simultaneously, unprecedented, comprehensive
+            高中(L10~L12) difficulty=3~5：
+            - L10(高一)：高中基础词 abstract, analyze, conclusion 等，名词性从句+非谓语
+            - L11(高二)：高考核心词 sophisticated, comprehensive, phenomenon 等，虚拟语气+倒装
+            - L12(高三)：学术词汇 unprecedented, simultaneously, deteriorate 等，长难句+嵌套从句
+            - 禁止用初中常见词
             - 要求长难句、从句嵌套、虚拟语气等高级语法
             - 例：Had it not been for his perseverance, the project would have failed.""";
 

@@ -43,4 +43,19 @@ public class SrsController {
         Long userId = UserContext.getUserId();
         return ApiResponse.ok(srsService.getAllCards(userId));
     }
+
+    /**
+     * Phase 5a: 按知识点内容复习（AI 对话反馈联动，服务间调用）
+     * 请求体：{ "userId": 1, "content": "apple", "correct": true }
+     */
+    @PostMapping("/review-by-content")
+    public ApiResponse<Map<String, Object>> reviewByContent(@RequestBody Map<String, Object> body) {
+        Long userId = body.get("userId") != null
+                ? Long.valueOf(body.get("userId").toString())
+                : UserContext.getUserId();
+        String content = (String) body.get("content");
+        boolean correct = Boolean.parseBoolean(body.get("correct").toString());
+        Map<String, Object> result = srsService.reviewByContent(userId, content, correct);
+        return result != null ? ApiResponse.ok(result) : ApiResponse.ok(null);
+    }
 }

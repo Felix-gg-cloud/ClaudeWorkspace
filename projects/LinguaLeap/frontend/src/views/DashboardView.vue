@@ -12,7 +12,7 @@
     </div>
 
     <!-- Phase 5a: AI 学习计划卡 -->
-    <div v-if="teachingPlan && !showAssessmentBanner" class="plan-card" @click="goToChat">
+    <div v-if="teachingPlan && !showAssessmentBanner" class="plan-card" @click="goToPlanTarget">
       <div class="plan-card__header">
         <span class="plan-card__icon">{{ phaseEmoji }}</span>
         <div class="plan-card__info">
@@ -22,7 +22,7 @@
         <span class="plan-card__badge">{{ phaseAction }}</span>
       </div>
       <div class="plan-card__hint">
-        点击与 Lily 老师开始今天的 {{ teachingPlan.phaseLabel }}
+        {{ planHint }}
       </div>
     </div>
 
@@ -239,6 +239,22 @@ const phaseAction = computed(() => {
   const map: Record<string, string> = { review: '开始复习', learn: '开始学习', practice: '开始练习', summary: '查看总结' }
   return map[teachingPlan.value?.phase || ''] || '开始'
 })
+const planHint = computed(() => {
+  const p = teachingPlan.value?.phase
+  if (p === 'practice') return '点击进入练习模式，巩固已学知识'
+  if (p === 'review') return '点击进入复习，巩固薄弱知识点'
+  return `点击与 Lily 老师开始今天的${teachingPlan.value?.phaseLabel || '学习'}`
+})
+function goToPlanTarget() {
+  const p = teachingPlan.value?.phase
+  if (p === 'practice') {
+    router.push('/practice')
+  } else if (p === 'review') {
+    router.push('/review')
+  } else {
+    router.push('/chat')
+  }
+}
 function goToChat() { router.push('/chat') }
 
 onMounted(async () => {

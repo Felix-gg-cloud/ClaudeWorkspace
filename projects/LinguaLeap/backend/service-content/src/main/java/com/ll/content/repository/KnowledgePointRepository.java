@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface KnowledgePointRepository extends JpaRepository<KnowledgePoint, Long> {
 
@@ -34,4 +35,6 @@ public interface KnowledgePointRepository extends JpaRepository<KnowledgePoint, 
     long countByUnitId(Long unitId);
 
     long countByLevelId(Long levelId);
+
+    Optional<KnowledgePoint> findFirstByContentIgnoreCase(String content);
 }

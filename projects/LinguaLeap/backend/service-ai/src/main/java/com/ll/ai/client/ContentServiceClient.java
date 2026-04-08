@@ -203,4 +203,25 @@ public class ContentServiceClient {
             return null;
         }
     }
+
+    /**
+     * Phase 5a: 通知 SRS 系统按内容复习（AI 对话反馈联动）
+     */
+    public void reviewSrsByContent(Long userId, String kpContent, boolean correct) {
+        try {
+            String url = contentServiceUrl + "/api/content/srs/review-by-content";
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            Map<String, Object> body = Map.of(
+                    "userId", userId,
+                    "content", kpContent,
+                    "correct", correct);
+            HttpEntity<String> entity = new HttpEntity<>(objectMapper.writeValueAsString(body), headers);
+            restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+            log.debug("SRS 反馈: userId={}, content={}, correct={}", userId, kpContent, correct);
+        } catch (Exception e) {
+            log.warn("SRS 反馈通知失败: {}", e.getMessage());
+        }
+    }
 }

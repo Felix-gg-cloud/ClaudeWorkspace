@@ -1,5 +1,6 @@
 package com.ll.ai.service;
 
+import com.ll.ai.client.ContentServiceClient;
 import com.ll.ai.entity.ChatMessage;
 import com.ll.ai.entity.ChatSession;
 import com.ll.ai.entity.StudentProfile;
@@ -37,19 +38,22 @@ public class TeacherChatService {
     private final StudentProfileRepository profileRepo;
     private final RateLimiter rateLimiter;
     private final OrchestratorService orchestratorService;
+    private final ContentServiceClient contentClient;
 
     public TeacherChatService(ChatModel chatModel,
                               ChatSessionRepository sessionRepo,
                               ChatMessageRepository messageRepo,
                               StudentProfileRepository profileRepo,
                               RateLimiter rateLimiter,
-                              OrchestratorService orchestratorService) {
+                              OrchestratorService orchestratorService,
+                              ContentServiceClient contentClient) {
         this.chatClient = ChatClient.builder(chatModel).build();
         this.sessionRepo = sessionRepo;
         this.messageRepo = messageRepo;
         this.profileRepo = profileRepo;
         this.rateLimiter = rateLimiter;
         this.orchestratorService = orchestratorService;
+        this.contentClient = contentClient;
     }
 
     /**
@@ -297,6 +301,12 @@ public class TeacherChatService {
             boolean correct = fb.path("correct").asBoolean(false);
             String kp = fb.path("kp").asText(null);
             orchestratorService.updateAfterAnswer(userId, correct, kp);
+
+            // Phase 5a: 联动 SRS 卡片系统
+            if (kp != null) {
+                contentClient.reviewSrsByContent(userId, kp, correct);
+            }
+
             log.debug("FEEDBACK 更新: userId={}, correct={}, kp={}", userId, correct, kp);
         } catch (Exception e) {
             log.warn("解析 FEEDBACK 失败: {}", e.getMessage());

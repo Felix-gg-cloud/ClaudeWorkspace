@@ -329,6 +329,7 @@ import { useRouter, useRoute } from 'vue-router'
 import { practiceApi, type PracticeQuestion, type AnswerResult, type PracticeResult, type TranslateJudgeResult } from '@/api/practice'
 import { bankApi, type QuestionBank } from '@/api/content'
 import { statsApi } from '@/api/stats'
+import { orchestratorApi } from '@/api/teacher'
 import AppIcon from '@/components/AppIcon.vue'
 import { showToast } from '@/composables/useToast'
 import SpeakButton from '@/components/SpeakButton.vue'
@@ -730,6 +731,11 @@ async function finishPractice() {
     const studyMinutes = Math.max(1, Math.round(durationSec / 60))
     statsApi.record({ correctCount, wrongCount, wordsLearned: 0, studyMinutes }).catch(() => {})
 
+    // Phase 5a: 上报编排引擎 — 逐题上报汇总
+    if (totalCount > 0) {
+      orchestratorApi.recordAnswer(correctCount > wrongCount, `练习${totalCount}题/正确${correctCount}`).catch(() => {})
+    }
+
     // 异步请求 AI 分析
     if (totalCount > 0) {
       analysisLoading.value = true
@@ -773,7 +779,7 @@ function optionClass(opt: string) {
   return 'dimmed'
 }
 
-onMounted(() => {
+onMounted(async () => {
   const qUnitId = route.query.unitId
   const qUnitName = route.query.unitName as string
   const qGrade = route.query.grade as string
@@ -793,6 +799,19 @@ onMounted(() => {
     if (qGrade) selectedGrade.value = qGrade
   } else {
     loadBanks()
+    // Phase 5a: 从编排引擎获取推荐年级
+    if (!qGrade) {
+      try {
+        const { data } = await orchestratorApi.getPlan()
+        const lc = data.data?.levelCode
+        if (lc) {
+          const num = parseInt(lc.replace('L', ''), 10)
+          if (num >= 3 && num <= 6) selectedGrade.value = 'primary'
+          else if (num >= 7 && num <= 9) selectedGrade.value = 'junior'
+          else if (num >= 10) selectedGrade.value = 'senior'
+        }
+      } catch { /* 降级：保持默认 junior */ }
+    }
   }
 })
 </script>
