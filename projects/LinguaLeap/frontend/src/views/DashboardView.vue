@@ -288,8 +288,10 @@ onMounted(async () => {
       try {
         const profileRes = await assessmentApi.getProfile()
         const p: StudentProfile = profileRes.data.data
-        const grade = userStore.user?.grade || 'junior'
-        const targetCode = mapVocabToLevel(p.vocabularyLevel, grade)
+        // Phase 5b: 优先使用编排引擎的 levelCode，退而求其次用画像推算
+        const targetCode = teachingPlan.value?.levelCode
+            || p.levelCode
+            || mapVocabToLevel(p.vocabularyLevel, userStore.user?.grade || 'junior')
         if (targetCode) {
           const levels = levelsRes.value.data.data
           const found = levels.find((l: any) => l.code === targetCode)

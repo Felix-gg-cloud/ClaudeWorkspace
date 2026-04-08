@@ -81,10 +81,12 @@
               v-for="level in group"
               :key="level.id"
               class="level-card"
+              :class="{ recommended: level.code === recommendedCode }"
               @click="goToLevel(level)"
             >
               <div class="lv-card-top">
                 <span class="lv-badge" :class="groupName">{{ level.code }}</span>
+                <span v-if="level.code === recommendedCode" class="lv-recommended">⭐ 推荐</span>
                 <span v-if="level.progress > 0" class="lv-progress">{{ level.progress }}%</span>
               </div>
               <h3 class="lv-title">{{ level.name }}</h3>
@@ -108,12 +110,14 @@ import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { levelApi, type KnowledgeLevel } from '@/api/level'
 import { studySetApi, type StudySet } from '@/api/studySet'
+import { orchestratorApi } from '@/api/teacher'
 import AppIcon from '@/components/AppIcon.vue'
 
 const router = useRouter()
 const loading = ref(false)
 const levels = ref<KnowledgeLevel[]>([])
 const studySets = ref<StudySet[]>([])
+const recommendedCode = ref<string | null>(null)
 
 const ssStatusLabel: Record<string, string> = {
   ready: '可用',
@@ -153,12 +157,14 @@ function formatDate(dateStr: string) {
 onMounted(async () => {
   loading.value = true
   try {
-    const [levelsRes, setsRes] = await Promise.allSettled([
+    const [levelsRes, setsRes, planRes] = await Promise.allSettled([
       levelApi.list(),
       studySetApi.list(),
+      orchestratorApi.getPlan(),
     ])
     if (levelsRes.status === 'fulfilled') levels.value = levelsRes.value.data.data
     if (setsRes.status === 'fulfilled') studySets.value = setsRes.value.data.data || []
+    if (planRes.status === 'fulfilled') recommendedCode.value = planRes.value.data.data?.levelCode || null
   } catch (e) {
     console.error('加载知识库失败', e)
   } finally {
@@ -391,6 +397,11 @@ onMounted(async () => {
   cursor: pointer;
   transition: all 0.2s;
 
+  &.recommended {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 1px var(--primary), 0 2px 12px rgba(99, 102, 241, 0.15);
+  }
+
   &:hover {
     border-color: var(--primary);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
@@ -402,6 +413,14 @@ onMounted(async () => {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 8px;
+    gap: 6px;
+  }
+
+  .lv-recommended {
+    font-size: 11px;
+    color: var(--primary);
+    font-weight: 600;
+    margin-right: auto;
   }
 
   .lv-title {
