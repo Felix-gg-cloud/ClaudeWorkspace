@@ -18,7 +18,14 @@
           <p class="assessment-text">{{ profile.aiAssessment }}</p>
         </div>
       </div>
-      <button class="btn-primary" @click="goToChat">开始和 Lily 老师聊天 🌸</button>
+      <div class="next-steps">
+        <p class="next-title">接下来你可以：</p>
+        <div class="next-actions">
+          <button class="btn-primary" @click="goToDashboard">📋 查看学习计划</button>
+          <button class="btn-secondary" @click="goToLevels">📚 浏览知识库</button>
+          <button class="btn-outline" @click="goToChat">💬 和 Lily 老师聊天</button>
+        </div>
+      </div>
     </div>
 
     <!-- 评估进行中 -->
@@ -232,6 +239,14 @@ function goToChat() {
   router.push('/chat')
 }
 
+function goToDashboard() {
+  router.push('/')
+}
+
+function goToLevels() {
+  router.push('/levels')
+}
+
 async function selectAnswer(msgIdx: number, answer: string) {
   const msg = messages.value[msgIdx]
   if (!msg || msg.answered) return
@@ -364,6 +379,56 @@ function levelLabel(level: string): string {
     &:hover {
       transform: translateY(-1px);
       box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    }
+  }
+
+  .next-steps {
+    margin-top: 24px;
+
+    .next-title {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .next-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      max-width: 300px;
+      margin: 0 auto;
+    }
+  }
+
+  .btn-secondary {
+    background: var(--bg-card);
+    color: var(--primary);
+    border: 1px solid var(--primary);
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      background: var(--primary-light, #eef2ff);
+    }
+  }
+
+  .btn-outline {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+    padding: 12px 32px;
+    border-radius: 24px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    &:hover {
+      border-color: var(--text-secondary);
+      color: var(--text-primary);
     }
   }
 }

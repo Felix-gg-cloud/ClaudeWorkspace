@@ -242,6 +242,9 @@ public class AssessmentService {
             profile.setSelfDescription(selfDesc);
             profile.setAiAssessment(analysisJson);
             profile.setAssessedAt(LocalDateTime.now());
+            // 兜底 levelCode：从 grade 推导
+            String fallbackLevel = (grade != null && grade.matches("L\\d{1,2}")) ? grade : "L7";
+            profile.setLevelCode(fallbackLevel);
             profileRepo.save(profile);
         }
 
@@ -316,8 +319,15 @@ public class AssessmentService {
         profile.setAiAssessment((String) data.get("aiAssessment"));
         profile.setAssessedAt(LocalDateTime.now());
 
+        // 设置 levelCode — 优先使用 AI 输出，兜底从 grade 推导
+        String levelCode = (String) data.get("levelCode");
+        if (levelCode == null || !levelCode.matches("L\\d{1,2}")) {
+            levelCode = "L7"; // 默认七年级
+        }
+        profile.setLevelCode(levelCode);
+
         profileRepo.save(profile);
-        log.info("学生画像已保存: userId={}, level={}", userId, profile.getVocabularyLevel());
+        log.info("学生画像已保存: userId={}, levelCode={}, vocabLevel={}", userId, profile.getLevelCode(), profile.getVocabularyLevel());
     }
 
     private List<Message> buildHistory(Long sessionId) {

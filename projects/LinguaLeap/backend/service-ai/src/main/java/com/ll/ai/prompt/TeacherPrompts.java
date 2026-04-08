@@ -103,8 +103,13 @@ public final class TeacherPrompts {
                 诊断测试结果：
                 %s
 
-                请分析该学生的英语水平，输出 JSON 格式的评估结果：
+                请分析该学生的英语水平，输出 JSON 格式的评估结果。
+                levelCode 必须是以下之一：L3(三年级), L4(四年级), L5(五年级), L6(六年级),
+                L7(七年级), L8(八年级), L9(九年级), L10(高一), L11(高二), L12(高三)。
+                根据学生年级和测试表现综合判断，如果测试表现明显低于年级水平可以降级。
+
                 {
+                  "levelCode": "L7",
                   "vocabularyLevel": "beginner/elementary/intermediate/upper/advanced",
                   "grammarLevel": "beginner/elementary/intermediate/upper/advanced",
                   "interests": ["兴趣1","兴趣2"],
@@ -140,8 +145,16 @@ public final class TeacherPrompts {
     private static String gradeLabel(String grade) {
         if (grade == null) return "未知";
         return switch (grade) {
-            case "primary" -> "小学";
-            case "senior" -> "高中";
+            case "primary", "L3" -> "小学三年级";
+            case "L4" -> "小学四年级";
+            case "L5" -> "小学五年级";
+            case "L6" -> "小学六年级";
+            case "L7", "七年级" -> "初一（七年级）";
+            case "L8", "八年级" -> "初二（八年级）";
+            case "L9", "九年级" -> "初三（九年级）";
+            case "L10", "高一", "senior" -> "高一";
+            case "L11", "高二" -> "高二";
+            case "L12", "高三" -> "高三";
             default -> "初中";
         };
     }

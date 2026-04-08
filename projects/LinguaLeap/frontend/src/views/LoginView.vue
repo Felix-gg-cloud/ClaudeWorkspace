@@ -119,14 +119,16 @@ const loginForm = reactive({ username: '', password: '' })
 const regForm = reactive({ username: '', password: '', displayName: '', grade: '' })
 
 const grades = [
-  { value: '七年级', label: '七年级' },
-  { value: '八年级', label: '八年级' },
-  { value: '九年级', label: '九年级' },
-  { value: '高一', label: '高一' },
-  { value: '高二', label: '高二' },
-  { value: '高三', label: '高三' },
-  { value: '大学', label: '大学' },
-  { value: '其他', label: '其他' },
+  { value: 'L3', label: '小学三年级' },
+  { value: 'L4', label: '小学四年级' },
+  { value: 'L5', label: '小学五年级' },
+  { value: 'L6', label: '小学六年级' },
+  { value: 'L7', label: '初一（七年级）' },
+  { value: 'L8', label: '初二（八年级）' },
+  { value: 'L9', label: '初三（九年级）' },
+  { value: 'L10', label: '高一' },
+  { value: 'L11', label: '高二' },
+  { value: 'L12', label: '高三' },
 ]
 
 const brandFeatures = [
