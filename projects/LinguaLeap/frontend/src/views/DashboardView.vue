@@ -87,7 +87,7 @@
         </div>
 
         <!-- 第三步：练习 -->
-        <div class="task-item" :class="{ done: todayPracticed >= 10, active: todayLearned >= dailyGoal && todayPracticed < 10 }" @click="router.push('/practice')">
+        <div class="task-item" :class="{ done: todayPracticed >= 10, active: todayLearned >= dailyGoal && todayPracticed < 10 }" @click="goToPractice">
           <div class="task-step">3</div>
           <div class="task-body">
             <h4>做练习</h4>
@@ -181,6 +181,9 @@ const studySets = ref<StudySet[]>([])
 const unreviewedMistakes = ref(0)
 const currentUnitName = ref('')
 const currentUnitPath = ref('')
+const currentUnitId = ref<number | null>(null)
+const currentLevelName = ref('')
+const currentLevelGroup = ref('')
 const dailyGoal = 10
 
 const greeting = computed(() => {
@@ -248,11 +251,26 @@ const planHint = computed(() => {
 function goToPlanTarget() {
   const p = teachingPlan.value?.phase
   if (p === 'practice') {
-    router.push('/practice')
+    goToPractice()
   } else if (p === 'review') {
     router.push('/review')
   } else {
     router.push('/chat')
+  }
+}
+function goToPractice() {
+  if (currentUnitId.value) {
+    router.push({
+      path: '/practice',
+      query: {
+        unitId: String(currentUnitId.value),
+        unitName: currentUnitName.value,
+        grade: currentLevelGroup.value,
+        levelName: currentLevelName.value,
+      },
+    })
+  } else {
+    router.push('/practice')
   }
 }
 function goToChat() { router.push('/chat') }
@@ -304,13 +322,20 @@ onMounted(async () => {
                 if (current) {
                   currentUnitName.value = `${found.name} · ${current.name}`
                   currentUnitPath.value = `/learn/${current.id}`
+                  currentUnitId.value = current.id
+                  currentLevelName.value = found.name
+                  currentLevelGroup.value = found.gradeGroup || ''
                 } else {
                   currentUnitName.value = found.name
                   currentUnitPath.value = `/levels/${found.id}`
+                  currentLevelName.value = found.name
+                  currentLevelGroup.value = found.gradeGroup || ''
                 }
               } catch {
                 currentUnitName.value = found.name
                 currentUnitPath.value = `/levels/${found.id}`
+                currentLevelName.value = found.name
+                currentLevelGroup.value = found.gradeGroup || ''
               }
             }
           }

@@ -330,6 +330,7 @@ import { practiceApi, type PracticeQuestion, type AnswerResult, type PracticeRes
 import { bankApi, type QuestionBank } from '@/api/content'
 import { statsApi } from '@/api/stats'
 import { orchestratorApi } from '@/api/teacher'
+import { levelApi } from '@/api/level'
 import AppIcon from '@/components/AppIcon.vue'
 import { showToast } from '@/composables/useToast'
 import SpeakButton from '@/components/SpeakButton.vue'
@@ -798,19 +799,39 @@ onMounted(async () => {
     levelName.value = qLevelName || ''
     if (qGrade) selectedGrade.value = qGrade
   } else {
-    loadBanks()
-    // Phase 5a: 从编排引擎获取推荐年级
-    if (!qGrade) {
-      try {
-        const { data } = await orchestratorApi.getPlan()
-        const lc = data.data?.levelCode
-        if (lc) {
-          const num = parseInt(lc.replace('L', ''), 10)
-          if (num >= 3 && num <= 6) selectedGrade.value = 'primary'
-          else if (num >= 7 && num <= 9) selectedGrade.value = 'junior'
-          else if (num >= 10) selectedGrade.value = 'senior'
+    // 无参数时：从编排引擎获取推荐级别 → 自动匹配单元进入单元练习
+    let autoMatched = false
+    try {
+      const { data: planRes } = await orchestratorApi.getPlan()
+      const lc = planRes.data?.levelCode
+      if (lc) {
+        const num = parseInt(lc.replace('L', ''), 10)
+        if (num >= 3 && num <= 6) selectedGrade.value = 'primary'
+        else if (num >= 7 && num <= 9) selectedGrade.value = 'junior'
+        else if (num >= 10) selectedGrade.value = 'senior'
+
+        // 查找该级别下有知识点的单元
+        const { data: levelsData } = await levelApi.list()
+        const targetLevel = levelsData.data?.find((l: any) => l.code === lc)
+        if (targetLevel && targetLevel.unitCount > 0) {
+          const { data: detailData } = await levelApi.getDetail(targetLevel.id)
+          const units = detailData.data?.units || []
+          // 找第一个有知识点且未100%完成的单元
+          const targetUnit = units.find((u: any) => u.kpCount > 0 && (u.progress || 0) < 100)
+            || units.find((u: any) => u.kpCount > 0)
+          if (targetUnit) {
+            unitMode.value = true
+            unitId.value = targetUnit.id
+            unitName.value = targetUnit.name
+            levelName.value = targetLevel.name
+            autoMatched = true
+          }
         }
-      } catch { /* 降级：保持默认 junior */ }
+      }
+    } catch { /* 降级到题库模式 */ }
+
+    if (!autoMatched) {
+      loadBanks()
     }
   }
 })
