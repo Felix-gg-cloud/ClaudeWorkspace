@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offshoring 数据校验报告 — {{period}}</title>
+  <style>
+    /* ===== 基础样式 ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Microsoft YaHei", "Segoe UI", Tahoma, sans-serif;
+      font-size: 11pt;
+      color: #1a1a1a;
+      background: #ffffff;
+      padding: 30px 40px;
+    }
+
+    /* ===== 报告头部 ===== */
+    .report-header {
+      border-bottom: 3px solid #1F497D;
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+    }
+    .report-header h1 {
+      font-size: 20pt;
+      color: #1F497D;
+      font-weight: 700;
+    }
+    .report-header .meta {
+      margin-top: 8px;
+      font-size: 9.5pt;
+      color: #555;
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .report-header .meta span strong {
+      color: #333;
+    }
+
+    /* ===== 摘要卡片区域 ===== */
+    .summary-section {
+      margin-bottom: 28px;
+    }
+    .summary-section h2 {
+      font-size: 13pt;
+      color: #1F497D;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .summary-cards {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .card {
+      flex: 1;
+      min-width: 130px;
+      border: 1px solid #d0d7e3;
+      border-radius: 6px;
+      padding: 14px 18px;
+      text-align: center;
+      background: #F5F8FC;
+    }
+    .card .card-value {
+      font-size: 26pt;
+      font-weight: 700;
+      color: #1F497D;
+      line-height: 1;
+    }
+    .card .card-label {
+      font-size: 9pt;
+      color: #666;
+      margin-top: 4px;
+    }
+    .card.error .card-value { color: #9C0006; }
+    .card.error { background: #FFF2F2; border-color: #ffaaaa; }
+    .card.warning .card-value { color: #9C5700; }
+    .card.warning { background: #FFFBE6; border-color: #ffd080; }
+    .card.clean .card-value { color: #375623; }
+    .card.clean { background: #F0FFF0; border-color: #90d090; }
+
+    /* ===== 校验结果横幅 ===== */
+    .result-banner {
+      text-align: center;
+      padding: 14px 24px;
+      border-radius: 6px;
+      font-size: 16pt;
+      font-weight: 700;
+      margin-bottom: 28px;
+    }
+    .result-banner.passed {
+      background: #E2EFDA;
+      color: #375623;
+      border: 2px solid #70AD47;
+    }
+    .result-banner.failed {
+      background: #FFCCCC;
+      color: #9C0006;
+      border: 2px solid #FF0000;
+    }
+
+    /* ===== 按规则统计 ===== */
+    .rule-stats-section {
+      margin-bottom: 28px;
+    }
+    .rule-stats-section h2 {
+      font-size: 13pt;
+      color: #1F497D;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .rule-stats-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+    }
+    .rule-stats-table th {
+      background: #1F497D;
+      color: #ffffff;
+      padding: 8px 12px;
+      text-align: left;
+      font-weight: 600;
+    }
+    .rule-stats-table td {
+      padding: 7px 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .rule-stats-table tr:nth-child(even) td { background: #F5F8FC; }
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 9pt;
+      font-weight: 600;
+    }
+    .badge.error { background: #FFCCCC; color: #9C0006; }
+    .badge.warning { background: #FFEB9C; color: #9C5700; }
+
+    /* ===== 问题明细 ===== */
+    .issues-section {
+      margin-bottom: 28px;
+    }
+    .issues-section h2 {
+      font-size: 13pt;
+      color: #1F497D;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+    .issues-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9pt;
+      table-layout: fixed;
+    }
+    .issues-table th {
+      background: #1F497D;
+      color: #ffffff;
+      padding: 8px 10px;
+      text-align: left;
+      font-weight: 600;
+      word-break: break-word;
+    }
+    .issues-table td {
+      padding: 7px 10px;
+      border-bottom: 1px solid #e0e0e0;
+      vertical-align: top;
+      word-break: break-word;
+    }
+    .issues-table tr.error-row td { background: #FFF2F2; }
+    .issues-table tr.warning-row td { background: #FFFBE6; }
+    .issues-table .col-num { width: 4%; }
+    .issues-table .col-severity { width: 9%; }
+    .issues-table .col-ruleid { width: 13%; }
+    .issues-table .col-rowkey { width: 22%; font-family: monospace; font-size: 8pt; }
+    .issues-table .col-column { width: 12%; }
+    .issues-table .col-rawval { width: 10%; font-family: monospace; }
+    .issues-table .col-msg { width: 18%; }
+    .issues-table .col-fix { width: 12%; }
+
+    /* ===== 页脚 ===== */
+    .report-footer {
+      margin-top: 32px;
+      padding-top: 12px;
+      border-top: 1px solid #ddd;
+      font-size: 8.5pt;
+      color: #888;
+      text-align: center;
+    }
+
+    /* ===== 打印样式 ===== */
+    @media print {
+      body { padding: 10px 20px; font-size: 9pt; }
+      .report-header h1 { font-size: 16pt; }
+      .card .card-value { font-size: 20pt; }
+      .result-banner { font-size: 13pt; }
+      .issues-table { font-size: 7.5pt; }
+      .issues-table th, .issues-table td { padding: 4px 6px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ===== 报告头部 ===== -->
+  <div class="report-header">
+    <h1>Offshoring 数据校验报告</h1>
+    <div class="meta">
+      <span><strong>数据来源：</strong>{{source_table}}</span>
+      <span><strong>数据期间：</strong>{{period}}</span>
+      <span><strong>生成时间：</strong>{{generated_at}}</span>
+    </div>
+  </div>
+
+  <!-- ===== 校验结果横幅 ===== -->
+  <!--
+    Power Automate 条件替换：
+    - 若 validation_passed == true  → class="result-banner passed"，文字 "校验通过 ✅ 无 Error"
+    - 若 validation_passed == false → class="result-banner failed"，文字 "校验未通过 ❌ 请处理 Error 后重新提交"
+  -->
+  <div class="result-banner {{result_banner_class}}">
+    {{result_banner_text}}
+  </div>
+
+  <!-- ===== 摘要卡片 ===== -->
+  <div class="summary-section">
+    <h2>📊 校验摘要</h2>
+    <div class="summary-cards">
+      <div class="card">
+        <div class="card-value">{{total_rows_checked}}</div>
+        <div class="card-label">检查总行数</div>
+      </div>
+      <div class="card clean">
+        <div class="card-value">{{rows_clean}}</div>
+        <div class="card-label">无问题行数</div>
+      </div>
+      <div class="card">
+        <div class="card-value">{{rows_with_issues}}</div>
+        <div class="card-label">含问题行数</div>
+      </div>
+      <div class="card error">
+        <div class="card-value">{{error_count}}</div>
+        <div class="card-label">Error 数量</div>
+      </div>
+      <div class="card warning">
+        <div class="card-value">{{warning_count}}</div>
+        <div class="card-label">Warning 数量</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 按规则统计 ===== -->
+  <div class="rule-stats-section">
+    <h2>📋 按规则统计</h2>
+    <table class="rule-stats-table">
+      <thead>
+        <tr>
+          <th>规则 ID</th>
+          <th>严重级别</th>
+          <th>问题数</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--
+          Power Automate 循环 report_model.issues_by_rule，每条一行：
+          <tr>
+            <td>{{rule_id}}</td>
+            <td><span class="badge {{severity_lower}}">{{severity}}</span></td>
+            <td>{{count}}</td>
+          </tr>
+          
+          若 issues_by_rule 为空：
+          <tr><td colspan="3" style="text-align:center;color:#888;">无问题，所有规则均通过</td></tr>
+        -->
+        {{issues_by_rule_rows}}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== 问题明细 ===== -->
+  <div class="issues-section">
+    <h2>🔍 问题明细</h2>
+    <!--
+      若 issues 为空，显示：
+      <p style="color:#375623;font-weight:bold;">✅ 未发现任何问题，数据校验通过。</p>
+      
+      否则显示下方表格：
+    -->
+    <table class="issues-table">
+      <thead>
+        <tr>
+          <th class="col-num">#</th>
+          <th class="col-severity">严重级别</th>
+          <th class="col-ruleid">规则 ID</th>
+          <th class="col-rowkey">行定位键</th>
+          <th class="col-column">列名</th>
+          <th class="col-rawval">原始值</th>
+          <th class="col-msg">问题描述</th>
+          <th class="col-fix">修正建议</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!--
+          Power Automate 循环 issues 数组，每条一行：
+          <tr class="{{error_or_warning}}-row">
+            <td>{{row_num}}</td>
+            <td><span class="badge {{severity_lower}}">{{Severity}}</span></td>
+            <td>{{RuleId}}</td>
+            <td>{{RowKey}}</td>
+            <td>{{Column}}</td>
+            <td>{{RawValue}}</td>
+            <td>{{Message}}</td>
+            <td>{{FixSuggestion}}</td>
+          </tr>
+        -->
+        {{issue_rows}}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== 页脚 ===== -->
+  <div class="report-footer">
+    本报告由 Power Automate + Copilot Studio AI 自动生成 · 仅供内部参考 · 生成时间：{{generated_at}}
+  </div>
+
+</body>
+</html>
+
+<!--
+===== Power Automate 使用说明 =====
+
+1. 读取此 HTML 模板文件（从 SharePoint 或 OneDrive 存储中读取）
+
+2. 使用「替换文本」操作或 Compose 动作，将以下占位符替换为实际值：
+   {{source_table}}         → report_model.source_table
+   {{period}}               → report_model.period
+   {{generated_at}}         → formatDateTime(report_model.generated_at, 'yyyy-MM-dd HH:mm:ss UTC')
+   {{total_rows_checked}}   → report_model.summary.total_rows_checked
+   {{rows_clean}}           → report_model.summary.rows_clean
+   {{rows_with_issues}}     → report_model.summary.rows_with_issues
+   {{error_count}}          → report_model.summary.error_count
+   {{warning_count}}        → report_model.summary.warning_count
+   {{result_banner_class}}  → if(validation_passed, 'passed', 'failed')
+   {{result_banner_text}}   → if(validation_passed, '校验通过 ✅ 无 Error', '校验未通过 ❌ 请处理 Error 后重新提交')
+   {{issues_by_rule_rows}}  → Apply to each：issues_by_rule → 拼接 <tr> HTML
+   {{issue_rows}}           → Apply to each：issues → 拼接 <tr> HTML（或空消息段）
+
+3. 将最终 HTML 字符串保存为 .html 文件，或直接转为 PDF：
+   - 方案 A（推荐）：使用「Encodian」或「Plumsail Documents」连接器将 HTML 转为 PDF
+   - 方案 B：使用「Word Online」连接器（先渲染 Word 模板再导出 PDF）
+   - 方案 C：将 HTML 文件上传 SharePoint，通知用户自行打印为 PDF（最简化）
+
+4. PDF 文件命名规范：
+   ValidationReport_{{period}}_{{YYYYMMDD-HHMMSS}}.pdf
+-->
