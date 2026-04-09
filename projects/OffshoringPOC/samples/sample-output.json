@@ -1,0 +1,252 @@
+{
+  "_description": "Sample AI output from the Offshoring Data Quality Validator (Copilot Studio / Azure OpenAI). This is the JSON payload produced by the AI model, consumed by Power Automate to render the Excel workbook. No Markdown is produced.",
+  "report_model": {
+    "title": "Offshoring Data Quality Validation Report",
+    "generated_at": "2025-01-20T14:30:22Z",
+    "source_file": "Offshoring_Headcount_202501.xlsx",
+    "period_covered": "202501",
+    "total_rows_checked": 12,
+    "summary": {
+      "error_count": 7,
+      "warning_count": 1,
+      "pass_count": 5,
+      "rows_with_issues": 5,
+      "pass_rate_pct": 58.3
+    },
+    "rule_counts": [
+      { "rule_id": "R-WS-ALL-001", "severity": "Error",   "count": 3 },
+      { "rule_id": "R-REQ-001",    "severity": "Error",   "count": 2 },
+      { "rule_id": "R-REF-002",    "severity": "Error",   "count": 1 },
+      { "rule_id": "R-FMT-001",    "severity": "Error",   "count": 1 },
+      { "rule_id": "R-VAL-003",    "severity": "Warning", "count": 1 }
+    ],
+    "top_issues": [
+      {
+        "rule_id": "R-WS-ALL-001",
+        "severity": "Error",
+        "count": 3,
+        "example_row_key": "RowIndex=2|YearMonth=202501|CCN=CC001|Function=GBS |Team=EA"
+      },
+      {
+        "rule_id": "R-REQ-001",
+        "severity": "Error",
+        "count": 2,
+        "example_row_key": "RowIndex=5|YearMonth=|CCN=CC002|Function=Finance|Team=AP"
+      },
+      {
+        "rule_id": "R-REF-002",
+        "severity": "Error",
+        "count": 1,
+        "example_row_key": "RowIndex=7|YearMonth=202501|CCN=CC003|Function=HR|Team=InvalidTeam"
+      },
+      {
+        "rule_id": "R-FMT-001",
+        "severity": "Error",
+        "count": 1,
+        "example_row_key": "RowIndex=9|YearMonth=2025-01|CCN=CC004|Function=IT|Team=Asia"
+      },
+      {
+        "rule_id": "R-VAL-003",
+        "severity": "Warning",
+        "count": 1,
+        "example_row_key": "RowIndex=11|YearMonth=202501|CCN=CC005|Function=Total|Team="
+      }
+    ],
+    "table_rows": [
+      {
+        "row_num": 1,
+        "year_month": "202501",
+        "cost_center_number": "CC001",
+        "function": "GBS",
+        "team": "EA",
+        "issue_count": 0,
+        "highest_severity": "None",
+        "rule_ids": ""
+      },
+      {
+        "row_num": 2,
+        "year_month": "202501",
+        "cost_center_number": "CC001",
+        "function": "GBS ",
+        "team": "EA",
+        "issue_count": 1,
+        "highest_severity": "Error",
+        "rule_ids": "R-WS-ALL-001"
+      },
+      {
+        "row_num": 3,
+        "year_month": "202501",
+        "cost_center_number": "CC001",
+        "function": "GBS",
+        "team": " EA",
+        "issue_count": 1,
+        "highest_severity": "Error",
+        "rule_ids": "R-WS-ALL-001"
+      },
+      {
+        "row_num": 4,
+        "year_month": "202501",
+        "cost_center_number": "CC001",
+        "function": "GBS",
+        "team": "EA",
+        "issue_count": 0,
+        "highest_severity": "None",
+        "rule_ids": ""
+      },
+      {
+        "row_num": 5,
+        "year_month": "",
+        "cost_center_number": "CC002",
+        "function": "Finance",
+        "team": "AP",
+        "issue_count": 1,
+        "highest_severity": "Error",
+        "rule_ids": "R-REQ-001"
+      },
+      {
+        "row_num": 6,
+        "year_month": "   ",
+        "cost_center_number": "CC002",
+        "function": "Finance",
+        "team": "AP",
+        "issue_count": 2,
+        "highest_severity": "Error",
+        "rule_ids": "R-WS-ALL-001,R-REQ-001"
+      },
+      {
+        "row_num": 7,
+        "year_month": "202501",
+        "cost_center_number": "CC003",
+        "function": "HR",
+        "team": "InvalidTeam",
+        "issue_count": 1,
+        "highest_severity": "Error",
+        "rule_ids": "R-REF-002"
+      },
+      {
+        "row_num": 8,
+        "year_month": "202501",
+        "cost_center_number": "CC003",
+        "function": "HR",
+        "team": "Asia",
+        "issue_count": 0,
+        "highest_severity": "None",
+        "rule_ids": ""
+      },
+      {
+        "row_num": 9,
+        "year_month": "2025-01",
+        "cost_center_number": "CC004",
+        "function": "IT",
+        "team": "Asia",
+        "issue_count": 1,
+        "highest_severity": "Error",
+        "rule_ids": "R-FMT-001"
+      },
+      {
+        "row_num": 10,
+        "year_month": "202501",
+        "cost_center_number": "CC004",
+        "function": "IT",
+        "team": "Asia",
+        "issue_count": 0,
+        "highest_severity": "None",
+        "rule_ids": ""
+      },
+      {
+        "row_num": 11,
+        "year_month": "202501",
+        "cost_center_number": "CC005",
+        "function": "Total",
+        "team": "",
+        "issue_count": 1,
+        "highest_severity": "Warning",
+        "rule_ids": "R-VAL-003"
+      },
+      {
+        "row_num": 12,
+        "year_month": "202501",
+        "cost_center_number": "CC005",
+        "function": "Finance",
+        "team": "AP",
+        "issue_count": 0,
+        "highest_severity": "None",
+        "rule_ids": ""
+      }
+    ]
+  },
+  "issues": [
+    {
+      "Severity": "Error",
+      "RuleId": "R-WS-ALL-001",
+      "RowKey": "RowIndex=2|YearMonth=202501|CCN=CC001|Function=GBS |Team=EA",
+      "Column": "Function",
+      "RawValue": "GBS ",
+      "Message": "Column 'Function' contains leading or trailing whitespace.",
+      "FixSuggestion": "Remove all leading and trailing spaces from the cell value."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-WS-ALL-001",
+      "RowKey": "RowIndex=3|YearMonth=202501|CCN=CC001|Function=GBS|Team= EA",
+      "Column": "Team",
+      "RawValue": " EA",
+      "Message": "Column 'Team' contains leading or trailing whitespace.",
+      "FixSuggestion": "Remove all leading and trailing spaces from the cell value."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-REQ-001",
+      "RowKey": "RowIndex=5|YearMonth=|CCN=CC002|Function=Finance|Team=AP",
+      "Column": "YearMonth",
+      "RawValue": "",
+      "Message": "YearMonth is mandatory for all rows.",
+      "FixSuggestion": "Enter the period in YYYYMM format (e.g., 202501)."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-WS-ALL-001",
+      "RowKey": "RowIndex=6|YearMonth=   |CCN=CC002|Function=Finance|Team=AP",
+      "Column": "YearMonth",
+      "RawValue": "   ",
+      "Message": "Column 'YearMonth' contains leading or trailing whitespace.",
+      "FixSuggestion": "Remove all leading and trailing spaces from the cell value."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-REQ-001",
+      "RowKey": "RowIndex=6|YearMonth=   |CCN=CC002|Function=Finance|Team=AP",
+      "Column": "YearMonth",
+      "RawValue": "   ",
+      "Message": "YearMonth is mandatory for all rows.",
+      "FixSuggestion": "Enter the period in YYYYMM format (e.g., 202501)."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-REF-002",
+      "RowKey": "RowIndex=7|YearMonth=202501|CCN=CC003|Function=HR|Team=InvalidTeam",
+      "Column": "Team",
+      "RawValue": "InvalidTeam",
+      "Message": "Combination Function='HR' + Team='InvalidTeam' is not a valid mapping.",
+      "FixSuggestion": "Verify the Function-Team pairing against the approved mapping table."
+    },
+    {
+      "Severity": "Error",
+      "RuleId": "R-FMT-001",
+      "RowKey": "RowIndex=9|YearMonth=2025-01|CCN=CC004|Function=IT|Team=Asia",
+      "Column": "YearMonth",
+      "RawValue": "2025-01",
+      "Message": "YearMonth '2025-01' does not match YYYYMM format (valid months: 01-12).",
+      "FixSuggestion": "Correct to YYYYMM, e.g., 202501 for January 2025."
+    },
+    {
+      "Severity": "Warning",
+      "RuleId": "R-VAL-003",
+      "RowKey": "RowIndex=11|YearMonth=202501|CCN=CC005|Function=Total|Team=",
+      "Column": "ShoringRatio",
+      "RawValue": "150%",
+      "Message": "ShoringRatio on a Total row is optional, but if provided must be a valid percentage.",
+      "FixSuggestion": "Either clear the cell or enter a valid percentage (e.g., '50%')."
+    }
+  ]
+}

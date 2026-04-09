@@ -1,0 +1,240 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json",
+  "description": "Excel template schema for the Offshoring Data Quality Validation Report. This schema defines the two worksheets and their column structures. Use this to configure the 'Populate a Microsoft Excel template' action in Power Automate, or to create a manual Excel template with matching table names.",
+  "workbook": {
+    "file_naming_convention": "OffshoringDQ_{YYYYMM}_{YYYYMMDDTHHmmss}Z.xlsx",
+    "file_naming_notes": "YYYYMM = period covered (e.g., 202501); YYYYMMDDTHHmmss = UTC timestamp at run time (e.g., 20250120T143022). Example: OffshoringDQ_202501_20250120T143022Z.xlsx",
+    "storage_location": "SharePoint Document Library: /sites/<SiteName>/Shared Documents/OffshoringDQ/Reports/",
+    "sharepoint_folder_convention": "Reports are stored in the year sub-folder: .../Reports/2025/",
+    "sharing": "Power Automate posts the file URL into the designated Teams channel and sends an email to the requestor with a direct link."
+  },
+  "worksheets": [
+    {
+      "name": "Summary",
+      "table_name": "tblSummary",
+      "description": "High-level validation summary — one row per input data row. Provides an at-a-glance status for every row in the dataset.",
+      "freeze_top_row": true,
+      "autofilter": true,
+      "columns": [
+        {
+          "column_letter": "A",
+          "header": "RowNum",
+          "data_type": "integer",
+          "source_field": "report_model.table_rows[].row_num",
+          "width": 8,
+          "notes": "1-based row index matching the original Excel input table"
+        },
+        {
+          "column_letter": "B",
+          "header": "YearMonth",
+          "data_type": "string",
+          "source_field": "report_model.table_rows[].year_month",
+          "width": 12,
+          "notes": "Raw YearMonth value from the input row"
+        },
+        {
+          "column_letter": "C",
+          "header": "CostCenterNumber",
+          "data_type": "string",
+          "source_field": "report_model.table_rows[].cost_center_number",
+          "width": 18,
+          "notes": "Raw Cost Center Number value from the input row"
+        },
+        {
+          "column_letter": "D",
+          "header": "Function",
+          "data_type": "string",
+          "source_field": "report_model.table_rows[].function",
+          "width": 16,
+          "notes": "Raw Function value from the input row"
+        },
+        {
+          "column_letter": "E",
+          "header": "Team",
+          "data_type": "string",
+          "source_field": "report_model.table_rows[].team",
+          "width": 16,
+          "notes": "Raw Team value from the input row"
+        },
+        {
+          "column_letter": "F",
+          "header": "IssueCount",
+          "data_type": "integer",
+          "source_field": "report_model.table_rows[].issue_count",
+          "width": 12,
+          "notes": "Total number of issues (Errors + Warnings) for this row",
+          "conditional_formatting": {
+            "rule": "cell > 0",
+            "format": "background_color: #FFD7D7 (light red)"
+          }
+        },
+        {
+          "column_letter": "G",
+          "header": "HighestSeverity",
+          "data_type": "string",
+          "source_field": "report_model.table_rows[].highest_severity",
+          "width": 15,
+          "allowed_values": ["Error", "Warning", "None"],
+          "conditional_formatting": {
+            "rules": [
+              { "value": "Error",   "format": "font_color: #CC0000, background_color: #FFD7D7" },
+              { "value": "Warning", "format": "font_color: #7A4F00, background_color: #FFF3CD" },
+              { "value": "None",    "format": "font_color: #155724, background_color: #D4EDDA" }
+            ]
+          }
+        },
+        {
+          "column_letter": "H",
+          "header": "RuleIDs",
+          "data_type": "string",
+          "source_field": "report_model.table_rows[].rule_ids",
+          "width": 40,
+          "notes": "Comma-separated list of triggered RuleIds; empty if no issues"
+        }
+      ],
+      "totals_row": {
+        "enabled": false,
+        "notes": "Totals are provided in the ReportMeta worksheet, not inline"
+      }
+    },
+    {
+      "name": "IssuesDetail",
+      "table_name": "tblIssuesDetail",
+      "description": "Full issues list — one row per issue. Used for detailed root-cause analysis and corrective action tracking.",
+      "freeze_top_row": true,
+      "autofilter": true,
+      "columns": [
+        {
+          "column_letter": "A",
+          "header": "Severity",
+          "data_type": "string",
+          "source_field": "issues[].Severity",
+          "width": 10,
+          "allowed_values": ["Error", "Warning"],
+          "conditional_formatting": {
+            "rules": [
+              { "value": "Error",   "format": "font_color: #CC0000, background_color: #FFD7D7, font_bold: true" },
+              { "value": "Warning", "format": "font_color: #7A4F00, background_color: #FFF3CD" }
+            ]
+          }
+        },
+        {
+          "column_letter": "B",
+          "header": "RuleId",
+          "data_type": "string",
+          "source_field": "issues[].RuleId",
+          "width": 18,
+          "notes": "Rule identifier (e.g., R-WS-ALL-001)"
+        },
+        {
+          "column_letter": "C",
+          "header": "RowKey",
+          "data_type": "string",
+          "source_field": "issues[].RowKey",
+          "width": 60,
+          "notes": "Composite key identifying the exact row: RowIndex=N|YearMonth=...|CCN=...|Function=...|Team=..."
+        },
+        {
+          "column_letter": "D",
+          "header": "Column",
+          "data_type": "string",
+          "source_field": "issues[].Column",
+          "width": 22,
+          "notes": "Column name in the source Excel table that triggered this issue"
+        },
+        {
+          "column_letter": "E",
+          "header": "RawValue",
+          "data_type": "string",
+          "source_field": "issues[].RawValue",
+          "width": 30,
+          "notes": "Exact raw cell value (including any leading/trailing spaces) as read from the source"
+        },
+        {
+          "column_letter": "F",
+          "header": "Message",
+          "data_type": "string",
+          "source_field": "issues[].Message",
+          "width": 55,
+          "notes": "Human-readable description of the issue"
+        },
+        {
+          "column_letter": "G",
+          "header": "FixSuggestion",
+          "data_type": "string",
+          "source_field": "issues[].FixSuggestion",
+          "width": 55,
+          "notes": "Actionable correction instruction for the data owner"
+        },
+        {
+          "column_letter": "H",
+          "header": "Status",
+          "data_type": "string",
+          "width": 14,
+          "notes": "To be filled in manually by the data owner. Suggested values: Open / Fixed / Accepted",
+          "default_value": "Open",
+          "conditional_formatting": {
+            "rules": [
+              { "value": "Open",     "format": "background_color: #FFD7D7" },
+              { "value": "Fixed",    "format": "background_color: #D4EDDA" },
+              { "value": "Accepted", "format": "background_color: #E2E3E5" }
+            ]
+          }
+        },
+        {
+          "column_letter": "I",
+          "header": "FixedBy",
+          "data_type": "string",
+          "width": 20,
+          "notes": "Name/email of the person who resolved the issue (manual entry)"
+        },
+        {
+          "column_letter": "J",
+          "header": "FixedDate",
+          "data_type": "date",
+          "width": 14,
+          "notes": "Date the issue was resolved (manual entry, format: YYYY-MM-DD)"
+        }
+      ]
+    },
+    {
+      "name": "ReportMeta",
+      "table_name": "tblReportMeta",
+      "description": "Report metadata and aggregated summary statistics sourced from report_model.",
+      "freeze_top_row": false,
+      "autofilter": false,
+      "layout": "key-value pairs (column A = label, column B = value)",
+      "rows": [
+        { "label": "Report Title",        "source_field": "report_model.title" },
+        { "label": "Generated At (UTC)",  "source_field": "report_model.generated_at" },
+        { "label": "Source File",         "source_field": "report_model.source_file" },
+        { "label": "Period Covered",      "source_field": "report_model.period_covered" },
+        { "label": "Total Rows Checked",  "source_field": "report_model.total_rows_checked" },
+        { "label": "Error Count",         "source_field": "report_model.summary.error_count" },
+        { "label": "Warning Count",       "source_field": "report_model.summary.warning_count" },
+        { "label": "Pass Count",          "source_field": "report_model.summary.pass_count" },
+        { "label": "Rows With Issues",    "source_field": "report_model.summary.rows_with_issues" },
+        { "label": "Pass Rate (%)",       "source_field": "report_model.summary.pass_rate_pct" }
+      ],
+      "rule_counts_table": {
+        "description": "Below the key-value section, render a small table of rule_counts starting at row 14",
+        "start_row": 14,
+        "columns": ["RuleId", "Severity", "IssueCount"],
+        "source_field": "report_model.rule_counts",
+        "sort": "count descending"
+      }
+    }
+  ],
+  "conditional_formatting_notes": {
+    "summary": [
+      "Apply green (D4EDDA) background to rows in the Summary sheet where HighestSeverity = 'None'",
+      "Apply red (FFD7D7) background to rows where HighestSeverity = 'Error'",
+      "Apply yellow (FFF3CD) background to rows where HighestSeverity = 'Warning'"
+    ],
+    "issues_detail": [
+      "In the IssuesDetail sheet, use font bold + red for Error rows in column A",
+      "Auto-filter is enabled by default — users can filter by Severity, RuleId, or Status"
+    ],
+    "implementation": "Apply conditional formatting via Excel table styles or manual rules. When using the 'Populate a Microsoft Excel template' action, pre-configure these rules in the template file saved to SharePoint."
+  }
+}
