@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "example-filesystem": {
+      "command": "npx",
+      "args": ["-y", "@anthropic/mcp-filesystem"],
+      "disabled": true,
+      "_comment": "示例：文件系统 MCP Server，按需启用并修改 args"
+    }
+  },
+  "_说明": "此文件仅作参考模板。实际 MCP 配置位置取决于你的客户端：VS Code 在 .vscode/mcp.json，Claude Desktop 在 ~/Library/Application Support/Claude/claude_desktop_config.json"
+}

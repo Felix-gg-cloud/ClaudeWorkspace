@@ -1,0 +1,14 @@
+[
+  { "code": "FIRST_LOGIN", "name": "🎉 初来乍到", "description": "完成第一次登录", "icon": "🎉", "conditionType": "FIRST_LOGIN", "conditionValue": 1 },
+  { "code": "STREAK_3", "name": "🔥 三日之约", "description": "连续打卡3天", "icon": "🔥", "conditionType": "STREAK_N", "conditionValue": 3 },
+  { "code": "STREAK_7", "name": "⚡ 一周达人", "description": "连续打卡7天", "icon": "⚡", "conditionType": "STREAK_N", "conditionValue": 7 },
+  { "code": "STREAK_30", "name": "💎 月度之星", "description": "连续打卡30天", "icon": "💎", "conditionType": "STREAK_N", "conditionValue": 30 },
+  { "code": "LEVEL_2", "name": "📖 初级读者", "description": "达到等级2", "icon": "📖", "conditionType": "LEVEL_N", "conditionValue": 2 },
+  { "code": "LEVEL_3", "name": "🗣️ 对话新手", "description": "达到等级3", "icon": "🗣️", "conditionType": "LEVEL_N", "conditionValue": 3},
+  { "code": "LEVEL_5", "name": "🎯 中级达人", "description": "达到等级5", "icon": "🎯", "conditionType": "LEVEL_N", "conditionValue": 5 },
+  { "code": "TOTAL_TASKS_10", "name": "✏️ 小试牛刀", "description": "完成10个任务", "icon": "✏️", "conditionType": "TOTAL_TASKS_N", "conditionValue": 10 },
+  { "code": "TOTAL_TASKS_50", "name": "📚 勤学好问", "description": "完成50个任务", "icon": "📚", "conditionType": "TOTAL_TASKS_N", "conditionValue": 50 },
+  { "code": "TOTAL_TASKS_100", "name": "🏅 百题战将", "description": "完成100个任务", "icon": "🏅", "conditionType": "TOTAL_TASKS_N", "conditionValue": 100 },
+  { "code": "TOTAL_CHECKIN_7", "name": "📅 一周常客", "description": "累计打卡7天", "icon": "📅", "conditionType": "TOTAL_CHECKIN_N", "conditionValue": 7 },
+  { "code": "TOTAL_CHECKIN_30", "name": "🗓️ 月度学霸", "description": "累计打卡30天", "icon": "🗓️", "conditionType": "TOTAL_CHECKIN_N", "conditionValue": 30 }
+]

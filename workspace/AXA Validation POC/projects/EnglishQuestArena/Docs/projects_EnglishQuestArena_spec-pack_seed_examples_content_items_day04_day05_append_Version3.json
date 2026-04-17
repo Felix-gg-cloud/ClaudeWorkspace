@@ -1,0 +1,15 @@
+[
+  { "code": "W_YOU", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "you", "textZh": "你/你们", "ipa": "", "exampleEn": "Where are you?", "exampleZh": "你在哪里？", "tags": ["pronoun"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_BOOK", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "book", "textZh": "书", "ipa": "", "exampleEn": "I have a book.", "exampleZh": "我有一本书。", "tags": ["object"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "P_I_HAVE_A_BOOK", "type": "PATTERN", "cefrLevel": "PRE_A1", "textEn": "I have a book.", "textZh": "我有一本书。", "ipa": "", "exampleEn": "I have a book.", "exampleZh": "我有一本书。", "tags": ["pattern"], "source": { "name": "In-house", "url": "", "note": "Course pattern" } },
+
+  { "code": "W_THIS", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "this", "textZh": "这个（近）", "ipa": "", "exampleEn": "This is a book.", "exampleZh": "这是一本书。", "tags": ["pointer"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_THAT", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "that", "textZh": "那个（远）", "ipa": "", "exampleEn": "That is a phone.", "exampleZh": "那是一部手机。", "tags": ["pointer"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_PHONE", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "phone", "textZh": "手机", "ipa": "", "exampleEn": "This is a phone.", "exampleZh": "这是一部手机。", "tags": ["object"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_IT", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "it", "textZh": "它", "ipa": "", "exampleEn": "It is red.", "exampleZh": "它是红色的。", "tags": ["pronoun"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_RED", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "red", "textZh": "红色", "ipa": "", "exampleEn": "It is red.", "exampleZh": "它是红色的。", "tags": ["color"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+
+  { "code": "P_THIS_IS_A_BOOK", "type": "PATTERN", "cefrLevel": "PRE_A1", "textEn": "This is a book.", "textZh": "这是一本书。", "ipa": "", "exampleEn": "This is a book.", "exampleZh": "这是一本书。", "tags": ["pattern"], "source": { "name": "In-house", "url": "", "note": "Course pattern" } },
+  { "code": "P_THAT_IS_A_PHONE", "type": "PATTERN", "cefrLevel": "PRE_A1", "textEn": "That is a phone.", "textZh": "那是一部手机。", "ipa": "", "exampleEn": "That is a phone.", "exampleZh": "那是一部手机。", "tags": ["pattern"], "source": { "name": "In-house", "url": "", "note": "Course pattern" } },
+  { "code": "P_IT_IS_RED", "type": "PATTERN", "cefrLevel": "PRE_A1", "textEn": "It is red.", "textZh": "它是红色的。", "ipa": "", "exampleEn": "It is red.", "exampleZh": "它是红色的。", "tags": ["pattern"], "source": { "name": "In-house", "url": "", "note": "Course pattern" } }
+]

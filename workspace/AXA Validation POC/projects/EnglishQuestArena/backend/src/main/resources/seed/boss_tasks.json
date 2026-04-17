@@ -1,0 +1,210 @@
+[
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_1",
+    "taskType": "MCQ",
+    "promptEn": "Choose the meaning of \"hello\".",
+    "options": "[{\"key\":\"A\",\"textEn\":\"hello\",\"textZh\":\"你好\"},{\"key\":\"B\",\"textEn\":\"hello\",\"textZh\":\"再见\"},{\"key\":\"C\",\"textEn\":\"hello\",\"textZh\":\"谢谢\"}]",
+    "answer": "{\"correctOptionKey\":\"A\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_2",
+    "taskType": "SPELLING",
+    "promptEn": "Type the word you hear.",
+    "answer": "{\"acceptedTexts\":[\"goodbye\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_3",
+    "taskType": "MCQ",
+    "promptEn": "Fill in: I ___ a student.",
+    "options": "[{\"key\":\"A\",\"textEn\":\"have\",\"textZh\":\"有\"},{\"key\":\"B\",\"textEn\":\"am\",\"textZh\":\"是\"},{\"key\":\"C\",\"textEn\":\"is\",\"textZh\":\"是\"}]",
+    "answer": "{\"correctOptionKey\":\"B\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_4",
+    "taskType": "MCQ",
+    "promptEn": "\"name\" means ___",
+    "options": "[{\"key\":\"A\",\"textEn\":\"name\",\"textZh\":\"年龄\"},{\"key\":\"B\",\"textEn\":\"name\",\"textZh\":\"名字\"},{\"key\":\"C\",\"textEn\":\"name\",\"textZh\":\"家庭\"}]",
+    "answer": "{\"correctOptionKey\":\"B\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_5",
+    "taskType": "SPELLING",
+    "promptEn": "Type the word you hear.",
+    "answer": "{\"acceptedTexts\":[\"please\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_6",
+    "taskType": "WORD_ORDER",
+    "promptEn": "Put the words in order.",
+    "options": "[\"morning\",\"Good\",\"!\"]",
+    "answer": "{\"orderedFragments\":[\"Good\",\"morning\",\"!\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_7",
+    "taskType": "FILL_BLANK",
+    "promptEn": "How ___ you?",
+    "answer": "{\"acceptedTexts\":[\"are\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_8",
+    "taskType": "MCQ_REVERSE",
+    "promptEn": "What does \"teacher\" mean?",
+    "options": "[{\"key\":\"A\",\"textEn\":\"teacher\",\"textZh\":\"学生\"},{\"key\":\"B\",\"textEn\":\"teacher\",\"textZh\":\"老师\"},{\"key\":\"C\",\"textEn\":\"teacher\",\"textZh\":\"男孩\"}]",
+    "answer": "{\"correctOptionKey\":\"B\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_9",
+    "taskType": "LISTEN_PICK",
+    "promptEn": "Listen and pick the correct word.",
+    "options": "[{\"key\":\"A\",\"textEn\":\"book\",\"textZh\":\"书\"},{\"key\":\"B\",\"textEn\":\"bag\",\"textZh\":\"包\"},{\"key\":\"C\",\"textEn\":\"pen\",\"textZh\":\"笔\"}]",
+    "answer": "{\"correctOptionKey\":\"A\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_10",
+    "taskType": "WORD_ORDER",
+    "promptEn": "Put the words in order.",
+    "options": "[\"a\",\"I\",\"pen\",\"have\",\".\"]",
+    "answer": "{\"orderedFragments\":[\"I\",\"have\",\"a\",\"pen\",\".\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_11",
+    "taskType": "SPELLING",
+    "promptEn": "Type the word: 早上",
+    "answer": "{\"acceptedTexts\":[\"morning\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_12",
+    "taskType": "MCQ",
+    "promptEn": "___ is my book. (pointing to something near you)",
+    "options": "[{\"key\":\"A\",\"textEn\":\"This\",\"textZh\":\"这个\"},{\"key\":\"B\",\"textEn\":\"That\",\"textZh\":\"那个\"},{\"key\":\"C\",\"textEn\":\"It\",\"textZh\":\"它\"}]",
+    "answer": "{\"correctOptionKey\":\"A\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_13",
+    "taskType": "FILL_BLANK",
+    "promptEn": "___ is the pen?",
+    "answer": "{\"acceptedTexts\":[\"Where\",\"where\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_14",
+    "taskType": "MCQ_REVERSE",
+    "promptEn": "What does \"can\" mean?",
+    "options": "[{\"key\":\"A\",\"textEn\":\"can\",\"textZh\":\"有\"},{\"key\":\"B\",\"textEn\":\"can\",\"textZh\":\"是\"},{\"key\":\"C\",\"textEn\":\"can\",\"textZh\":\"能/会\"}]",
+    "answer": "{\"correctOptionKey\":\"C\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH1_BOSS",
+    "taskCode": "B1_15",
+    "taskType": "WORD_ORDER",
+    "promptEn": "Put the words in order.",
+    "options": "[\"you\",\"this\",\"Can\",\"read\",\"?\"]",
+    "answer": "{\"orderedFragments\":[\"Can\",\"you\",\"read\",\"this\",\"?\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH2_BOSS",
+    "taskCode": "B2_1",
+    "taskType": "MCQ",
+    "promptEn": "What number is \"three\"?",
+    "options": "[{\"key\":\"A\",\"textEn\":\"three\",\"textZh\":\"二\"},{\"key\":\"B\",\"textEn\":\"three\",\"textZh\":\"三\"},{\"key\":\"C\",\"textEn\":\"three\",\"textZh\":\"四\"}]",
+    "answer": "{\"correctOptionKey\":\"B\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH2_BOSS",
+    "taskCode": "B2_2",
+    "taskType": "SPELLING",
+    "promptEn": "Type the color you hear.",
+    "answer": "{\"acceptedTexts\":[\"blue\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH2_BOSS",
+    "taskCode": "B2_3",
+    "taskType": "MCQ",
+    "promptEn": "The opposite of \"big\" is ___.",
+    "options": "[{\"key\":\"A\",\"textEn\":\"tall\",\"textZh\":\"高\"},{\"key\":\"B\",\"textEn\":\"small\",\"textZh\":\"小\"},{\"key\":\"C\",\"textEn\":\"long\",\"textZh\":\"长\"}]",
+    "answer": "{\"correctOptionKey\":\"B\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH2_BOSS",
+    "taskCode": "B2_4",
+    "taskType": "MCQ",
+    "promptEn": "What color is the sky?",
+    "options": "[{\"key\":\"A\",\"textEn\":\"red\",\"textZh\":\"红色\"},{\"key\":\"B\",\"textEn\":\"green\",\"textZh\":\"绿色\"},{\"key\":\"C\",\"textEn\":\"blue\",\"textZh\":\"蓝色\"}]",
+    "answer": "{\"correctOptionKey\":\"C\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH3_BOSS",
+    "taskCode": "B3_1",
+    "taskType": "MCQ",
+    "promptEn": "What is \"cat\" in Chinese?",
+    "options": "[{\"key\":\"A\",\"textEn\":\"cat\",\"textZh\":\"狗\"},{\"key\":\"B\",\"textEn\":\"cat\",\"textZh\":\"猫\"},{\"key\":\"C\",\"textEn\":\"cat\",\"textZh\":\"鸟\"}]",
+    "answer": "{\"correctOptionKey\":\"B\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH3_BOSS",
+    "taskCode": "B3_2",
+    "taskType": "SPELLING",
+    "promptEn": "Type the word you hear.",
+    "answer": "{\"acceptedTexts\":[\"happy\"]}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH3_BOSS",
+    "taskCode": "B3_3",
+    "taskType": "MCQ",
+    "promptEn": "I ___ my mom.",
+    "options": "[{\"key\":\"A\",\"textEn\":\"like\",\"textZh\":\"喜欢\"},{\"key\":\"B\",\"textEn\":\"love\",\"textZh\":\"爱\"},{\"key\":\"C\",\"textEn\":\"am\",\"textZh\":\"是\"}]",
+    "answer": "{\"correctOptionKey\":\"B\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH3_BOSS",
+    "taskCode": "B3_4",
+    "taskType": "MCQ",
+    "promptEn": "The opposite of \"happy\" is ___.",
+    "options": "[{\"key\":\"A\",\"textEn\":\"big\",\"textZh\":\"大\"},{\"key\":\"B\",\"textEn\":\"sad\",\"textZh\":\"伤心\"},{\"key\":\"C\",\"textEn\":\"small\",\"textZh\":\"小\"}]",
+    "answer": "{\"correctOptionKey\":\"B\"}",
+    "ttsEnabled": true
+  },
+  {
+    "bossCode": "PRE_A1_CH3_BOSS",
+    "taskCode": "B3_5",
+    "taskType": "SPELLING",
+    "promptEn": "Type the word you hear.",
+    "answer": "{\"acceptedTexts\":[\"bird\"]}",
+    "ttsEnabled": true
+  }
+]

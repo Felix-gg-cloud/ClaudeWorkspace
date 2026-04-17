@@ -1,0 +1,9 @@
+[
+  { "level": 1, "requiredXp": 0, "title": "🌱 萌芽学徒", "description": "英语学习之旅刚刚开始" },
+  { "level": 2, "requiredXp": 200, "title": "📖 初级读者", "description": "掌握了基础词汇和句型" },
+  { "level": 3, "requiredXp": 500, "title": "🗣️ 对话新手", "description": "能进行简单的日常对话" },
+  { "level": 4, "requiredXp": 1000, "title": "✍️ 写作入门", "description": "能写出简短的英文段落" },
+  { "level": 5, "requiredXp": 1800, "title": "🎯 中级达人", "description": "英语应用能力显著提升" },
+  { "level": 6, "requiredXp": 3000, "title": "🌟 高阶学者", "description": "能流利阅读英文文章" },
+  { "level": 7, "requiredXp": 5000, "title": "🏆 英语大师", "description": "已经是英语达人了！" }
+]

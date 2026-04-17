@@ -1,0 +1,18 @@
+[
+  { "code": "W_MY", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "my", "textZh": "我的", "ipa": "", "exampleEn": "My name is {playerName}.", "exampleZh": "我的名字是{playerName}。", "tags": ["pronoun"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_YOUR", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "your", "textZh": "你的", "ipa": "", "exampleEn": "What is your name?", "exampleZh": "你叫什么名字？", "tags": ["pronoun"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_NAME", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "name", "textZh": "名字", "ipa": "", "exampleEn": "My name is {playerName}.", "exampleZh": "我的名字是{playerName}。", "tags": ["core"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_WHAT", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "what", "textZh": "什么", "ipa": "", "exampleEn": "What is your name?", "exampleZh": "你叫什么名字？", "tags": ["question"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_NICE", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "nice", "textZh": "很高兴的/友好的", "ipa": "", "exampleEn": "Nice to meet you.", "exampleZh": "很高兴认识你。", "tags": ["social"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_MEET", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "meet", "textZh": "遇见/认识", "ipa": "", "exampleEn": "Nice to meet you.", "exampleZh": "很高兴认识你。", "tags": ["social"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+
+  { "code": "P_MY_NAME_IS", "type": "PATTERN", "cefrLevel": "PRE_A1", "textEn": "My name is {playerName}.", "textZh": "我的名字是{playerName}。", "ipa": "", "exampleEn": "My name is {playerName}.", "exampleZh": "我的名字是{playerName}。", "tags": ["pattern"], "source": { "name": "In-house", "url": "", "note": "Course pattern" } },
+  { "code": "P_WHAT_IS_YOUR_NAME", "type": "PATTERN", "cefrLevel": "PRE_A1", "textEn": "What is your name?", "textZh": "你叫什么名字？", "ipa": "", "exampleEn": "What is your name?", "exampleZh": "你叫什么名字？", "tags": ["pattern", "question"], "source": { "name": "In-house", "url": "", "note": "Course pattern" } },
+  { "code": "P_NICE_TO_MEET_YOU", "type": "PATTERN", "cefrLevel": "PRE_A1", "textEn": "Nice to meet you.", "textZh": "很高兴认识你。", "ipa": "", "exampleEn": "Nice to meet you.", "exampleZh": "很高兴认识你。", "tags": ["pattern", "social"], "source": { "name": "In-house", "url": "", "note": "Course pattern" } },
+
+  { "code": "W_HAVE", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "have", "textZh": "有", "ipa": "", "exampleEn": "I have a pen.", "exampleZh": "我有一支笔。", "tags": ["verb"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_A", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "a", "textZh": "一个（用于单数名词前）", "ipa": "", "exampleEn": "a pen", "exampleZh": "一支笔", "tags": ["article"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+  { "code": "W_PEN", "type": "WORD", "cefrLevel": "PRE_A1", "textEn": "pen", "textZh": "笔", "ipa": "", "exampleEn": "I have a pen.", "exampleZh": "我有一支笔。", "tags": ["object"], "source": { "name": "In-house", "url": "", "note": "Course word" } },
+
+  { "code": "P_I_HAVE_A_PEN", "type": "PATTERN", "cefrLevel": "PRE_A1", "textEn": "I have a pen.", "textZh": "我有一支笔。", "ipa": "", "exampleEn": "I have a pen.", "exampleZh": "我有一支笔。", "tags": ["pattern"], "source": { "name": "In-house", "url": "", "note": "Course pattern" } }
+]

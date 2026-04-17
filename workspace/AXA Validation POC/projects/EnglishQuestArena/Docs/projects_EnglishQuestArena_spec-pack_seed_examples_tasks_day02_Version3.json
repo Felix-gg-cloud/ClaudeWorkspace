@@ -1,0 +1,201 @@
+[
+  { "code": "PRE_A1_CH1_D02_WU01", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 1, "type": "MCQ",
+    "promptEn": "Choose the correct reply to: \"Hi!\"",
+    "promptZhHint": "提示：选择合适回复",
+    "options": [
+      { "key": "A", "textEn": "Hello!", "textZh": "你好！" },
+      { "key": "B", "textEn": "Goodbye!", "textZh": "再见！" },
+      { "key": "C", "textEn": "Morning!", "textZh": "早晨！" }
+    ],
+    "answer": { "correctOptionKey": "A" },
+    "xpReward": 5, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "Hi!" },
+    "links": { "contentItemCodes": ["W_HI", "W_HELLO"] }
+  },
+  { "code": "PRE_A1_CH1_D02_WU02", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 2, "type": "MCQ",
+    "promptEn": "Fill in: I ___ {playerName}.",
+    "promptZhHint": "提示：选择正确单词",
+    "options": [
+      { "key": "A", "textEn": "am", "textZh": "是" },
+      { "key": "B", "textEn": "is", "textZh": "是" },
+      { "key": "C", "textEn": "are", "textZh": "是" }
+    ],
+    "answer": { "correctOptionKey": "A" },
+    "explanationEn": "Use “am” with “I”.",
+    "explanationZh": "I 后面用 am。",
+    "xpReward": 6, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "I am {playerName}." },
+    "links": { "contentItemCodes": ["W_I", "W_AM", "P_I_AM_NAME"] }
+  },
+
+  { "code": "PRE_A1_CH1_D02_C01", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 3, "type": "FLASHCARD",
+    "promptEn": "my", "promptZhHint": "我的",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "My = belonging to me.",
+    "explanationZh": "my 表示“我的”。",
+    "xpReward": 2, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "my" },
+    "links": { "contentItemCodes": ["W_MY"] }
+  },
+  { "code": "PRE_A1_CH1_D02_C02", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 4, "type": "FLASHCARD",
+    "promptEn": "your", "promptZhHint": "你的",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Your = belonging to you.",
+    "explanationZh": "your 表示“你的”。",
+    "xpReward": 2, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "your" },
+    "links": { "contentItemCodes": ["W_YOUR"] }
+  },
+  { "code": "PRE_A1_CH1_D02_C03", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 5, "type": "FLASHCARD",
+    "promptEn": "name", "promptZhHint": "名字",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Name = what people call you.",
+    "explanationZh": "name 是“名字”。",
+    "xpReward": 2, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "name" },
+    "links": { "contentItemCodes": ["W_NAME"] }
+  },
+  { "code": "PRE_A1_CH1_D02_C04", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 6, "type": "FLASHCARD",
+    "promptEn": "what", "promptZhHint": "什么",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "What = asking about something.",
+    "explanationZh": "what 表示“什么”。",
+    "xpReward": 2, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "what" },
+    "links": { "contentItemCodes": ["W_WHAT"] }
+  },
+  { "code": "PRE_A1_CH1_D02_C05", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 7, "type": "FLASHCARD",
+    "promptEn": "nice", "promptZhHint": "很高兴的/友好的",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Nice = pleasant.",
+    "explanationZh": "nice 可表示“很高兴/友好”。",
+    "xpReward": 2, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "nice" },
+    "links": { "contentItemCodes": ["W_NICE"] }
+  },
+  { "code": "PRE_A1_CH1_D02_C06", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 8, "type": "FLASHCARD",
+    "promptEn": "meet", "promptZhHint": "遇见/认识",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Meet = see someone for the first time.",
+    "explanationZh": "meet 表示“认识/见到”。",
+    "xpReward": 2, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "meet" },
+    "links": { "contentItemCodes": ["W_MEET"] }
+  },
+
+  { "code": "PRE_A1_CH1_D02_C07", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 9, "type": "FLASHCARD",
+    "promptEn": "What is your name?", "promptZhHint": "你叫什么名字？",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "A common question.",
+    "explanationZh": "常用问句。",
+    "xpReward": 3, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "What is your name?" },
+    "links": { "contentItemCodes": ["P_WHAT_IS_YOUR_NAME"] }
+  },
+  { "code": "PRE_A1_CH1_D02_C08", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 10, "type": "FLASHCARD",
+    "promptEn": "My name is {playerName}.", "promptZhHint": "我的名字是{playerName}。",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Use this to answer.",
+    "explanationZh": "用来回答上面的问题。",
+    "xpReward": 3, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "My name is {playerName}." },
+    "links": { "contentItemCodes": ["P_MY_NAME_IS"] }
+  },
+  { "code": "PRE_A1_CH1_D02_C09", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 11, "type": "FLASHCARD",
+    "promptEn": "Nice to meet you.", "promptZhHint": "很高兴认识你。",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "Say this when you meet someone.",
+    "explanationZh": "初次见面时说。",
+    "xpReward": 3, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "Nice to meet you." },
+    "links": { "contentItemCodes": ["P_NICE_TO_MEET_YOU"] }
+  },
+
+  { "code": "PRE_A1_CH1_D02_O01", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 12, "type": "WORD_ORDER",
+    "promptEn": "Arrange the words.",
+    "promptZhHint": "提示：排序成句子",
+    "tokens": ["name", "is", "My", "{playerName}", "."],
+    "answer": { "correctTokens": ["My", "name", "is", "{playerName}", "."] },
+    "xpReward": 8, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "My name is {playerName}." },
+    "links": { "contentItemCodes": ["P_MY_NAME_IS"] }
+  },
+  { "code": "PRE_A1_CH1_D02_O02", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 13, "type": "WORD_ORDER",
+    "promptEn": "Arrange the words.",
+    "promptZhHint": "提示：排序成句子",
+    "tokens": ["your", "name", "is", "What", "?"],
+    "answer": { "correctTokens": ["What", "is", "your", "name", "?"] },
+    "xpReward": 8, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "What is your name?" },
+    "links": { "contentItemCodes": ["P_WHAT_IS_YOUR_NAME"] }
+  },
+
+  { "code": "PRE_A1_CH1_D02_EXPL01", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 14, "type": "FLASHCARD",
+    "promptEn": "Tip: my vs your",
+    "promptZhHint": "解释卡：my 和 your",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "my = mine, your = yours.",
+    "explanationZh": "my=我的；your=你的。",
+    "xpReward": 1, "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": ["W_MY", "W_YOUR"] }
+  },
+
+  { "code": "PRE_A1_CH1_D02_S01", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 15, "type": "SPELLING",
+    "promptEn": "Type the word you hear.",
+    "promptZhHint": "提示：听音拼写",
+    "answer": { "acceptedTexts": ["name"] },
+    "xpReward": 8, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "name" },
+    "links": { "contentItemCodes": ["W_NAME"] }
+  },
+
+  { "code": "PRE_A1_CH1_D02_DLG01", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 16, "type": "DIALOGUE_REVIEW",
+    "dialogue": {
+      "lines": [
+        { "en": "Hi!", "zh": "嗨！", "ttsTextEn": "Hi!" },
+        { "en": "Hello!", "zh": "你好！", "ttsTextEn": "Hello!" },
+        { "en": "What is your name?", "zh": "你叫什么名字？", "ttsTextEn": "What is your name?" },
+        { "en": "My name is {playerName}.", "zh": "我的名字是{playerName}。", "ttsTextEn": "My name is {playerName}." },
+        { "en": "Nice to meet you.", "zh": "很高兴认识你。", "ttsTextEn": "Nice to meet you." }
+      ]
+    },
+    "followUpQuestions": [
+      {
+        "type": "MCQ",
+        "promptEn": "Which sentence asks a name?",
+        "promptZhHint": "提示：哪一句是在问名字？",
+        "options": [
+          { "key": "A", "textEn": "What is your name?", "textZh": "你叫什么名字？" },
+          { "key": "B", "textEn": "Goodbye!", "textZh": "再见！" }
+        ],
+        "answer": { "correctOptionKey": "A" }
+      }
+    ],
+    "xpReward": 10, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "" },
+    "links": { "contentItemCodes": ["P_WHAT_IS_YOUR_NAME", "P_MY_NAME_IS", "P_NICE_TO_MEET_YOU"] }
+  },
+
+  { "code": "PRE_A1_CH1_D02_SUM01", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 17, "type": "FLASHCARD",
+    "promptEn": "Summary",
+    "promptZhHint": "总结",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "You can ask and say a name.",
+    "explanationZh": "你会问名字，并能用 My name is ... 回答。",
+    "xpReward": 2, "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": ["P_WHAT_IS_YOUR_NAME", "P_MY_NAME_IS"] }
+  },
+
+  { "code": "PRE_A1_CH1_D02_END01", "lessonCode": "PRE_A1_CH1_D02", "orderIndex": 18, "type": "FLASHCARD",
+    "promptEn": "Quest Complete!",
+    "promptZhHint": "主线完成！",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "You finished Day 2.",
+    "explanationZh": "你完成了第2天主线任务。",
+    "xpReward": 1, "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": [] }
+  }
+]

@@ -1,0 +1,22 @@
+[
+  {
+    "code": "PRE_A1_CH1_BOSS",
+    "chapterCode": "PRE_A1_CH1",
+    "bossDayIndex": 11,
+    "rules": {
+      "bossHp": 10,
+      "playerHp": 5,
+      "comboThreshold": 5,
+      "comboBonusDamage": 1,
+      "dailyRetryLimit": 1,
+      "coverage": "CORE_70_PERCENT",
+      "drawPlan": [
+        { "pool": "LISTEN_WORD", "count": 4 },
+        { "pool": "MEANING", "count": 4 },
+        { "pool": "PATTERN_ORDER", "count": 4 },
+        { "pool": "SPELLING", "count": 2 },
+        { "pool": "DIALOGUE", "count": 1 }
+      ]
+    }
+  }
+]

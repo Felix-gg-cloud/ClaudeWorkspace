@@ -1,0 +1,25 @@
+[
+  { "code": "PRE_A1_CH1_D05_WU01", "lessonCode": "PRE_A1_CH1_D05", "orderIndex": 1, "type": "MCQ",
+    "promptEn": "Choose the correct sentence.",
+    "promptZhHint": "提示：选择正确句子",
+    "options": [
+      { "key": "A", "textEn": "This is a book.", "textZh": "这是一本书。" },
+      { "key": "B", "textEn": "This am a book.", "textZh": "（错误）" },
+      { "key": "C", "textEn": "That have a book.", "textZh": "（错误）" }
+    ],
+    "answer": { "correctOptionKey": "A" },
+    "xpReward": 7, "goldReward": 0,
+    "tts": { "enabled": true, "ttsTextEn": "This is a book." },
+    "links": { "contentItemCodes": ["P_THIS_IS_A_BOOK"] }
+  },
+  { "code": "PRE_A1_CH1_D05_END01", "lessonCode": "PRE_A1_CH1_D05", "orderIndex": 2, "type": "FLASHCARD",
+    "promptEn": "Quest Complete!",
+    "promptZhHint": "主线完成！",
+    "answer": { "action": "GOT_IT" },
+    "explanationEn": "You finished Day 5.",
+    "explanationZh": "你完成了第5天主线任务。",
+    "xpReward": 1, "goldReward": 0,
+    "tts": { "enabled": false, "ttsTextEn": "" },
+    "links": { "contentItemCodes": [] }
+  }
+]

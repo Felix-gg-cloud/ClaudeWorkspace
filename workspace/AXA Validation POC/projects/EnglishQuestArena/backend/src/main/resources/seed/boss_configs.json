@@ -1,0 +1,35 @@
+[
+  {
+    "code": "PRE_A1_CH1_BOSS",
+    "chapterCode": "PRE_A1_CH1",
+    "bossName": "Grumble King",
+    "bossTitle": "咕噜国王",
+    "bossHp": 15,
+    "playerHp": 5,
+    "timeLimitSec": 20,
+    "damageCorrect": 3,
+    "damageWrong": 1
+  },
+  {
+    "code": "PRE_A1_CH2_BOSS",
+    "chapterCode": "PRE_A1_CH2",
+    "bossName": "Color Witch",
+    "bossTitle": "色彩女巫",
+    "bossHp": 12,
+    "playerHp": 5,
+    "timeLimitSec": 18,
+    "damageCorrect": 3,
+    "damageWrong": 1
+  },
+  {
+    "code": "PRE_A1_CH3_BOSS",
+    "chapterCode": "PRE_A1_CH3",
+    "bossName": "Shadow Beast",
+    "bossTitle": "暗影兽",
+    "bossHp": 15,
+    "playerHp": 6,
+    "timeLimitSec": 20,
+    "damageCorrect": 3,
+    "damageWrong": 1
+  }
+]

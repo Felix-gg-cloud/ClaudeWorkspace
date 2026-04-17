@@ -1,0 +1,123 @@
+[
+  {
+    "code": "PRE_A1_CH1_D01",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 1,
+    "titleEn": "Day 1 — Greetings",
+    "titleZh": "第1天—问候与 I am",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D02",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 2,
+    "titleEn": "Day 2 — Name & Introduction",
+    "titleZh": "第2天—名字与介绍",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D03",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 3,
+    "titleEn": "Day 3 — Numbers 1-5 & I have",
+    "titleZh": "第3天—数字1-5与 I have",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D04",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 4,
+    "titleEn": "Day 4 — Numbers 6-10",
+    "titleZh": "第4天—数字6-10",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D05",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 5,
+    "titleEn": "Day 5 — This/That",
+    "titleZh": "第5天—this/that 指物",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D06",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 6,
+    "titleEn": "Day 6 — Colors & It is",
+    "titleZh": "第6天—颜色与 It is",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D07",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 7,
+    "titleEn": "Day 7 — Places",
+    "titleZh": "第7天—地点与 Where",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D08",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 8,
+    "titleEn": "Day 8 — Likes",
+    "titleZh": "第8天—喜欢与饮食",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D09",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 9,
+    "titleEn": "Day 9 — Family & Actions",
+    "titleZh": "第9天—家人与动作",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D10",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 10,
+    "titleEn": "Day 10 — Review Story",
+    "titleZh": "第10天—复习与小故事",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": true
+  },
+  {
+    "code": "PRE_A1_CH1_D11_BOSS",
+    "chapterCode": "PRE_A1_CH1",
+    "dayIndex": 11,
+    "titleEn": "Day 11 — Boss: Gatekeeper",
+    "titleZh": "第11天—Boss：守门人",
+    "estimatedMinutes": 30,
+    "unlockRule": { "type": "SEQUENTIAL" },
+    "targetTaskCount": 30,
+    "autoDrillEnabled": false
+  }
+]
