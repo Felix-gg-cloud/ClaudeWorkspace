@@ -1,0 +1,31 @@
+{
+  "_comment": "Team 白名单 — 对应 Excel tblOffshoring 中 Team 列的合法值（区分大小写）",
+  "_source": "headcount_analysis.xlsx / Sheet: Offshoring / Table: tblOffshoring",
+  "_ruleRef": "R004",
+  "_lastUpdated": "2025-01-15",
+  "allowedValues": [
+    "Platform",
+    "Backend",
+    "Frontend",
+    "Mobile",
+    "Infrastructure",
+    "Data Engineering",
+    "Data Science",
+    "Analytics",
+    "Product Management",
+    "UX",
+    "DevOps",
+    "QA",
+    "Security Engineering",
+    "Finance Operations",
+    "HR Operations",
+    "Legal Operations",
+    "Marketing Operations",
+    "Sales Operations",
+    "IT Support",
+    "Customer Support",
+    "Business Analysis",
+    "Strategy"
+  ],
+  "_note": "请根据实际业务更新上方列表。新增 Team 需经业务确认后更新此文件，并同步更新 function-team-mapping.json。"
+}

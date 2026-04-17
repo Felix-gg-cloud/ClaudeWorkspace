@@ -1,0 +1,75 @@
+{
+  "_comment": "Function → Team 合法组合映射 — 对应规则 R009",
+  "_source": "headcount_analysis.xlsx / Sheet: Offshoring / Table: tblOffshoring",
+  "_ruleRef": "R009",
+  "_lastUpdated": "2025-01-15",
+  "_usage": "Key 为 Function 值，Value 为该 Function 下允许出现的 Team 列表。若 Function+Team 组合不在此映射中，触发 R009 Warning。",
+  "mapping": {
+    "Engineering": [
+      "Platform",
+      "Backend",
+      "Frontend",
+      "Mobile",
+      "Infrastructure",
+      "DevOps",
+      "QA",
+      "Security Engineering"
+    ],
+    "Data": [
+      "Data Engineering",
+      "Data Science",
+      "Analytics"
+    ],
+    "Product": [
+      "Product Management",
+      "Business Analysis"
+    ],
+    "Design": [
+      "UX"
+    ],
+    "Finance": [
+      "Finance Operations",
+      "Analytics"
+    ],
+    "HR": [
+      "HR Operations"
+    ],
+    "Legal": [
+      "Legal Operations"
+    ],
+    "Marketing": [
+      "Marketing Operations",
+      "Analytics"
+    ],
+    "Sales": [
+      "Sales Operations",
+      "Business Development"
+    ],
+    "Operations": [
+      "Finance Operations",
+      "HR Operations",
+      "IT Support",
+      "Business Analysis"
+    ],
+    "IT": [
+      "IT Support",
+      "Infrastructure",
+      "Security Engineering"
+    ],
+    "Customer Success": [
+      "Customer Support"
+    ],
+    "Business Development": [
+      "Business Development",
+      "Strategy"
+    ],
+    "Research": [
+      "Data Science",
+      "Analytics"
+    ],
+    "Security": [
+      "Security Engineering"
+    ]
+  },
+  "_note": "请根据实际业务更新上方映射。一个 Team 可以属于多个 Function（如 Analytics 可属于 Data、Finance、Marketing）。新增组合需经业务确认后更新此文件。"
+}
