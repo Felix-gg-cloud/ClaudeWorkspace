@@ -1,0 +1,56 @@
+{
+  "_comment": "Allowed Function→Team combinations. Each Function key maps to its permitted Team values.",
+  "Finance": [
+    "GBS-Finance-AP",
+    "GBS-Finance-AR",
+    "GBS-Finance-GL",
+    "GBS-Finance-Reporting"
+  ],
+  "HR": [
+    "GBS-HR-Payroll",
+    "GBS-HR-Recruitment",
+    "GBS-HR-L&D"
+  ],
+  "IT": [
+    "GBS-IT-Infra",
+    "GBS-IT-AppSupport"
+  ],
+  "Procurement": [
+    "GBS-Procurement-Sourcing",
+    "GBS-Procurement-PO"
+  ],
+  "Legal": [
+    "GBS-Legal-Contract"
+  ],
+  "Supply Chain": [
+    "GBS-SupplyChain-Planning",
+    "GBS-SupplyChain-Logistics"
+  ],
+  "Analytics": [
+    "GBS-Analytics-BI",
+    "GBS-Analytics-DataEng"
+  ],
+  "Compliance": [
+    "GBS-Compliance-AML",
+    "GBS-Compliance-KYC"
+  ],
+  "Risk Management": [
+    "GBS-Risk-OpRisk"
+  ],
+  "Customer Service": [
+    "GBS-CS-L1",
+    "GBS-CS-L2"
+  ],
+  "Tax": [
+    "GBS-Tax-Indirect",
+    "GBS-Tax-Direct"
+  ],
+  "Treasury": [
+    "GBS-Treasury-Cash"
+  ],
+  "Audit": [
+    "GBS-Audit-Internal"
+  ],
+  "Marketing": [],
+  "Operations": []
+}
