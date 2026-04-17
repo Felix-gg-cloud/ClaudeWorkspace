@@ -1,0 +1,301 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "tblOffshoring-schema",
+  "title": "tblOffshoring 表列定义与校验规则",
+  "description": "Offshoring 月度数据表 tblOffshoring 的列定义、类型约束与校验规则。Power Automate 机械读取，AI 全权校验。",
+  "version": "1.0",
+  "metadata": {
+    "tableName": "tblOffshoring",
+    "fileLocation": "OneDrive:/Offshoring/tblOffshoring.xlsx",
+    "updateFrequency": "月度",
+    "rowTypes": {
+      "total": "Function 列原始值（trim 后）等于 'Total'",
+      "non_total": "其他所有行"
+    },
+    "globalRule": "所有列均不允许前导或尾随空白字符（leading/trailing whitespace），出现即报 Error（R-WS-ALL-001）"
+  },
+
+  "columns": [
+    {
+      "name": "YearMonth",
+      "type": "string",
+      "description": "数据所属年月，格式 YYYYMM",
+      "required": "all_rows",
+      "rules": [
+        {
+          "ruleId": "R-YM-001",
+          "severity": "Error",
+          "description": "必填；格式必须为 YYYYMM（6位数字）；月份部分（第5-6位）必须在 01-12 之间",
+          "pattern": "^\\d{6}$",
+          "monthRange": "01-12"
+        }
+      ],
+      "examples": {
+        "valid": ["202501", "202412"],
+        "invalid": ["2025-01", "20251", "202513", "202500", " 202501", "202501 "]
+      }
+    },
+    {
+      "name": "Cost Center Number",
+      "type": "string",
+      "description": "成本中心编号",
+      "required": "non_total_rows",
+      "rules": [
+        {
+          "ruleId": "R-REQ-CCN-001",
+          "severity": "Error",
+          "description": "Non-Total 行必填；不得为空（空白字符视为空）"
+        }
+      ],
+      "examples": {
+        "valid": ["CC001", "10001", "APAC-GBS-001"],
+        "invalid": ["", "  ", " CC001", "CC001 "]
+      }
+    },
+    {
+      "name": "Function",
+      "type": "string",
+      "description": "业务功能分类；Non-Total 行须在白名单内；Total 行固定为 'Total'",
+      "required": "non_total_rows",
+      "rules": [
+        {
+          "ruleId": "R-REQ-FUNC-001",
+          "severity": "Error",
+          "description": "Non-Total 行必填"
+        },
+        {
+          "ruleId": "R-WL-FUNC-001",
+          "severity": "Error",
+          "description": "Non-Total 行：原始值必须精确匹配 FUNCTION_WHITELIST（不做 trim）"
+        }
+      ],
+      "whitelist": ["GBS", "IT", "Finance", "HR", "Operations", "Total"],
+      "totalRowValue": "Total",
+      "examples": {
+        "valid": ["GBS", "IT", "Finance", "HR", "Operations", "Total"],
+        "invalid": ["gbs", "GBS ", " GBS", "Marketing", ""]
+      }
+    },
+    {
+      "name": "Team",
+      "type": "string",
+      "description": "团队分类；Non-Total 行须在白名单内且与 Function 组合合法；Total 行可为空",
+      "required": "non_total_rows",
+      "rules": [
+        {
+          "ruleId": "R-REQ-TEAM-001",
+          "severity": "Error",
+          "description": "Non-Total 行必填"
+        },
+        {
+          "ruleId": "R-WL-TEAM-001",
+          "severity": "Error",
+          "description": "Non-Total 行：原始值必须精确匹配 TEAM_WHITELIST（不做 trim）"
+        },
+        {
+          "ruleId": "R-MAP-FT-001",
+          "severity": "Error",
+          "description": "Non-Total 行：Function-Team 组合必须在 FUNCTION_TEAM_MAPPING 中；Total 行 Team 为空是合法组合"
+        }
+      ],
+      "whitelist": ["EA", "GFS", "GAS", "HRIT", "FinOps", "Talent", ""],
+      "note": "空字符串 '' 用于 Total 行（Function=Total, Team=空 是合法组合）",
+      "examples": {
+        "valid": ["EA", "GFS", "GAS", "HRIT", "FinOps", "Talent"],
+        "invalid": ["ea", "EA ", " EA", "DevOps", ""]
+      }
+    },
+    {
+      "name": "Owner",
+      "type": "string",
+      "description": "数据负责人（姓名或邮箱）",
+      "required": "all_rows",
+      "rules": [
+        {
+          "ruleId": "R-REQ-OWNER-001",
+          "severity": "Error",
+          "description": "所有行必填（包括 Total 行）"
+        }
+      ],
+      "examples": {
+        "valid": ["Alice", "bob.smith@company.com", "张三"],
+        "invalid": ["", "  ", " Alice", "Alice "]
+      }
+    },
+    {
+      "name": "ShoringRatio",
+      "type": "string",
+      "description": "Offshoring 比例；格式为 '数字%'，范围 0-100；Non-Total 行必填；Total 行可选",
+      "required": "non_total_rows",
+      "rules": [
+        {
+          "ruleId": "R-SR-001",
+          "severity": "Error",
+          "description": "Non-Total 行必填；格式必须匹配 ^\\d+(\\.\\d+)?%$；数值部分必须在 0-100 之间（含边界）",
+          "pattern": "^\\d+(\\.\\d+)?%$",
+          "valueRange": "0-100（对应 '0%' 到 '100%'）",
+          "totalRowBehavior": "Total 行可为空；有值则同样校验格式和范围"
+        }
+      ],
+      "examples": {
+        "valid": ["0%", "12%", "33.5%", "100%", "0.5%"],
+        "invalid": ["12 %", "0.12", "120%", "12", "12.%", "-5%", " 25%", "25% "]
+      }
+    },
+    {
+      "name": "Actual Headcount",
+      "type": "numeric",
+      "description": "当月实际在编人数",
+      "required": "optional_skip_if_blank",
+      "rules": [
+        {
+          "ruleId": "R-NUM-001",
+          "severity": "Error",
+          "description": "空则跳过；非空必须为有效数字且 >= 0"
+        }
+      ],
+      "examples": {
+        "valid": ["", "0", "10", "100", "3.5"],
+        "invalid": ["-1", "-10", "abc", "10人", " 10", "10 "]
+      }
+    },
+    {
+      "name": "Planned Headcount",
+      "type": "numeric",
+      "description": "当月计划在编人数",
+      "required": "optional_skip_if_blank",
+      "rules": [
+        {
+          "ruleId": "R-NUM-001",
+          "severity": "Error",
+          "description": "空则跳过；非空必须为有效数字且 >= 0"
+        }
+      ],
+      "examples": {
+        "valid": ["", "0", "12", "120"],
+        "invalid": ["-1", "abc", " 12", "12 "]
+      }
+    },
+    {
+      "name": "Target Headcount",
+      "type": "numeric",
+      "description": "当月目标在编人数",
+      "required": "optional_skip_if_blank",
+      "rules": [
+        {
+          "ruleId": "R-NUM-001",
+          "severity": "Error",
+          "description": "空则跳过；非空必须为有效数字且 >= 0"
+        }
+      ],
+      "examples": {
+        "valid": ["", "0", "15", "150"],
+        "invalid": ["-5", "n/a", " 15", "15 "]
+      }
+    },
+    {
+      "name": "Actual Cost",
+      "type": "numeric",
+      "description": "当月实际成本（单位：元/美元，取决于团队配置）",
+      "required": "optional_skip_if_blank",
+      "rules": [
+        {
+          "ruleId": "R-NUM-001",
+          "severity": "Error",
+          "description": "空则跳过；非空必须为有效数字且 >= 0"
+        }
+      ],
+      "examples": {
+        "valid": ["", "0", "50000", "123456.78"],
+        "invalid": ["-100", "5万", "$50000", " 50000", "50000 "]
+      }
+    },
+    {
+      "name": "Planned Cost",
+      "type": "numeric",
+      "description": "当月计划成本",
+      "required": "optional_skip_if_blank",
+      "rules": [
+        {
+          "ruleId": "R-NUM-001",
+          "severity": "Error",
+          "description": "空则跳过；非空必须为有效数字且 >= 0"
+        }
+      ],
+      "examples": {
+        "valid": ["", "0", "60000", "60000.50"],
+        "invalid": ["-200", "abc", " 60000", "60000 "]
+      }
+    },
+    {
+      "name": "Target Cost",
+      "type": "numeric",
+      "description": "当月目标成本",
+      "required": "optional_skip_if_blank",
+      "rules": [
+        {
+          "ruleId": "R-NUM-001",
+          "severity": "Error",
+          "description": "空则跳过；非空必须为有效数字且 >= 0"
+        }
+      ],
+      "examples": {
+        "valid": ["", "0", "70000", "70000.00"],
+        "invalid": ["-300", "TBD", " 70000", "70000 "]
+      }
+    }
+  ],
+
+  "functionTeamMapping": {
+    "description": "合法 Function-Team 组合列表（精确匹配，不做 trim）",
+    "note": "'Total' + 空字符串 '' 是合法组合，用于 Total 汇总行",
+    "pairs": [
+      {"Function": "GBS",        "Team": "EA"},
+      {"Function": "GBS",        "Team": "GFS"},
+      {"Function": "GBS",        "Team": "GAS"},
+      {"Function": "IT",         "Team": "HRIT"},
+      {"Function": "Finance",    "Team": "FinOps"},
+      {"Function": "HR",         "Team": "Talent"},
+      {"Function": "Operations", "Team": "EA"},
+      {"Function": "Total",      "Team": ""}
+    ]
+  },
+
+  "ruleExecutionOrder": [
+    {
+      "order": 1,
+      "ruleId": "R-WS-ALL-001",
+      "note": "全列前后空格检查，优先执行；触发后跳过该列的其他规则"
+    },
+    {
+      "order": 2,
+      "ruleId": "R-YM-001",
+      "note": "YearMonth 必填与格式校验"
+    },
+    {
+      "order": 3,
+      "ruleIds": ["R-REQ-CCN-001", "R-REQ-FUNC-001", "R-REQ-TEAM-001", "R-REQ-OWNER-001"],
+      "note": "必填字段校验"
+    },
+    {
+      "order": 4,
+      "ruleIds": ["R-WL-FUNC-001", "R-WL-TEAM-001"],
+      "note": "白名单匹配；前置条件：对应列非空且未触发空格规则"
+    },
+    {
+      "order": 5,
+      "ruleId": "R-MAP-FT-001",
+      "note": "Function-Team 组合校验；前置条件：两列均非空且均通过白名单检查"
+    },
+    {
+      "order": 6,
+      "ruleId": "R-NUM-001",
+      "note": "数值列格式与范围校验；前置条件：列值非空（空则跳过）"
+    },
+    {
+      "order": 7,
+      "ruleId": "R-SR-001",
+      "note": "ShoringRatio 格式与范围校验"
+    }
+  ]
+}
