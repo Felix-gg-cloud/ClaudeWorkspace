@@ -1,0 +1,184 @@
+{
+  "schema": {
+    "table": "tblOffshoring",
+    "version": "1.3",
+    "lastUpdated": "2026-03-20",
+    "columns": [
+      { "name": "Cost Center Number", "type": "text", "description": "成本中心编号" },
+      { "name": "Function",           "type": "text", "description": "职能部门" },
+      { "name": "Team",               "type": "text", "description": "团队" },
+      { "name": "Owner",              "type": "text", "description": "负责人" },
+      { "name": "YearMonth",          "type": "text", "description": "年月 YYYYMM" },
+      { "name": "ShoringRatio",       "type": "text", "description": "离岸比例 百分比格式" },
+      { "name": "Actual_HC",          "type": "numeric", "description": "实际总人力" },
+      { "name": "Actual_Offshore_HC", "type": "numeric", "description": "实际离岸人力" },
+      { "name": "Actual_Cost",        "type": "numeric", "description": "实际总成本" },
+      { "name": "Actual_Offshore_Cost","type": "numeric","description": "实际离岸成本" },
+      { "name": "Planned_HC",         "type": "numeric", "description": "计划总人力" },
+      { "name": "Planned_Offshore_HC","type": "numeric", "description": "计划离岸人力" },
+      { "name": "Planned_Cost",       "type": "numeric", "description": "计划总成本" },
+      { "name": "Planned_Offshore_Cost","type":"numeric","description": "计划离岸成本" },
+      { "name": "Target_YearEnd",     "type": "numeric", "description": "年底目标" },
+      { "name": "Target_2030YearEnd", "type": "numeric", "description": "2030年底目标" }
+    ],
+    "numericColumns": [
+      "Actual_HC", "Actual_Offshore_HC", "Actual_Cost", "Actual_Offshore_Cost",
+      "Planned_HC", "Planned_Offshore_HC", "Planned_Cost", "Planned_Offshore_Cost",
+      "Target_YearEnd", "Target_2030YearEnd"
+    ],
+    "totalRowFunctions": ["Total (All)", "Total (Core Operations)"]
+  },
+  "rowClassification": {
+    "description": "根据 Function 列判定行类型",
+    "totalRow": {
+      "condition": "trim(Function) in totalRowFunctions",
+      "values": ["Total (All)", "Total (Core Operations)"]
+    },
+    "nonTotalRow": {
+      "condition": "trim(Function) NOT in totalRowFunctions"
+    }
+  },
+  "rules": [
+    {
+      "ruleId": "R-CCN-001",
+      "name": "Cost Center Number 格式",
+      "severity": "Error",
+      "applicableRows": "all",
+      "triggerCondition": "trim(Cost Center Number) != ''",
+      "description": "Cost Center Number 必须为 7 位纯数字",
+      "regex": "^\\d{7}$",
+      "message": "Cost Center Number 必须为 7 位纯数字（例：1234567）。",
+      "fixSuggestion": "请确认成本中心编号为 7 位数字，不含前导零以外的非数字字符。"
+    },
+    {
+      "ruleId": "R-YM-001",
+      "name": "YearMonth 格式",
+      "severity": "Error",
+      "applicableRows": "all",
+      "triggerCondition": "trim(YearMonth) != ''",
+      "description": "YearMonth 必须为 YYYYMM 格式，月份 01–12",
+      "regex": "^\\d{6}$",
+      "additionalCheck": "month part (last 2 digits) between 01 and 12",
+      "message": "YearMonth 必须为 YYYYMM 格式（例：202501），月份须在 01–12 之间。",
+      "fixSuggestion": "将 YearMonth 改为 6 位数字年月，如 202501、202412。"
+    },
+    {
+      "ruleId": "R-FN-001",
+      "name": "Function 白名单",
+      "severity": "Error",
+      "applicableRows": "all",
+      "triggerCondition": "trim(Function) != ''",
+      "description": "Function 必须在允许的白名单内",
+      "referenceFile": "function-team-mapping.json",
+      "message": "Function 值 \"{value}\" 不在允许列表中。",
+      "fixSuggestion": "请从标准 Function 列表中选择正确的值，注意大小写与空格。"
+    },
+    {
+      "ruleId": "R-TM-001",
+      "name": "Team 白名单",
+      "severity": "Error",
+      "applicableRows": "all",
+      "triggerCondition": "trim(Team) != ''",
+      "description": "Team 必须在允许的白名单内",
+      "referenceFile": "function-team-mapping.json",
+      "message": "Team 值 \"{value}\" 不在允许列表中。",
+      "fixSuggestion": "请从标准 Team 列表中选择正确的值，注意大小写与空格。"
+    },
+    {
+      "ruleId": "R-FM-001",
+      "name": "Function-Team 组合映射",
+      "severity": "Error",
+      "applicableRows": "all",
+      "triggerCondition": "trim(Function) != '' AND trim(Team) != ''",
+      "description": "Function 与 Team 的组合必须在允许的映射表内。Total 行 + 空 Team 是合法组合，因触发条件（Team 非空）不满足，自然不报错；若 Total 行填入非空 Team，则照常校验。",
+      "referenceFile": "function-team-mapping.json",
+      "note": "Rule is NOT skipped for Total rows. Empty Team for Total rows satisfies the skip naturally via triggerCondition.",
+      "message": "Team \"{team}\" 不属于 Function \"{function}\" 的有效下属团队。",
+      "fixSuggestion": "请确认 Function 与 Team 的对应关系，参考映射表选择正确的组合。"
+    },
+    {
+      "ruleId": "R-NUM-001",
+      "name": "数值列格式与范围",
+      "severity": "Error",
+      "applicableRows": "all",
+      "applicableColumns": [
+        "Actual_HC", "Actual_Offshore_HC", "Actual_Cost", "Actual_Offshore_Cost",
+        "Planned_HC", "Planned_Offshore_HC", "Planned_Cost", "Planned_Offshore_Cost",
+        "Target_YearEnd", "Target_2030YearEnd"
+      ],
+      "triggerCondition": "trim(columnValue) != '' for each numeric column",
+      "description": "数值列若有值，必须是数字且 >= 0；空值不校验",
+      "checks": [
+        "isNumeric(value)",
+        "float(value) >= 0"
+      ],
+      "message": "{columnName} 值 \"{value}\" 无效，必须为大于等于 0 的数字。",
+      "fixSuggestion": "请填入 0 或正数（不带单位符号），空值请留空而非填写文字。"
+    },
+    {
+      "ruleId": "R-SR-001",
+      "name": "ShoringRatio 百分比格式",
+      "severity": "Error",
+      "applicableRows": "all",
+      "triggerCondition": "trim(ShoringRatio) != ''",
+      "description": "ShoringRatio 必须为 '数字+%' 格式，数值范围 0–100，允许小数",
+      "regex": "^\\d+(\\.\\d+)?%$",
+      "valueRange": { "min": 0, "max": 100 },
+      "allowDecimals": true,
+      "validExamples": ["0%", "100%", "12.5%", "50%"],
+      "invalidExamples": ["23", "0.23", "101%", "-1%", "abc%"],
+      "message": "ShoringRatio 必须使用百分比格式，例如 23%（范围 0%~100%，允许小数如 12.5%）。",
+      "fixSuggestion": "将值改为'数字+%'形式（如 0%、25.5%、100%），不要填写 0.23 或 23。"
+    },
+    {
+      "ruleId": "R-REQ-TOTAL-001",
+      "name": "Total 行 Owner 必填",
+      "severity": "Error",
+      "applicableRows": "totalRow",
+      "triggerCondition": "always (when row is Total)",
+      "description": "Total 行 Owner 不得为空",
+      "message": "Total 行必须填写 Owner。",
+      "fixSuggestion": "补充 Owner 后重新提交。"
+    },
+    {
+      "ruleId": "R-REQ-TOTAL-002",
+      "name": "Total 行 YearMonth 必填",
+      "severity": "Error",
+      "applicableRows": "totalRow",
+      "triggerCondition": "always (when row is Total)",
+      "description": "Total 行 YearMonth 不得为空，且须符合 YYYYMM 格式（与 R-YM-001 联动）",
+      "message": "Total 行必须填写 YearMonth，格式为 YYYYMM（例如 202501）。",
+      "fixSuggestion": "将 YearMonth 改为 6 位数字年月。"
+    },
+    {
+      "ruleId": "R-REQ-NT-001",
+      "name": "Non-Total 行 Target_YearEnd 必填",
+      "severity": "Error",
+      "applicableRows": "nonTotalRow",
+      "triggerCondition": "always (when row is Non-Total)",
+      "description": "非 Total 行 Target_YearEnd 不得为空",
+      "message": "非 Total 行 Target_YearEnd 不允许为空。",
+      "fixSuggestion": "填写 Target_YearEnd（>= 0 的数字）。"
+    },
+    {
+      "ruleId": "R-REQ-NT-002",
+      "name": "Non-Total 行 Target_2030YearEnd 必填",
+      "severity": "Error",
+      "applicableRows": "nonTotalRow",
+      "triggerCondition": "always (when row is Non-Total)",
+      "description": "非 Total 行 Target_2030YearEnd 不得为空",
+      "message": "非 Total 行 Target_2030YearEnd 不允许为空。",
+      "fixSuggestion": "填写 Target_2030YearEnd（>= 0 的数字）。"
+    },
+    {
+      "ruleId": "R-REQ-NT-003",
+      "name": "Non-Total 行 ShoringRatio 必填",
+      "severity": "Error",
+      "applicableRows": "nonTotalRow",
+      "triggerCondition": "always (when row is Non-Total)",
+      "description": "非 Total 行 ShoringRatio 不得为空，且须满足 R-SR-001 格式",
+      "message": "非 Total 行 ShoringRatio 不允许为空。",
+      "fixSuggestion": "填写 ShoringRatio（例如 23%）。"
+    }
+  ]
+}

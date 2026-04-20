@@ -1,0 +1,52 @@
+{
+  "description": "tblOffshoring Function 白名单、Team 白名单及 Function-Team 映射表",
+  "version": "1.3",
+  "lastUpdated": "2026-03-20",
+  "note": "Total 行（Function='Total (All)' 或 'Total (Core Operations)'）允许 Team 为空；空 Team 与 Total Function 的组合视为合法，无需在映射中单独列出。",
+  "functions": [
+    "Total (All)",
+    "Total (Core Operations)",
+    "Finance",
+    "HR",
+    "IT",
+    "Operations",
+    "Procurement",
+    "Risk & Compliance",
+    "Sales & Marketing",
+    "Supply Chain"
+  ],
+  "teams": [
+    "Finance - Accounting",
+    "Finance - FP&A",
+    "HR - Talent Acquisition",
+    "HR - Payroll",
+    "IT - Infrastructure",
+    "IT - Development",
+    "IT - Support",
+    "Operations - Core",
+    "Operations - Support",
+    "Procurement - Sourcing",
+    "Procurement - Vendor Mgmt",
+    "Risk & Compliance - Audit",
+    "Risk & Compliance - Legal",
+    "Sales & Marketing - Digital",
+    "Sales & Marketing - Field",
+    "Supply Chain - Logistics",
+    "Supply Chain - Warehouse"
+  ],
+  "functionTeamMapping": {
+    "Total (All)": [],
+    "Total (Core Operations)": [],
+    "Finance": ["Finance - Accounting", "Finance - FP&A"],
+    "HR": ["HR - Talent Acquisition", "HR - Payroll"],
+    "IT": ["IT - Infrastructure", "IT - Development", "IT - Support"],
+    "Operations": ["Operations - Core", "Operations - Support"],
+    "Procurement": ["Procurement - Sourcing", "Procurement - Vendor Mgmt"],
+    "Risk & Compliance": ["Risk & Compliance - Audit", "Risk & Compliance - Legal"],
+    "Sales & Marketing": ["Sales & Marketing - Digital", "Sales & Marketing - Field"],
+    "Supply Chain": ["Supply Chain - Logistics", "Supply Chain - Warehouse"]
+  },
+  "validationNotes": {
+    "R-FM-001": "当 Function 和 Team 都非空时校验。Total 行通常 Team 为空，因此自然不触发映射检查。若 Total 行填写了非空 Team 值，则照常检查该组合是否在映射表中（Total 行映射表为空列表，故将报错）。"
+  }
+}
