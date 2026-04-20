@@ -20,6 +20,14 @@ ClaudeWorkspace/
 └── README.md
 ```
 
+## 项目列表
+
+| 项目 | 说明 |
+|------|------|
+| [LingoBuddy](projects/LingoBuddy/) | 英语学习打卡应用（Spring Boot + 前端） |
+| [EnglishQuestArena](projects/EnglishQuestArena/) | 英语学习游戏化平台 |
+| [POC-Validator](projects/POC-Validator/) | Power Automate Flow：Offshoring 数据质量验证，输出 Excel/PDF 报告（SharePoint 共享账户版） |
+
 ## 使用方式
 
 1. 用 VS Code 打开此目录作为工作区：`code ClaudeWorkspace`
