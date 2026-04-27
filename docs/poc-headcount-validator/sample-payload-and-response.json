@@ -1,0 +1,211 @@
+{
+  "_comment": "本文件包含两部分：1) 示例请求载荷（Power Automate -> Copilot Studio），2) 示例 AI 响应（Copilot Studio 返回）",
+
+  "sample_request": {
+    "run_label": "2025Q1-校验",
+    "triggered_at": "2025-01-15T10:00:00Z",
+    "rows": [
+      {
+        "RowIndex": 1,
+        "YearMonth": "202501",
+        "CostCenterNumber": "1001",
+        "Function": "GBS",
+        "Team": "EA",
+        "Owner": "Zhang Wei",
+        "ShoringRatio": "60%",
+        "ActualOnshore": "40",
+        "ActualOffshore": "60",
+        "ActualTotal": "100",
+        "PlannedOnshore": "38",
+        "PlannedOffshore": "62",
+        "PlannedTotal": "100",
+        "TargetOnshore": "35",
+        "TargetOffshore": "65",
+        "TargetTotal": "100"
+      },
+      {
+        "RowIndex": 2,
+        "YearMonth": "202501 ",
+        "CostCenterNumber": "1002",
+        "Function": "IT",
+        "Team": "Infrastructure",
+        "Owner": "Li Ming",
+        "ShoringRatio": "45%",
+        "ActualOnshore": "55",
+        "ActualOffshore": "45",
+        "ActualTotal": "100",
+        "PlannedOnshore": "",
+        "PlannedOffshore": "",
+        "PlannedTotal": "",
+        "TargetOnshore": "50",
+        "TargetOffshore": "50",
+        "TargetTotal": "100"
+      },
+      {
+        "RowIndex": 3,
+        "YearMonth": "202501",
+        "CostCenterNumber": "1003",
+        "Function": "GBS ",
+        "Team": "EA",
+        "Owner": "Wang Fang",
+        "ShoringRatio": "70%",
+        "ActualOnshore": "30",
+        "ActualOffshore": "70",
+        "ActualTotal": "100",
+        "PlannedOnshore": "-5",
+        "PlannedOffshore": "70",
+        "PlannedTotal": "65",
+        "TargetOnshore": "30",
+        "TargetOffshore": "70",
+        "TargetTotal": "100"
+      },
+      {
+        "RowIndex": 4,
+        "YearMonth": "202501",
+        "CostCenterNumber": "",
+        "Function": "Finance",
+        "Team": "FP&A",
+        "Owner": "Chen Jia",
+        "ShoringRatio": "50%",
+        "ActualOnshore": "50",
+        "ActualOffshore": "50",
+        "ActualTotal": "100",
+        "PlannedOnshore": "48",
+        "PlannedOffshore": "52",
+        "PlannedTotal": "100",
+        "TargetOnshore": "45",
+        "TargetOffshore": "55",
+        "TargetTotal": "100"
+      },
+      {
+        "RowIndex": 5,
+        "YearMonth": "202501",
+        "CostCenterNumber": "9999",
+        "Function": "Total",
+        "Team": "Total",
+        "Owner": "Liu Yang",
+        "ShoringRatio": "56%",
+        "ActualOnshore": "175",
+        "ActualOffshore": "225",
+        "ActualTotal": "400",
+        "PlannedOnshore": "171",
+        "PlannedOffshore": "229",
+        "PlannedTotal": "400",
+        "TargetOnshore": "160",
+        "TargetOffshore": "240",
+        "TargetTotal": "400"
+      },
+      {
+        "RowIndex": 6,
+        "YearMonth": "202501",
+        "CostCenterNumber": "1005",
+        "Function": "HR",
+        "Team": "Sales",
+        "Owner": "Zhao Lei",
+        "ShoringRatio": "110%",
+        "ActualOnshore": "20",
+        "ActualOffshore": "abc",
+        "ActualTotal": "20",
+        "PlannedOnshore": "20",
+        "PlannedOffshore": "0",
+        "PlannedTotal": "20",
+        "TargetOnshore": "20",
+        "TargetOffshore": "0",
+        "TargetTotal": "20"
+      }
+    ]
+  },
+
+  "sample_response": {
+    "report_model": {
+      "total_rows": 6,
+      "error_count": 8,
+      "warning_count": 0,
+      "pass_count": 2,
+      "generated_at": "2025-01-15T10:00:45Z"
+    },
+    "issues": [
+      {
+        "Severity": "Error",
+        "RuleId": "R-WS-ALL-001",
+        "RowKey": "RowIndex=2|YearMonth=202501 |CCN=1002|Function=IT|Team=Infrastructure",
+        "Column": "YearMonth",
+        "RawValue": "202501 ",
+        "Message": "列 YearMonth 的值包含前后空格，不允许。",
+        "FixSuggestion": "删除该值开头/结尾的空格后重新提交。"
+      },
+      {
+        "Severity": "Error",
+        "RuleId": "R-WS-ALL-001",
+        "RowKey": "RowIndex=3|YearMonth=202501|CCN=1003|Function=GBS |Team=EA",
+        "Column": "Function",
+        "RawValue": "GBS ",
+        "Message": "列 Function 的值包含前后空格，不允许。",
+        "FixSuggestion": "删除该值开头/结尾的空格后重新提交。"
+      },
+      {
+        "Severity": "Error",
+        "RuleId": "R-NUM-003",
+        "RowKey": "RowIndex=3|YearMonth=202501|CCN=1003|Function=GBS |Team=EA",
+        "Column": "PlannedOnshore",
+        "RawValue": "-5",
+        "Message": "列 PlannedOnshore 的值 \"-5\" 不能为负数。",
+        "FixSuggestion": "请填写 0 或正数。"
+      },
+      {
+        "Severity": "Error",
+        "RuleId": "R-REQ-002",
+        "RowKey": "RowIndex=4|YearMonth=202501|CCN=|Function=Finance|Team=FP&A",
+        "Column": "CostCenterNumber",
+        "RawValue": "",
+        "Message": "列 CostCenterNumber 为非 Total 行的必填列，不能为空或纯空格。",
+        "FixSuggestion": "请填写 CostCenterNumber 的值。"
+      },
+      {
+        "Severity": "Error",
+        "RuleId": "R-MAP-001",
+        "RowKey": "RowIndex=6|YearMonth=202501|CCN=1005|Function=HR|Team=Sales",
+        "Column": "Team",
+        "RawValue": "Sales",
+        "Message": "Function=\"HR\" 下，Team=\"Sales\" 不是允许的组合。",
+        "FixSuggestion": "请检查 Function-Team 映射表，使用允许的 Team 值（精确匹配）。"
+      },
+      {
+        "Severity": "Error",
+        "RuleId": "R-SR-001",
+        "RowKey": "RowIndex=6|YearMonth=202501|CCN=1005|Function=HR|Team=Sales",
+        "Column": "ShoringRatio",
+        "RawValue": "110%",
+        "Message": "ShoringRatio 值 \"110%\" 格式错误或超出 0%~100% 范围。",
+        "FixSuggestion": "请使用 \"12.5%\" 格式，数值在 0%~100% 之间。"
+      },
+      {
+        "Severity": "Error",
+        "RuleId": "R-NUM-002",
+        "RowKey": "RowIndex=6|YearMonth=202501|CCN=1005|Function=HR|Team=Sales",
+        "Column": "ActualOffshore",
+        "RawValue": "abc",
+        "Message": "列 ActualOffshore 的值 \"abc\" 不是有效数字。",
+        "FixSuggestion": "请填写数字（整数或小数），或留空跳过校验。"
+      },
+      {
+        "Severity": "Error",
+        "RuleId": "R-NUM-003",
+        "RowKey": "RowIndex=6|YearMonth=202501|CCN=1005|Function=HR|Team=Sales",
+        "Column": "ActualTotal",
+        "RawValue": "20",
+        "Message": "列 ActualTotal 的值 \"20\" 与 ActualOnshore + ActualOffshore 合计不符（20 + abc = 无法计算）。",
+        "FixSuggestion": "请先修正 ActualOffshore 的值后再核对合计。"
+      }
+    ]
+  },
+
+  "_notes": {
+    "row_1": "完全正确，无 issue（pass）",
+    "row_2": "YearMonth 末尾有空格 -> R-WS-ALL-001 Error（其它规则跳过）；PlannedOnshore/Offshore/Total 为空 -> 按 R-NUM-001 跳过（正常）",
+    "row_3": "Function='GBS ' 有尾随空格 -> R-WS-ALL-001 Error；PlannedOnshore=-5 -> R-NUM-003 Error（不同列，独立报错）",
+    "row_4": "CostCenterNumber 为空 -> R-REQ-002 Error；其余通过",
+    "row_5": "Total 行，Function=Total, Team=Total, Owner 已填 -> 全部通过（pass）",
+    "row_6": "Team=Sales 不在 HR 映射中 -> R-MAP-001 Error；ShoringRatio=110% 超出范围 -> R-SR-001 Error；ActualOffshore=abc 非数字 -> R-NUM-002 Error"
+  }
+}
