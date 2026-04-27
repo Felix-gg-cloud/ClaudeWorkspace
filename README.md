@@ -26,3 +26,11 @@ ClaudeWorkspace/
 2. `.github/copilot-instructions.md` 会自动被 Copilot 读取
 3. 每个新项目在 `projects/` 下创建子目录
 4. 可复用的提示词放 `prompts/`，方便跨项目引用
+
+## 项目列表
+
+| 项目 | 路径 | 说明 |
+|------|------|------|
+| LingoBuddy | `projects/LingoBuddy/` | 英语学习 RPG 应用（Spring Boot + React） |
+| EnglishQuestArena | `projects/EnglishQuestArena/` | 英语闯关游戏（全栈） |
+| POC-Validator | `projects/POC-Validator/` | Power Automate + Copilot Studio 数据校验流程（Excel tblOffshoring），输出存储于个人 OneDrive `Documents/PowerbiTest/POC-Validator/` |
