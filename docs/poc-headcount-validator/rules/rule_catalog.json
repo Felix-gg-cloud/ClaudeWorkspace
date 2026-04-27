@@ -1,0 +1,250 @@
+{
+  "meta": {
+    "table": "tblOffshoring",
+    "sheet": "Offshoring",
+    "totalRowFunctions": ["Total (All)", "Total (Core Operations)"],
+    "numericColumns": [
+      "Actual_GBS_TeamMember",
+      "Actual_GBS_TeamLeaderAM",
+      "Actual_EA",
+      "Actual_HKT",
+      "Planned_GBS_TeamMember",
+      "Planned_GBS_TeamLeaderAM",
+      "Planned_EA",
+      "Planned_HKT",
+      "Target_YearEnd",
+      "Target_2030YearEnd"
+    ],
+    "requiredColumnsNonTotalRows": [
+      "Cost Center Number",
+      "Function",
+      "Team",
+      "Owner",
+      "YearMonth",
+      "Actual_GBS_TeamMember",
+      "Actual_GBS_TeamLeaderAM",
+      "Actual_EA",
+      "Actual_HKT",
+      "Planned_GBS_TeamMember",
+      "Planned_GBS_TeamLeaderAM",
+      "Planned_EA",
+      "Planned_HKT",
+      "Target_YearEnd",
+      "Target_2030YearEnd",
+      "ShoringRatio"
+    ],
+    "totalRowRequiredColumns": ["YearMonth", "Function"],
+    "totalRowAllowedBlankColumns": [
+      "Cost Center Number",
+      "Team",
+      "Owner",
+      "Actual_GBS_TeamMember",
+      "Actual_GBS_TeamLeaderAM",
+      "Actual_EA",
+      "Actual_HKT",
+      "Planned_GBS_TeamMember",
+      "Planned_GBS_TeamLeaderAM",
+      "Planned_EA",
+      "Planned_HKT",
+      "Target_YearEnd",
+      "Target_2030YearEnd",
+      "ShoringRatio"
+    ]
+  },
+  "rules": [
+    {
+      "id": "R-REQ-001",
+      "name": "Required fields non-empty (non-Total rows)",
+      "description": "For rows where Function is NOT 'Total (All)' and NOT 'Total (Core Operations)', all required fields must be non-empty after trimming whitespace.",
+      "severity": "Error",
+      "scope": "non-Total rows",
+      "requiredColumns": [
+        "Cost Center Number",
+        "Function",
+        "Team",
+        "Owner",
+        "YearMonth",
+        "Actual_GBS_TeamMember",
+        "Actual_GBS_TeamLeaderAM",
+        "Actual_EA",
+        "Actual_HKT",
+        "Planned_GBS_TeamMember",
+        "Planned_GBS_TeamLeaderAM",
+        "Planned_EA",
+        "Planned_HKT",
+        "Target_YearEnd",
+        "Target_2030YearEnd",
+        "ShoringRatio"
+      ],
+      "messageTemplate": "\"{Column}\" must not be empty for non-Total rows.",
+      "fixSuggestion": "Fill in a valid value for \"{Column}\". This column is mandatory for all non-Total rows."
+    },
+    {
+      "id": "R-REQ-002",
+      "name": "Total rows: core fields still validated",
+      "description": "For Total rows (Function = 'Total (All)' or 'Total (Core Operations)'), YearMonth and Function must be non-blank. All other columns are allowed to be blank. When ShoringRatio is non-blank on a Total row, its format is still validated per R-SR-001.",
+      "severity": {
+        "YearMonth_blank": "Error",
+        "other_invalid_when_present": "Warning"
+      },
+      "scope": "Total rows",
+      "alwaysRequiredColumns": ["YearMonth", "Function"],
+      "allowedBlankColumns": [
+        "Cost Center Number",
+        "Team",
+        "Owner",
+        "Actual_GBS_TeamMember",
+        "Actual_GBS_TeamLeaderAM",
+        "Actual_EA",
+        "Actual_HKT",
+        "Planned_GBS_TeamMember",
+        "Planned_GBS_TeamLeaderAM",
+        "Planned_EA",
+        "Planned_HKT",
+        "Target_YearEnd",
+        "Target_2030YearEnd",
+        "ShoringRatio"
+      ],
+      "noteOnShoringRatio": "If ShoringRatio is non-blank on a Total row, validate format and range per R-SR-001.",
+      "messageTemplates": {
+        "yearMonthBlank": "\"YearMonth\" must not be empty even for Total rows.",
+        "invalidWhenPresent": "\"{Column}\" value \"{Value}\" is present but invalid on a Total row."
+      }
+    },
+    {
+      "id": "R-CCN-001",
+      "name": "Cost Center Number: 7-digit numeric",
+      "description": "Cost Center Number must be exactly 7 digits (0-9 only).",
+      "severity": "Error",
+      "scope": "non-Total rows",
+      "regex": "^\\d{7}$",
+      "column": "Cost Center Number",
+      "messageTemplate": "\"Cost Center Number\" must be exactly 7 digits (e.g., 1234567). Got: \"{Value}\".",
+      "fixSuggestion": "Check the Cost Center Number. It must be a 7-digit number with no spaces or letters."
+    },
+    {
+      "id": "R-YM-001",
+      "name": "YearMonth: YYYYMM format with valid month",
+      "description": "YearMonth must be exactly 6 digits in YYYYMM format; month portion (last 2 digits) must be 01–12.",
+      "severity": "Error",
+      "scope": "All non-blank rows",
+      "regex": "^\\d{6}$",
+      "additionalCheck": "month (last 2 chars) must be 01–12",
+      "column": "YearMonth",
+      "messageTemplate": "\"YearMonth\" must be in YYYYMM format with a valid month (01–12). Got: \"{Value}\".",
+      "fixSuggestion": "Change to a 6-digit string like 202501 (year=2025, month=01)."
+    },
+    {
+      "id": "R-OWNER-001",
+      "name": "Owner: non-empty",
+      "description": "Owner must not be blank after trimming whitespace. Covered by R-REQ-001 for non-Total rows; retained as explicit rule for per-rule reporting.",
+      "severity": "Error",
+      "scope": "non-Total rows",
+      "column": "Owner",
+      "messageTemplate": "\"Owner\" must not be empty.",
+      "fixSuggestion": "Enter the responsible owner name in the Owner column."
+    },
+    {
+      "id": "R-NUM-001",
+      "name": "Numeric columns: must be a number",
+      "description": "All numeric columns must contain a parseable numeric value when non-blank.",
+      "severity": "Error",
+      "scope": "non-Total rows, non-blank column values",
+      "appliesTo": [
+        "Actual_GBS_TeamMember",
+        "Actual_GBS_TeamLeaderAM",
+        "Actual_EA",
+        "Actual_HKT",
+        "Planned_GBS_TeamMember",
+        "Planned_GBS_TeamLeaderAM",
+        "Planned_EA",
+        "Planned_HKT",
+        "Target_YearEnd",
+        "Target_2030YearEnd"
+      ],
+      "messageTemplate": "\"{Column}\" must be a number. Got: \"{Value}\".",
+      "fixSuggestion": "Replace with a valid numeric value (integer or decimal)."
+    },
+    {
+      "id": "R-NUM-002",
+      "name": "Numeric columns: must be ≥ 0",
+      "description": "All numeric columns must be zero or positive.",
+      "severity": "Error",
+      "scope": "non-Total rows, after R-NUM-001 passes",
+      "appliesTo": [
+        "Actual_GBS_TeamMember",
+        "Actual_GBS_TeamLeaderAM",
+        "Actual_EA",
+        "Actual_HKT",
+        "Planned_GBS_TeamMember",
+        "Planned_GBS_TeamLeaderAM",
+        "Planned_EA",
+        "Planned_HKT",
+        "Target_YearEnd",
+        "Target_2030YearEnd"
+      ],
+      "messageTemplate": "\"{Column}\" must be ≥ 0. Got: {Value}.",
+      "fixSuggestion": "Replace with a non-negative number."
+    },
+    {
+      "id": "R-SR-001",
+      "name": "ShoringRatio: strict percent format, 0%–100%",
+      "description": "ShoringRatio must use a strict percentage format: a non-negative integer or decimal followed immediately by '%'. Whitespace is trimmed before validation. The numeric part must be in the range [0, 100] inclusive. Applies to all rows; on Total rows only validated when non-blank.",
+      "severity": "Error",
+      "scope": "All non-blank ShoringRatio values",
+      "column": "ShoringRatio",
+      "regex": "^\\d+(\\.\\d+)?%$",
+      "validationSteps": [
+        "1. Trim whitespace from value.",
+        "2. If blank: skip (blank is caught by R-REQ-001 for non-Total rows; allowed blank for Total rows).",
+        "3. Match trimmed value against regex ^\\d+(\\.\\d+)?%$.",
+        "4. Strip trailing '%', convert to number n.",
+        "5. Verify 0 <= n <= 100."
+      ],
+      "validExamples": ["0%", "100%", "23%", "12.5%", "0.5%", " 23% "],
+      "invalidExamples": ["23", "0.23", "101%", "-1%", "abc%", "25.3.1%"],
+      "messageTemplate": "\"ShoringRatio\" must use percent format with a value between 0% and 100% (e.g., 23%, 12.5%). Got: \"{Value}\".",
+      "fixSuggestion": "Change the value to \"number%\" format, e.g., 25% or 12.5%. Do not use 0.25 or 25 without the % sign."
+    },
+    {
+      "id": "R-FUNC-001",
+      "name": "Function: must be in whitelist",
+      "description": "Function value must match one of the approved entries in the function whitelist.",
+      "severity": "Error",
+      "scope": "All non-blank rows",
+      "column": "Function",
+      "messageTemplate": "\"Function\" value \"{Value}\" is not in the allowed list.",
+      "fixSuggestion": "Choose a valid Function from the approved whitelist."
+    },
+    {
+      "id": "R-TEAM-001",
+      "name": "Team: must be in whitelist",
+      "description": "Team value must match one of the approved entries in the team whitelist.",
+      "severity": "Warning",
+      "scope": "non-Total rows where Team is non-blank",
+      "column": "Team",
+      "messageTemplate": "\"Team\" value \"{Value}\" is not in the allowed list.",
+      "fixSuggestion": "Choose a valid Team from the approved whitelist, or contact the admin to add a new team."
+    },
+    {
+      "id": "R-MAP-001",
+      "name": "(Function, Team) combination must be allowed",
+      "description": "The combination of Function and Team must exist in the approved mapping table.",
+      "severity": "Error",
+      "scope": "non-Total rows where both Function and Team are non-blank",
+      "columns": ["Function", "Team"],
+      "messageTemplate": "Function \"{Function}\" + Team \"{Team}\" is not an allowed combination.",
+      "fixSuggestion": "Check the Function-Team mapping table and correct either the Function or Team value."
+    },
+    {
+      "id": "R-COV-001",
+      "name": "Monthly coverage: expected (Function, Team) combinations present",
+      "description": "For each YearMonth, the set of (Function, Team) combinations must match the expected full set.",
+      "severity": "Warning",
+      "scope": "Whole-file aggregation per YearMonth",
+      "columns": ["YearMonth", "Function", "Team"],
+      "messageTemplate": "YearMonth {YearMonth}: expected combination Function=\"{Function}\" / Team=\"{Team}\" is missing.",
+      "fixSuggestion": "Add the missing row for the specified Function and Team in YearMonth {YearMonth}."
+    }
+  ]
+}
